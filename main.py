@@ -1261,17 +1261,65 @@ class Credit(QtWidgets.QMainWindow):
         utils.set_table_column_sizes(self.ui.chargeTableWidget, 80, 170, 250, 200)
         self.ui.labelChargeCount.setText(f"Total: {len(rows)}")
 
-    def ui_create_charge(self):
-        self.ui.dateEditChargeDate.setDate(TODAY)  # Set current date as default
+    def ui_create_charge(self, edit=False):
+        """
+        Initializes the UI for creating or editing a charge entry.
+        If `edit` is True, populates the UI fields with the data of the selected charge for editing.
+        Otherwise, clears the input fields and sets default values for creating a new charge.
+        Args:
+            edit (bool): If True, the UI is set up for editing an existing charge. If False, for creating a new charge.
+        Side Effects:
+            - Populates the charge-by combo box with employee names.
+            - Sets up the UI fields with either existing charge data or default values.
+            - Updates the page title to reflect the current operation (add or edit).
+            - Displays an error message if the charge to edit is not found.
+        """
+        
         employees = self.db.get_names('employes')
-        self.ui.cbBoxChargeBy.clear()  # Clear previous items
         utils.populate_comboBox(self.ui.cbBoxChargeBy, employees)
-        self.setup_extraCenter_ui('Ajouter une Charge', self.ui.addChargePage)
+        if edit:
+            logger.info("Editing an existing charge...")
+            charge_id = self.get_item_id(self.ui.chargeTableWidget)
+            charge = self.db.get_charge_by_id(charge_id)
+            if not charge:
+                self.show_error_message("Erreur: Charge introuvable.", success=False)
+                return
+            # Populate fields with existing data
+            date_obj = QtCore.QDate.fromString(charge.date_charge, 'yyyy-MM-dd')
+            self.ui.dateEditChargeDate.setDate(date_obj)
+            self.ui.cbBoxChargeBy.setCurrentText(charge.effectue_par)
+            self.ui.editChargeMontant.setValue(charge.montant)
+            self.ui.editChargeMotif.setPlainText(charge.motif)
+            title = "Modifier une Charge"
+        else:
+            logger.info("Creating a new charge...")
+            # Clear previous inputs
+            inputs_to_clear = [
+                self.ui.dateEditChargeDate,
+                self.ui.editChargeMontant,
+                self.ui.editChargeMotif
+            ]
+            utils.clear_inputs(inputs_to_clear)
+            self.ui.dateEditChargeDate.setDate(TODAY)  # Set current date as default                        
+            title = "Ajouter une Charge"
+        
+        self.setup_extraCenter_ui(title, self.ui.addChargePage)
 
     def insert_new_charge(self):
         """
-        Insert a new charge into the database.
+        Inserts a new charge record into the database using values from the UI.
+        Retrieves the charge date, the person responsible, the amount, and the reason from the UI elements.
+        Attempts to insert the new charge into the database. If successful, displays a success message,
+        closes the left box, and navigates to the charges page. If unsuccessful, displays an error message.
+        Note:
+            This function currently only handles insertion. Update functionality is to be added.
+        Returns:
+            None
         """
+        
+        # FIXME: make this function work with update too
+        logger.info("Inserting a new charge...")
+        # Get values from UI
         date = self.ui.dateEditChargeDate.date().toPyDate()
         par = self.ui.cbBoxChargeBy.currentText()
         montant = self.ui.editChargeMontant.value()

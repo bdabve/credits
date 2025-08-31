@@ -9,6 +9,7 @@
 
 import sqlite3
 from datetime import datetime
+from collections import namedtuple
 # import utils
 # from decimal import Decimal
 
@@ -239,6 +240,26 @@ class Database:
             except sqlite3.Error as e:
                 return {'success': False, 'error': str(e)}
 
+        from collections import namedtuple
+    
+    def fetch_namedtuple(self, cursor, query, params=None, tuple_name="Row"):
+        """
+        Executes a query and returns the result as a list of namedtuples.
+    
+        Args:
+            cursor: sqlite3 cursor object.
+            query (str): SQL query to execute.
+            params (tuple or list, optional): Parameters for the query.
+            tuple_name (str): Name for the namedtuple type.
+    
+        Returns:
+            list: List of namedtuple instances, or an empty list if no results.
+        """
+        cursor.execute(query, params or ())
+        columns = [desc[0] for desc in cursor.description]
+        RowTuple = namedtuple(tuple_name, columns)
+        return [RowTuple(*row) for row in cursor.fetchall()]
+    
     # =========================
     # === EMPLOYES METHODES ===
     # =========================
@@ -938,6 +959,14 @@ class Database:
             cursor.execute(query)
             return cursor.fetchall()
 
+    def get_charge_by_id(self, charge_id):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            query = "SELECT * FROM charges WHERE id = ?"
+            result = self.fetch_namedtuple(cursor, query, (charge_id,), "Charge")
+            # result is a list of Charge namedtuples
+            return result[0] if result else None
+        
     def insert_new_charge(self, date_charge, effectue_par, montant, motif):
         """
         Insert a new charge into the database.

@@ -252,6 +252,17 @@ def main_icons_callbacks(root):
     ]
     setup_table_context_menu(root.ui.employesTableWidget, employe_table_actions)
 
+    # Charge Menu
+    charge_table_actions = [
+        (
+            'Modifier', 
+            qta.icon('ph.pencil-light', color=EDIT_COLOR), 
+            lambda: root.ui_create_charge(edit=True)
+        ),
+        ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_charge),
+    ]
+    setup_table_context_menu(root.ui.chargeTableWidget, charge_table_actions)
+
     # == ComboBox Signals
     root.ui.cbBoxCreditByStatus.currentIndexChanged.connect(root.filter_credit_by_status)
     root.ui.cbBoxSalaireEmpMonth.currentIndexChanged.connect(lambda: root.calculate_salaire(from_btn=False))
