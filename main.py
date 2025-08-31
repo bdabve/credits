@@ -17,6 +17,16 @@ TODAY = datetime.now()
 
 
 class Credit(QtWidgets.QMainWindow):
+    # #######################################
+    # TODO
+    # ====
+    # - Add PDF Export for Salary Slip
+    # - handle the chrage edit when button save is clicked
+    # - work with the charge page
+    # - handle all the search functions
+    # - handle edit for other function that need it
+    # - Add more validations
+    # ####################################################
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
@@ -130,6 +140,12 @@ class Credit(QtWidgets.QMainWindow):
 
     # -- Window UPBAR Controls --
     def mousePressEvent(self, event):
+        """
+        Handles the mouse press event by storing the global position of the mouse click.
+
+        Args:
+            event (QMouseEvent): The mouse event containing information about the click.
+        """
         self.clickPosition = event.globalPos()
 
     def move_window(self, e):
@@ -158,8 +174,12 @@ class Credit(QtWidgets.QMainWindow):
     # ===================================
     def on_toggle_menu(self):
         """
-        Toggle the left menu.
+        Toggles the menu's expanded or collapsed state.
+        Calls the `toggle_menu` method with the current state of `menu_expanded` to
+        either collapse or expand the menu, then updates `menu_expanded` to reflect
+        the new state.
         """
+        
         self.toggle_menu(collapse=self.menu_expanded)
         self.menu_expanded = not self.menu_expanded
 
@@ -498,6 +518,19 @@ class Credit(QtWidgets.QMainWindow):
         self.display_employes(rows)
 
     def edit_employe(self, row, col, text):
+        """
+        Edits an employee's information in the table and updates the database.
+
+        Args:
+            row (int): The row index of the employee in the table.
+            col (int): The column index being edited.
+            text (str): The new text value to set.
+
+        Validates the date format if the edited column is the date column (col == 5).
+        Displays an error message if the date format is invalid.
+        Updates the employee information in the database and displays a success or error message based on the result.
+        Refreshes the employee table display after editing.
+        """
         emp_id = self.get_item_id(self.ui.employesTableWidget)
         logger.info(f"Edit Employe({emp_id}) at Row({row}), Column({col}), New Text({text})")
         if col == 5:    # verify date format
@@ -514,7 +547,23 @@ class Credit(QtWidgets.QMainWindow):
             self.show_error_message(f"Erreur: {result['error']}", success=False)
 
     def delete_employe(self):
+        """
+        Deletes one or multiple selected employees from the database after user confirmation.
+
+        - Retrieves selected employee IDs from the employesTableWidget.
+        - Shows an error message if no employee is selected.
+        - Prompts the user for confirmation, displaying the employee name(s) in the dialog.
+        - If confirmed, deletes the selected employee(s) from the 'employes' table.
+        - Displays a success or error message based on the result.
+        - Refreshes the employee list upon successful deletion.
+
+        Returns:
+            None
+        """
         ids = utils.table_multi_selection(self.ui.employesTableWidget)
+        if not ids:
+            self.show_error_message("Aucun employé sélectionné.", success=False)
+            return
         if len(ids) > 1:
             logger.debug(f'Delete Multitple IDS({ids})')
             title = f"Etes-vous sûr de vouloir supprimer la selection [{ids}] ?"

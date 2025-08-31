@@ -508,10 +508,14 @@ class Database:
             result = []
             for row in rows:
                 emp_id, salaire_base, prime, retenue, avance = row
-                salaire_final = (salaire_base or 0) + prime - retenue - avance
+                salaire_base = salaire_base if salaire_base is not None else 0
+                prime = prime if prime is not None else 0
+                retenue = retenue if retenue is not None else 0
+                avance = avance if avance is not None else 0
+                salaire_final = salaire_base + prime - retenue - avance
                 result.append({
                     'employe_id': emp_id,
-                    'salaire_base': salaire_base or 0,
+                    'salaire_base': salaire_base,
                     'total_prime': prime,
                     'total_retenue': retenue,
                     'total_avance': avance,
@@ -1056,5 +1060,5 @@ if __name__ == '__main__':
     # print(f"Versement: {result}")
 
     # Calculate salarie
-    result = db.calculate_salaire_mensuel('08', 1)
+    result = db.calculate_salaire_mensuel('2024-08', 1)
     print(result)
