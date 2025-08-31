@@ -1,0 +1,10 @@
+markdown-it-py==3.0.0
+mdurl==0.1.2
+packaging==25.0
+pygments==2.19.2
+pyqt5==5.15.11
+pyqt5-qt5==5.15.17
+pyqt5-sip==12.17.0
+qtawesome==1.4.0
+qtpy==2.4.3
+rich==14.1.0
