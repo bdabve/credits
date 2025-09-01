@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1198, 535)
+        MainWindow.resize(1308, 535)
         MainWindow.setStyleSheet("QMenu {\n"
 "    font: 11pt \"Lucida Casual\";\n"
 "     background: #18191c;\n"
@@ -271,8 +271,18 @@ class Ui_MainWindow(object):
 "/* =======================================*/\n"
 "/* Close/Maximaze/Minimize QPushButtons */\n"
 "/* Btn Close ExtraLeftContent */\n"
+"#extraIconPlus {\n"
+"    background-color: transparent; \n"
+"    border: none;  \n"
+"    border-radius: 5px; \n"
+"    min-height: 30px;\n"
+"    min-width: 30px;\n"
+"    padding: 0;\n"
+"}\n"
+"\n"
 "#rightButtons QPushButton,\n"
-"#extraCloseColumnBtn { \n"
+"#extraCloseColumnBtn\n"
+" { \n"
 "    background-color: transparent; \n"
 "    border: none;  \n"
 "    border-radius: 5px; \n"
@@ -386,6 +396,11 @@ class Ui_MainWindow(object):
 "#editSearchCharge {\n"
 "    border: 1px solid #303030;\n"
 "}\n"
+"\n"
+"QLineEdit {\n"
+"    min-width: 350px;\n"
+"}\n"
+"\n"
 "QLineEdit:hover,\n"
 "QSpinBox:hover,\n"
 "QDoubleSpinBox:hover,\n"
@@ -582,7 +597,7 @@ class Ui_MainWindow(object):
 "    background-repeat: no-reperat;    \n"
 " }\n"
 "QComboBox QAbstractItemView {\n"
-"    color: rgb(255, 121, 198);    \n"
+"    color: #1dd1a1;    \n"
 "    background-color: #3d3d3d;\n"
 "    padding: 8px 20px;\n"
 "    selection-background-color: rgb(39, 44, 54);\n"
@@ -695,6 +710,7 @@ class Ui_MainWindow(object):
 "#extraLeftBox {\n"
 "    background-color: #272727;\n"
 "    border: 2px solid #202020;\n"
+"    border-left-color: #2C3E50;\n"
 "}\n"
 "#AddCreditPage,\n"
 "#AddCreditVersementPage,\n"
@@ -718,7 +734,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "/* Label */\n"
-"#extraLabelTitle { color: rgb(255, 255, 255); }\n"
+"#extraLabelTitle { color: #00AFF0; }\n"
 "\n"
 "#widgetSalairePage QLabel {\n"
 "    padding: 5px;\n"
@@ -1002,15 +1018,19 @@ class Ui_MainWindow(object):
         self.extraTopLayout.setHorizontalSpacing(10)
         self.extraTopLayout.setVerticalSpacing(0)
         self.extraTopLayout.setObjectName("extraTopLayout")
-        self.extraIcon = QtWidgets.QFrame(self.extraTopBg)
-        self.extraIcon.setMinimumSize(QtCore.QSize(20, 0))
-        self.extraIcon.setMaximumSize(QtCore.QSize(20, 20))
-        self.extraIcon.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.extraIcon.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.extraIcon.setObjectName("extraIcon")
-        self.extraTopLayout.addWidget(self.extraIcon, 0, 0, 1, 1)
+        self.extraIconPlus = QtWidgets.QPushButton(self.extraTopBg)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.extraIconPlus.sizePolicy().hasHeightForWidth())
+        self.extraIconPlus.setSizePolicy(sizePolicy)
+        self.extraIconPlus.setMinimumSize(QtCore.QSize(30, 30))
+        self.extraIconPlus.setText("")
+        self.extraIconPlus.setIconSize(QtCore.QSize(20, 20))
+        self.extraIconPlus.setObjectName("extraIconPlus")
+        self.extraTopLayout.addWidget(self.extraIconPlus, 0, 0, 1, 1)
         self.extraLabelTitle = QtWidgets.QLabel(self.extraTopBg)
-        self.extraLabelTitle.setMinimumSize(QtCore.QSize(150, 0))
+        self.extraLabelTitle.setMinimumSize(QtCore.QSize(130, 0))
         self.extraLabelTitle.setObjectName("extraLabelTitle")
         self.extraTopLayout.addWidget(self.extraLabelTitle, 0, 1, 1, 1)
         self.extraCloseColumnBtn = QtWidgets.QPushButton(self.extraTopBg)
@@ -1556,10 +1576,10 @@ class Ui_MainWindow(object):
         self.label_27.setWordWrap(False)
         self.label_27.setObjectName("label_27")
         self.formLayout_6.setWidget(5, QtWidgets.QFormLayout.LabelRole, self.label_27)
-        self.labelSpacer_2 = QtWidgets.QLabel(self.widget)
-        self.labelSpacer_2.setText("")
-        self.labelSpacer_2.setObjectName("labelSpacer_2")
-        self.formLayout_6.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.labelSpacer_2)
+        self.labelChargeID = QtWidgets.QLabel(self.widget)
+        self.labelChargeID.setText("")
+        self.labelChargeID.setObjectName("labelChargeID")
+        self.formLayout_6.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.labelChargeID)
         self.editChargeMotif = QtWidgets.QPlainTextEdit(self.widget)
         self.editChargeMotif.setObjectName("editChargeMotif")
         self.formLayout_6.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.editChargeMotif)
@@ -1575,6 +1595,10 @@ class Ui_MainWindow(object):
         self.cbBoxChargeBy = QtWidgets.QComboBox(self.widget)
         self.cbBoxChargeBy.setObjectName("cbBoxChargeBy")
         self.formLayout_6.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.cbBoxChargeBy)
+        self.labelChargeEditEnabled = QtWidgets.QLabel(self.widget)
+        self.labelChargeEditEnabled.setText("")
+        self.labelChargeEditEnabled.setObjectName("labelChargeEditEnabled")
+        self.formLayout_6.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.labelChargeEditEnabled)
         self.verticalLayout_38.addLayout(self.formLayout_6)
         spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_38.addItem(spacerItem7)
@@ -1614,18 +1638,9 @@ class Ui_MainWindow(object):
         self.leftBox.setFrameShadow(QtWidgets.QFrame.Raised)
         self.leftBox.setObjectName("leftBox")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.leftBox)
-        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_8.setContentsMargins(5, 0, 0, 0)
         self.horizontalLayout_8.setSpacing(0)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.plusButtonShurtcut = QtWidgets.QPushButton(self.leftBox)
-        self.plusButtonShurtcut.setMaximumSize(QtCore.QSize(41, 41))
-        self.plusButtonShurtcut.setText("")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.plusButtonShurtcut.setIcon(icon5)
-        self.plusButtonShurtcut.setIconSize(QtCore.QSize(20, 20))
-        self.plusButtonShurtcut.setObjectName("plusButtonShurtcut")
-        self.horizontalLayout_8.addWidget(self.plusButtonShurtcut)
         self.titleRightInfo = QtWidgets.QLabel(self.leftBox)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -1668,9 +1683,9 @@ class Ui_MainWindow(object):
         self.buttonLanguage.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.buttonLanguage.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonLanguage.setText("")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_settings.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.buttonLanguage.setIcon(icon6)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_settings.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.buttonLanguage.setIcon(icon5)
         self.buttonLanguage.setIconSize(QtCore.QSize(20, 20))
         self.buttonLanguage.setObjectName("buttonLanguage")
         self.horizontalLayout_9.addWidget(self.buttonLanguage)
@@ -1679,9 +1694,9 @@ class Ui_MainWindow(object):
         self.minimizeAppBtn.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.minimizeAppBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.minimizeAppBtn.setText("")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_minimize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.minimizeAppBtn.setIcon(icon7)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_minimize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.minimizeAppBtn.setIcon(icon6)
         self.minimizeAppBtn.setIconSize(QtCore.QSize(20, 20))
         self.minimizeAppBtn.setObjectName("minimizeAppBtn")
         self.horizontalLayout_9.addWidget(self.minimizeAppBtn)
@@ -1698,9 +1713,9 @@ class Ui_MainWindow(object):
         self.maximizeRestoreAppBtn.setFont(font)
         self.maximizeRestoreAppBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.maximizeRestoreAppBtn.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_maximize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.maximizeRestoreAppBtn.setIcon(icon8)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_maximize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.maximizeRestoreAppBtn.setIcon(icon7)
         self.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
         self.maximizeRestoreAppBtn.setObjectName("maximizeRestoreAppBtn")
         self.horizontalLayout_9.addWidget(self.maximizeRestoreAppBtn)
@@ -1720,6 +1735,15 @@ class Ui_MainWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widgetMainContent)
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.plusButtonShurtcut = QtWidgets.QPushButton(self.widgetMainContent)
+        self.plusButtonShurtcut.setMaximumSize(QtCore.QSize(41, 41))
+        self.plusButtonShurtcut.setText("")
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.plusButtonShurtcut.setIcon(icon8)
+        self.plusButtonShurtcut.setIconSize(QtCore.QSize(20, 20))
+        self.plusButtonShurtcut.setObjectName("plusButtonShurtcut")
+        self.verticalLayout.addWidget(self.plusButtonShurtcut)
         self.widgetMessages = QtWidgets.QWidget(self.widgetMainContent)
         self.widgetMessages.setMaximumSize(QtCore.QSize(0, 16777215))
         self.widgetMessages.setObjectName("widgetMessages")
@@ -1790,7 +1814,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.editSearchClients.sizePolicy().hasHeightForWidth())
         self.editSearchClients.setSizePolicy(sizePolicy)
-        self.editSearchClients.setMinimumSize(QtCore.QSize(260, 34))
+        self.editSearchClients.setMinimumSize(QtCore.QSize(362, 34))
         self.editSearchClients.setMaximumSize(QtCore.QSize(260, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -1835,7 +1859,7 @@ class Ui_MainWindow(object):
         self.buttonNewClient.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonNewClient.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewClient.setStyleSheet("")
-        self.buttonNewClient.setIcon(icon5)
+        self.buttonNewClient.setIcon(icon8)
         self.buttonNewClient.setIconSize(QtCore.QSize(22, 22))
         self.buttonNewClient.setObjectName("buttonNewClient")
         self.horizontalLayout_14.addWidget(self.buttonNewClient)
@@ -1848,7 +1872,7 @@ class Ui_MainWindow(object):
         self.buttonClientNewCredit.setSizePolicy(sizePolicy)
         self.buttonClientNewCredit.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonClientNewCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.buttonClientNewCredit.setIcon(icon5)
+        self.buttonClientNewCredit.setIcon(icon8)
         self.buttonClientNewCredit.setIconSize(QtCore.QSize(22, 22))
         self.buttonClientNewCredit.setObjectName("buttonClientNewCredit")
         self.horizontalLayout_14.addWidget(self.buttonClientNewCredit)
@@ -1935,7 +1959,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.editSearchCredit = QtWidgets.QLineEdit(self.partiesToolBarFrame)
-        self.editSearchCredit.setMinimumSize(QtCore.QSize(260, 43))
+        self.editSearchCredit.setMinimumSize(QtCore.QSize(362, 43))
         self.editSearchCredit.setMaximumSize(QtCore.QSize(350, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -1994,7 +2018,7 @@ class Ui_MainWindow(object):
         self.buttonNewCredit.setSizePolicy(sizePolicy)
         self.buttonNewCredit.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonNewCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.buttonNewCredit.setIcon(icon5)
+        self.buttonNewCredit.setIcon(icon8)
         self.buttonNewCredit.setIconSize(QtCore.QSize(22, 22))
         self.buttonNewCredit.setObjectName("buttonNewCredit")
         self.horizontalLayout_6.addWidget(self.buttonNewCredit)
@@ -2007,7 +2031,7 @@ class Ui_MainWindow(object):
         self.buttonCreditAddVersement.setSizePolicy(sizePolicy)
         self.buttonCreditAddVersement.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonCreditAddVersement.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.buttonCreditAddVersement.setIcon(icon5)
+        self.buttonCreditAddVersement.setIcon(icon8)
         self.buttonCreditAddVersement.setIconSize(QtCore.QSize(22, 22))
         self.buttonCreditAddVersement.setObjectName("buttonCreditAddVersement")
         self.horizontalLayout_6.addWidget(self.buttonCreditAddVersement)
@@ -2143,7 +2167,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.editSearchEmploye.sizePolicy().hasHeightForWidth())
         self.editSearchEmploye.setSizePolicy(sizePolicy)
-        self.editSearchEmploye.setMinimumSize(QtCore.QSize(260, 43))
+        self.editSearchEmploye.setMinimumSize(QtCore.QSize(362, 43))
         self.editSearchEmploye.setMaximumSize(QtCore.QSize(260, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -2186,7 +2210,7 @@ class Ui_MainWindow(object):
         self.buttonNewEmploye.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonNewEmploye.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewEmploye.setStyleSheet("")
-        self.buttonNewEmploye.setIcon(icon5)
+        self.buttonNewEmploye.setIcon(icon8)
         self.buttonNewEmploye.setIconSize(QtCore.QSize(22, 22))
         self.buttonNewEmploye.setObjectName("buttonNewEmploye")
         self.horizontalLayout.addWidget(self.buttonNewEmploye)
@@ -2200,7 +2224,7 @@ class Ui_MainWindow(object):
         self.buttonEmployeNewPrime.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonEmployeNewPrime.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonEmployeNewPrime.setStyleSheet("")
-        self.buttonEmployeNewPrime.setIcon(icon5)
+        self.buttonEmployeNewPrime.setIcon(icon8)
         self.buttonEmployeNewPrime.setIconSize(QtCore.QSize(22, 22))
         self.buttonEmployeNewPrime.setObjectName("buttonEmployeNewPrime")
         self.horizontalLayout.addWidget(self.buttonEmployeNewPrime)
@@ -2214,7 +2238,7 @@ class Ui_MainWindow(object):
         self.buttonEmployeNewAvance.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonEmployeNewAvance.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonEmployeNewAvance.setStyleSheet("")
-        self.buttonEmployeNewAvance.setIcon(icon5)
+        self.buttonEmployeNewAvance.setIcon(icon8)
         self.buttonEmployeNewAvance.setIconSize(QtCore.QSize(22, 22))
         self.buttonEmployeNewAvance.setObjectName("buttonEmployeNewAvance")
         self.horizontalLayout.addWidget(self.buttonEmployeNewAvance)
@@ -2439,7 +2463,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.editSearchEmployeOperation.sizePolicy().hasHeightForWidth())
         self.editSearchEmployeOperation.setSizePolicy(sizePolicy)
-        self.editSearchEmployeOperation.setMinimumSize(QtCore.QSize(260, 34))
+        self.editSearchEmployeOperation.setMinimumSize(QtCore.QSize(362, 34))
         self.editSearchEmployeOperation.setMaximumSize(QtCore.QSize(260, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -2692,7 +2716,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.editSearchCharge.sizePolicy().hasHeightForWidth())
         self.editSearchCharge.setSizePolicy(sizePolicy)
-        self.editSearchCharge.setMinimumSize(QtCore.QSize(260, 36))
+        self.editSearchCharge.setMinimumSize(QtCore.QSize(364, 36))
         self.editSearchCharge.setMaximumSize(QtCore.QSize(260, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -2732,7 +2756,7 @@ class Ui_MainWindow(object):
         self.buttonNewCharge.setMinimumSize(QtCore.QSize(0, 41))
         self.buttonNewCharge.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewCharge.setStyleSheet("")
-        self.buttonNewCharge.setIcon(icon5)
+        self.buttonNewCharge.setIcon(icon8)
         self.buttonNewCharge.setIconSize(QtCore.QSize(22, 22))
         self.buttonNewCharge.setObjectName("buttonNewCharge")
         self.horizontalLayout_31.addWidget(self.buttonNewCharge)

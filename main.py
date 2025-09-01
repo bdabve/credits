@@ -179,7 +179,7 @@ class Credit(QtWidgets.QMainWindow):
         either collapse or expand the menu, then updates `menu_expanded` to reflect
         the new state.
         """
-        
+
         self.toggle_menu(collapse=self.menu_expanded)
         self.menu_expanded = not self.menu_expanded
 
@@ -386,9 +386,9 @@ class Credit(QtWidgets.QMainWindow):
         Set up the extra center stackedWidget UI.
         """
         self.ui.extraLabelTitle.setText(title)
+        # self.ui.extraLabelTitle.setStyleSheet(f"color: {utils.SKYPE_COLOR};")
         self.toggle_left_box(close=False)
         self.auto_close_menu()
-        # self.toggle_menu(action='close', from_btn=False)
         self.ui.extraCenter.setCurrentWidget(page)
 
     def get_item_id(self, tableWidget):
@@ -459,11 +459,7 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.labelNewPersonJobText.setText('Poste')
             self.ui.editNewPersonJob.setPlaceholderText('Poste de Travaille')
 
-        self.ui.extraLabelTitle.setText(f"Nouveau {persone_type.title()}")
-        self.toggle_left_box(close=False)
-        self.auto_close_menu()
-        # self.toggle_menu(action='close', from_btn=False)
-        self.ui.extraCenter.setCurrentWidget(self.ui.AddPersonePage)
+        self.setup_extraCenter_ui(f"Nouveau {persone_type.title()}", self.ui.AddPersonePage)
 
     def save_new_persone(self):
         """
@@ -611,7 +607,7 @@ class Credit(QtWidgets.QMainWindow):
         :param rows: List of rows to display, if None it will fetch from the database.
         :param headers_type: Type of headers to display, "all" for all operations or "one" for one employe.
         """
-        if rows is None: 
+        if rows is None:
             rows = self.db.dump_operations()
             self.display_totals()  # Display total sums of operations
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
@@ -665,7 +661,7 @@ class Credit(QtWidgets.QMainWindow):
 
         date = f"{TODAY.year}-{month}" if month != 'Tous' else 'Tous'
         rows = self.db.filter_accomptes(employe, operation, date)
-        
+
         # Display Result in QTableWidget
         self.display_totals(date)  # Display total sums of operations
         self.display_accomptes(rows, headers_type="one")
@@ -682,7 +678,7 @@ class Credit(QtWidgets.QMainWindow):
                 self.ui.employesTableWidget,
                 self.ui.employesTableWidget.currentRow(),
                 1
-            )            
+            )
             month = TODAY.strftime("%m")
         else:
             emp_name = self.db.get_item('employes', 'nom', emp_id)
@@ -699,18 +695,24 @@ class Credit(QtWidgets.QMainWindow):
 
     def ui_employe_opration(self, operation):
         """"""
-        operation_dict = {
-            'prime': 'Nouveau Prime',
-            'retenu': 'Nouveau Retenu',
-            'avance': 'Nouveau Avance'
-        }
         employe_id = self.get_item_id(self.ui.employesTableWidget)
+        employe_name = utils.get_column_value(self.ui.employesTableWidget, self.ui.employesTableWidget.currentRow(), 1)
+        # operation_dict = {  # For Title
+            # 'prime': f"Nouveau Prime pour {employe_name}",
+            # 'retenu': "Nouveau Retenu pour {employe_name}",
+            # 'avance': "Nouveau Avance pour {employe_name}"
+        # }
+
         self.ui.labelEmployeOperationEmpID.setText(employe_id)
         self.ui.labelEmployeOperationEmpID.hide()
+
         self.ui.labelEmployeOperationType.setText(operation)    # Label Operation Type
         self.ui.labelEmployeOperationType.hide()
+
         self.ui.dateEditEmployeOperationDate.setDate(TODAY)
-        self.setup_extraCenter_ui(operation_dict[operation], self.ui.AddEmpOperationPage)
+
+        title = f"{operation.title()} {employe_name}"
+        self.setup_extraCenter_ui(title, self.ui.AddEmpOperationPage)
 
     def save_new_operation(self):
         """"""
@@ -852,7 +854,7 @@ class Credit(QtWidgets.QMainWindow):
             self.show_error_message(result['message'], success=True)
         else:
             self.show_error_message(f"Erreur: {result['error']}", success=False)
-        
+
         # refresh table
         self.accompte_by_employee(emp_id, month=month)
 
@@ -1371,12 +1373,15 @@ class Credit(QtWidgets.QMainWindow):
             - Updates the page title to reflect the current operation (add or edit).
             - Displays an error message if the charge to edit is not found.
         """
-        
+
         employees = self.db.get_names('employes')
         utils.populate_comboBox(self.ui.cbBoxChargeBy, employees)
         if edit:
             logger.info("Editing an existing charge...")
             charge_id = self.get_item_id(self.ui.chargeTableWidget)
+            self.ui.labelChargeID.setText(charge_id)
+            self.ui.labelChargeEditEnabled.setText('True')
+
             charge = self.db.get_charge_by_id(charge_id)
             if not charge:
                 self.show_error_message("Erreur: Charge introuvable.", success=False)
@@ -1387,7 +1392,9 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxChargeBy.setCurrentText(charge.effectue_par)
             self.ui.editChargeMontant.setValue(charge.montant)
             self.ui.editChargeMotif.setPlainText(charge.motif)
-            title = "Modifier une Charge"
+            title = "Modifier Charge"
+            self.ui.extraIconPlus.setIcon(qta.icon('ph.pencil-line-light', color="#FF6600"))
+            self.ui.extraLabelTitle.setStyleSheet("color: #FF6600;")
         else:
             logger.info("Creating a new charge...")
             # Clear previous inputs
@@ -1397,9 +1404,13 @@ class Credit(QtWidgets.QMainWindow):
                 self.ui.editChargeMotif
             ]
             utils.clear_inputs(inputs_to_clear)
-            self.ui.dateEditChargeDate.setDate(TODAY)  # Set current date as default                        
-            title = "Ajouter une Charge"
-        
+            self.ui.dateEditChargeDate.setDate(TODAY)  # Set current date as default
+            title = "Ajouter Une Charge"
+            self.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=utils.SKYPE_COLOR))
+            self.ui.extraLabelTitle.setStyleSheet(f"color: {utils.SKYPE_COLOR};")
+            self.ui.labelChargeEditEnabled.setText('False')
+            self.ui.labelChargeID.clear()
+
         self.setup_extraCenter_ui(title, self.ui.addChargePage)
 
     def insert_new_charge(self):
@@ -1413,19 +1424,29 @@ class Credit(QtWidgets.QMainWindow):
         Returns:
             None
         """
-        
-        # FIXME: make this function work with update too
-        logger.info("Inserting a new charge...")
+
         # Get values from UI
         date = self.ui.dateEditChargeDate.date().toPyDate()
         par = self.ui.cbBoxChargeBy.currentText()
         montant = self.ui.editChargeMontant.value()
         motif = self.ui.editChargeMotif.toPlainText()
-        logger.debug("Inserting new charge with values: "
-                     f"Date({date}), Par({par}), Montant({montant}), Motif({motif})")
-        result = self.db.insert_new_charge(date, par, montant, motif)
+
+        # Procedure to database
+        editable = self.ui.labelChargeEditEnabled.text()
+        if editable == 'True':
+            charge_id = self.ui.labelChargeID.text()
+            logger.debug(f"Editing charge({charge_id}): "
+                         f"Date({date}), Par({par}), Montant({montant}), Motif({motif})")
+            result = self.db.update_charge_values(charge_id, date, par, montant, motif)
+        else:
+            logger.debug("Inserting new charge with values: "
+                         f"Date({date}), Par({par}), Montant({montant}), Motif({motif})")
+            result = self.db.insert_new_charge(date, par, montant, motif)
+
         if result['success']:
-            logger.info("Charge added successfully.")
+            logger.info(f"{result['message']}")
+            self.show_error_message(f"{result['message']}", success=True)
+
             self.show_error_message("Charge ajoutée avec succès.", success=True)
             self.toggle_left_box(close=True)
             self.goto_page('charge', title='Charges')

@@ -17,9 +17,10 @@ NEW_COLOR = "#1dd1a1"
 SAVE_COLOR = '#17c0eb'
 BLUE_COLOR = '#4074a3'
 TRASH_COLOR = '#f77861'
-EDIT_COLOR = '#0097e6'
+EDIT_COLOR = '#FF6600'
 WHITE_COLOR = "#FFFFFF"
 ICON_COLOR = "#ececec"
+SKYPE_COLOR = "#00AFF0"
 
 Error_COLOR = "#f77861"
 Success_COLOR = "#44e37b"
@@ -84,7 +85,7 @@ def main_icons_callbacks(root):
     SAVE_ICON = qta.icon('mdi.content-save', color=BLUE_COLOR)
     TRASH_ICON = qta.icon('msc.trashcan', color=TRASH_COLOR)
     REFRESH_ICON = qta.icon("mdi6.refresh", color=WHITE_COLOR)
-    # EDIT_ICON = qta.icon('ph.pencil-light', color=EDIT_COLOR)
+    EDIT_ICON = qta.icon('ph.pencil-line-light', color=EDIT_COLOR)
     LIST_ICON = qta.icon('ph.list', color=WHITE_COLOR)
 
     # Create the Plus menu
@@ -211,6 +212,7 @@ def main_icons_callbacks(root):
     root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=WHITE_COLOR))
     root.ui.buttonIconSumAvance.setIcon(qta.icon('fa5s.comment-medical', color=WHITE_COLOR))
     root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=WHITE_COLOR))
+    root.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=SKYPE_COLOR))
 
     # == TableWidget Signals
     root.ui.clientsTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('client'))
@@ -254,11 +256,7 @@ def main_icons_callbacks(root):
 
     # Charge Menu
     charge_table_actions = [
-        (
-            'Modifier', 
-            qta.icon('ph.pencil-light', color=EDIT_COLOR), 
-            lambda: root.ui_create_charge(edit=True)
-        ),
+        ('Modifier', EDIT_ICON, lambda: root.ui_create_charge(edit=True)),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_charge),
     ]
     setup_table_context_menu(root.ui.chargeTableWidget, charge_table_actions)

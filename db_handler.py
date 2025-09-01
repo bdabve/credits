@@ -240,18 +240,16 @@ class Database:
             except sqlite3.Error as e:
                 return {'success': False, 'error': str(e)}
 
-        from collections import namedtuple
-    
     def fetch_namedtuple(self, cursor, query, params=None, tuple_name="Row"):
         """
         Executes a query and returns the result as a list of namedtuples.
-    
+
         Args:
             cursor: sqlite3 cursor object.
             query (str): SQL query to execute.
             params (tuple or list, optional): Parameters for the query.
             tuple_name (str): Name for the namedtuple type.
-    
+
         Returns:
             list: List of namedtuple instances, or an empty list if no results.
         """
@@ -259,7 +257,7 @@ class Database:
         columns = [desc[0] for desc in cursor.description]
         RowTuple = namedtuple(tuple_name, columns)
         return [RowTuple(*row) for row in cursor.fetchall()]
-    
+
     # =========================
     # === EMPLOYES METHODES ===
     # =========================
@@ -988,7 +986,7 @@ class Database:
             result = self.fetch_namedtuple(cursor, query, (charge_id,), "Charge")
             # result is a list of Charge namedtuples
             return result[0] if result else None
-        
+
     def insert_new_charge(self, date_charge, effectue_par, montant, motif):
         """
         Insert a new charge into the database.
@@ -1002,7 +1000,20 @@ class Database:
                     (date_charge, employe_id, str(montant), motif)
                 )
                 conn.commit()
-                return {'success': True, 'charge_id': cursor.lastrowid}
+                return {'success': True, 'message': "Charge ajoutée avec succès."}
+            except sqlite3.Error as e:
+                conn.rollback()
+                return {'success': False, 'error': str(e)}
+
+    def update_charge_values(self, charge_id, date, effectue_par, montant, motif):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            query = "UPDATE charges set date_charge = ?, effectue_par = ?, montant = ?, motif = ? WHERE id = ?"
+            employe_id = self.get_item_id('employes', 'nom', effectue_par)
+            try:
+                cursor.execute(query, (date, employe_id, str(montant), motif, charge_id))
+                conn.commit()
+                return {'success': True, 'message': 'Charge mise à jour avec succès.'}
             except sqlite3.Error as e:
                 conn.rollback()
                 return {'success': False, 'error': str(e)}
@@ -1033,6 +1044,7 @@ class Database:
                 message = 'Motif mis à jour avec succès.'
             else:
                 return {'success': False, 'error': 'Colonne invalide.'}
+
             conn.commit()
             return {'success': True, 'message': message}
 
