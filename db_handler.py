@@ -371,7 +371,16 @@ class Database:
     # ========================
     # == Accompte Functions ==
     # ========================
-    def get_sums_operations(self):
+    def get_sums_operations(self, month):
+        """
+        Retrieves the sum of 'prime', 'retenu', and 'avance' operations for a given month.
+
+        Args:
+            month (str): The month in 'YYYY-MM' format to filter operations. If 'Tous', sums are calculated for all months.
+
+        Returns:
+            tuple: A tuple containing the total sums for 'prime', 'retenu', and 'avance' operations, respectively.
+        """
         query = """
         SELECT
             SUM(CASE WHEN operation = 'prime' THEN montant ELSE 0 END) AS total_prime,
@@ -379,14 +388,23 @@ class Database:
             SUM(CASE WHEN operation = 'avance' THEN montant ELSE 0 END) AS total_avance
         FROM operations
         """
+        params = ()
+        if month != 'Tous':
+            query += " WHERE strftime('%Y-%m', date) = ?"
+            params = (month,)
         with self.connect() as conn:
             cursor = conn.cursor()
-            cursor.execute(query)
+            cursor.execute(query, params)
             return cursor.fetchone()
 
     def dump_operations(self):
         """
-        Retrieve all personnes from the database.
+        Retrieves summarized operation data for each employee from the database.
+        Executes a SQL query that selects specified fields from the 'employes' table,
+        left joins the 'operations' table on employee ID, groups the results by employee,
+        and orders them by employee name in ascending order.
+        Returns:
+            list: A list of tuples containing the selected fields for each employee.
         """
         with self.connect() as conn:
             cursor = conn.cursor()
@@ -1026,6 +1044,8 @@ class Database:
 if __name__ == '__main__':
     db = Database()
 
+    result = db.get_sums_operations('2024-08')
+    print(result)
     # CREATE DATABASE
     # result = db_handler.create_tables()
 
@@ -1060,5 +1080,5 @@ if __name__ == '__main__':
     # print(f"Versement: {result}")
 
     # Calculate salarie
-    result = db.calculate_salaire_mensuel('2024-08', 1)
-    print(result)
+    # result = db.calculate_salaire_mensuel('2024-08', 1)
+    # print(result)

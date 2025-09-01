@@ -590,19 +590,30 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================
     # == Employee Accompte ( Prime, Retenu, Avance) ==
     # ================================================
+    def display_totals(self, month='Tous'):
+        """
+        Display the total sums of Prime, Retenu, and Avance for all employees.
+        """
+        sums = self.db.get_sums_operations(month)
+        logger.info(f"Total Sums of accompte for month({month}): {sums}")
+        for sum in sums:
+            if sum is None:
+                sums = (0, 0, 0)
+                break
+        total_prime, total_retenu, total_avance = sums
+        self.ui.labelSumAvance.setText(f"{utils.format_money(total_avance)} DA")
+        self.ui.labelSumRetenu.setText(f"{utils.format_money(total_retenu)} DA")
+        self.ui.labelSumPrime.setText(f"{utils.format_money(total_prime)} DA")
+
     def display_accomptes(self, rows=None, headers_type="all", **kwargs):
         """
         This function display the SUM of (Prime, Retenu, Avance) for all employees.
         :param rows: List of rows to display, if None it will fetch from the database.
         :param headers_type: Type of headers to display, "all" for all operations or "one" for one employe.
         """
-        sums = self.db.get_sums_operations()
-        total_prime, total_retenu, total_avance = sums
-        self.ui.labelSumAvance.setText(f"{utils.format_money(total_avance)} DA")
-        self.ui.labelSumRetenu.setText(f"{utils.format_money(total_retenu)} DA")
-        self.ui.labelSumPrime.setText(f"{utils.format_money(total_prime)} DA")
-
-        if rows is None: rows = self.db.dump_operations()
+        if rows is None: 
+            rows = self.db.dump_operations()
+            self.display_totals()  # Display total sums of operations
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
         # Block ComboBoxSignals
         self.ui.cbBoxEmployeOperationByName.blockSignals(True)
@@ -625,6 +636,8 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.cbBoxEmployeOperationByDate.blockSignals(False)
         self.ui.labelAccompteEdit.hide()
 
+        # month = kwargs.get("month") if kwargs.get("month") is not None else "Tous"
+        # self.display_totals(month)  # Display total sums of operations
         # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.accompteTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.accompteTableWidget, 220, 170, 170, 170, 200)
@@ -652,10 +665,13 @@ class Credit(QtWidgets.QMainWindow):
 
         date = f"{TODAY.year}-{month}" if month != 'Tous' else 'Tous'
         rows = self.db.filter_accomptes(employe, operation, date)
+        
+        # Display Result in QTableWidget
+        self.display_totals(date)  # Display total sums of operations
         self.display_accomptes(rows, headers_type="one")
         self.goto_page(page='operations', from_btn=False)
 
-    def accompte_by_employee(self, emp_id=None):
+    def accompte_by_employee(self, emp_id=None, **kwargs):
         """
         This function will display operations by the selected employe.
         """
@@ -666,16 +682,19 @@ class Credit(QtWidgets.QMainWindow):
                 self.ui.employesTableWidget,
                 self.ui.employesTableWidget.currentRow(),
                 1
-            )
+            )            
+            month = TODAY.strftime("%m")
         else:
             emp_name = self.db.get_item('employes', 'nom', emp_id)
+            month = kwargs.get("month")
 
-        logger.debug(f"Getting accompte for employe({emp_name} - {emp_id})")
+        logger.debug(f"Getting accompte for employe({emp_name} - {emp_id}), month({month})")
 
         # Here the date for displaying result
         # the month to display in ComboBox
-        rows = self.db.employee_accompts(emp_id, TODAY.strftime("%Y-%m"))
-        self.display_accomptes(rows, headers_type="one", employee=emp_name, month=TODAY.strftime("%m"))
+        date = f"{TODAY.strftime(f"%Y-%m")}" if not month else f"{TODAY.strftime(f"%Y")}-{month}"
+        rows = self.db.employee_accompts(emp_id, date)
+        self.display_accomptes(rows, headers_type="one", employee=emp_name, month=month)
         self.goto_page(page='operations', from_btn=False)
 
     def ui_employe_opration(self, operation):
@@ -774,7 +793,34 @@ class Credit(QtWidgets.QMainWindow):
             self.show_error_message(f"Aucun salaire trouvé pour l'employé {employe} en {month}.", success=False)
 
     def edit_accompte(self, row, col, text):
+        """
+        Edits an accompte entry in the table widget and updates the database.
+
+        Parameters:
+            row (int): The row index of the edited item.
+            col (int): The column index of the edited item.
+            text (str): The new text value to be set.
+
+        Workflow:
+            - Checks if editing is enabled via the UI label.
+            - Validates the input based on the column:
+                - For date column (col == 1), verifies date format (YYYY-MM-DD).
+                - For amount column (col == 4), converts and validates decimal format.
+            - Updates the accompte entry in the database.
+            - Displays success or error messages based on the operation result.
+            - Refreshes the accompte display for the employee and selected month.
+
+        Returns:
+            None
+        """
         edit = self.ui.labelAccompteEdit.text()
+        date_str = utils.get_column_value(self.ui.accompteTableWidget, row, 1)
+        # date_str is in 'dd-mm-yyyy' format, extract month
+        try:
+            month = date_str.split('-')[1]
+        except Exception:
+            month = ''
+
         if edit != 'True':
             logger.debug('Edit or Delete is disabled.')
             self.show_error_message("Modification non autorisée.", success=False)
@@ -800,13 +846,15 @@ class Credit(QtWidgets.QMainWindow):
             else:
                 text = text['value']
 
+        # Database Handling
         result = self.db.update_accompte(accompte_id, col, text)
         if result['success']:
             self.show_error_message(result['message'], success=True)
         else:
             self.show_error_message(f"Erreur: {result['error']}", success=False)
-
-        self.accompte_by_employee(emp_id)
+        
+        # refresh table
+        self.accompte_by_employee(emp_id, month=month)
 
     # =========================================
     # NOTE:  Not implemented yet
