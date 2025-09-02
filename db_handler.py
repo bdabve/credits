@@ -381,39 +381,53 @@ class Database:
         """
         query = """
         SELECT
-            SUM(CASE WHEN operation = 'prime' THEN montant ELSE 0 END) AS total_prime,
-            SUM(CASE WHEN operation = 'retenu' THEN montant ELSE 0 END) AS total_retenue,
-            SUM(CASE WHEN operation = 'avance' THEN montant ELSE 0 END) AS total_avance
+            IFNULL(SUM(CASE WHEN operation = 'prime' THEN montant ELSE 0 END), 0) AS total_prime,
+            IFNULL(SUM(CASE WHEN operation = 'retenu' THEN montant ELSE 0 END), 0) AS total_retenu,
+            IFNULL(SUM(CASE WHEN operation = 'avance' THEN montant ELSE 0 END), 0) AS total_avance
         FROM operations
-        """
+        """        
         params = ()
         if month != 'Tous':
             query += " WHERE strftime('%Y-%m', date) = ?"
             params = (month,)
         with self.connect() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, params)
-            return cursor.fetchone()
+            return self.fetch_namedtuple(cursor, query, params=params, tuple_name="SUM_ACCOMPTE")[0]
 
-    def dump_operations(self):
+    def dump_operations(self, month=None):
         """
         Retrieves summarized operation data for each employee from the database.
         Executes a SQL query that selects specified fields from the 'employes' table,
-        left joins the 'operations' table on employee ID, groups the results by employee,
-        and orders them by employee name in ascending order.
+        left joins the 'operations' table on employee ID, optionally filters by month,
+        groups the results by employee, and orders them by employee name in ascending order.
+        
+        Args:
+            month (str, optional): A string in 'YYYY-MM' format to filter operations by month.
+            
         Returns:
             list: A list of tuples containing the selected fields for each employee.
         """
         with self.connect() as conn:
             cursor = conn.cursor()
+            
+            # base query
             query = f"""
                 SELECT {", ".join(self.operation_sum_fileds)}
                 FROM employes e
                 LEFT JOIN operations AS o ON e.id = o.employe_id
+            """
+            
+            params = ()
+            if month:
+                query += " WHERE strftime('%Y-%m', o.date) = ?"
+                params = (month,)
+            
+            query += """
                 GROUP BY e.id
                 ORDER BY e.nom ASC;
             """
-            cursor.execute(query)
+            
+            cursor.execute(query, params)
             return cursor.fetchall()
 
     def filter_accomptes(self, employe, selected_operation, selected_month):
@@ -969,6 +983,18 @@ class Database:
     # ======================
     # === Charge Methods ===
     # ======================
+    def sum_charges(self, month=None):
+        query = "SELECT IFNULL(SUM(montant), 0) AS total_charges FROM charges"
+        params = ()
+        if month:
+            query += " WHERE strftime('%Y-%m', date_charge) = ?"
+            params = (month, )
+        
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            result = self.fetch_namedtuple(cursor, query, params=params)
+            return result[0] if result else 0
+        
     def dump_charges(self):
         with self.connect() as conn:
             cursor = conn.cursor()
