@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1198</width>
+    <width>1308</width>
     <height>535</height>
    </rect>
   </property>
@@ -272,8 +272,18 @@ QGroupBox .QPushButton:pressed {
 /* =======================================*/
 /* Close/Maximaze/Minimize QPushButtons */
 /* Btn Close ExtraLeftContent */
+#extraIconPlus {
+	background-color: transparent; 
+	border: none;  
+	border-radius: 5px; 
+	min-height: 30px;
+	min-width: 30px;
+	padding: 0;
+}
+
 #rightButtons QPushButton,
-#extraCloseColumnBtn { 
+#extraCloseColumnBtn
+ { 
 	background-color: transparent; 
 	border: none;  
 	border-radius: 5px; 
@@ -387,6 +397,11 @@ QDateEdit
 #editSearchCharge {
 	border: 1px solid #303030;
 }
+
+QLineEdit {
+	min-width: 350px;
+}
+
 QLineEdit:hover,
 QSpinBox:hover,
 QDoubleSpinBox:hover,
@@ -583,7 +598,7 @@ QComboBox::drop-down {
 	background-repeat: no-reperat;    
  }
 QComboBox QAbstractItemView {
-	color: rgb(255, 121, 198);	
+	color: #1dd1a1;	
 	background-color: #3d3d3d;
 	padding: 8px 20px;
 	selection-background-color: rgb(39, 44, 54);
@@ -696,6 +711,7 @@ Extra Tab */
 #extraLeftBox {
 	background-color: #272727;
 	border: 2px solid #202020;
+	border-left-color: #2C3E50;
 }
 #AddCreditPage,
 #AddCreditVersementPage,
@@ -719,7 +735,7 @@ Extra Tab */
 }
 
 /* Label */
-#extraLabelTitle { color: rgb(255, 255, 255); }
+#extraLabelTitle { color: #00AFF0; }
 
 #widgetSalairePage QLabel {
 	padding: 5px;
@@ -1407,24 +1423,27 @@ Content App */
                 <number>0</number>
                </property>
                <item row="0" column="0">
-                <widget class="QFrame" name="extraIcon">
+                <widget class="QPushButton" name="extraIconPlus">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
-                   <width>20</width>
-                   <height>0</height>
+                   <width>30</width>
+                   <height>30</height>
                   </size>
                  </property>
-                 <property name="maximumSize">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="iconSize">
                   <size>
                    <width>20</width>
                    <height>20</height>
                   </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
                  </property>
                 </widget>
                </item>
@@ -1432,7 +1451,7 @@ Content App */
                 <widget class="QLabel" name="extraLabelTitle">
                  <property name="minimumSize">
                   <size>
-                   <width>150</width>
+                   <width>130</width>
                    <height>0</height>
                   </size>
                  </property>
@@ -2898,7 +2917,7 @@ Content App */
                        </widget>
                       </item>
                       <item row="0" column="1">
-                       <widget class="QLabel" name="labelSpacer_2">
+                       <widget class="QLabel" name="labelChargeID">
                         <property name="text">
                          <string/>
                         </property>
@@ -2942,6 +2961,13 @@ Content App */
                       </item>
                       <item row="2" column="1">
                        <widget class="QComboBox" name="cbBoxChargeBy"/>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="labelChargeEditEnabled">
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </item>
@@ -3054,7 +3080,7 @@ Content App */
                  <number>0</number>
                 </property>
                 <property name="leftMargin">
-                 <number>0</number>
+                 <number>5</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
@@ -3065,29 +3091,6 @@ Content App */
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QPushButton" name="plusButtonShurtcut">
-                  <property name="maximumSize">
-                   <size>
-                    <width>41</width>
-                    <height>41</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <widget class="QLabel" name="titleRightInfo">
                   <property name="sizePolicy">
@@ -3331,6 +3334,29 @@ Content App */
               <number>6</number>
              </property>
              <item>
+              <widget class="QPushButton" name="plusButtonShurtcut">
+               <property name="maximumSize">
+                <size>
+                 <width>41</width>
+                 <height>41</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QWidget" name="widgetMessages" native="true">
                <property name="maximumSize">
                 <size>
@@ -3524,7 +3550,7 @@ Content App */
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>260</width>
+                           <width>362</width>
                            <height>34</height>
                           </size>
                          </property>
@@ -3914,7 +3940,7 @@ Content App */
                         <widget class="QLineEdit" name="editSearchCredit">
                          <property name="minimumSize">
                           <size>
-                           <width>260</width>
+                           <width>362</width>
                            <height>43</height>
                           </size>
                          </property>
@@ -4459,7 +4485,7 @@ Content App */
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>260</width>
+                           <width>362</width>
                            <height>43</height>
                           </size>
                          </property>
@@ -5239,7 +5265,7 @@ Content App */
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>260</width>
+                           <width>362</width>
                            <height>34</height>
                           </size>
                          </property>
@@ -5946,7 +5972,7 @@ Content App */
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>260</width>
+                           <width>364</width>
                            <height>36</height>
                           </size>
                          </property>
