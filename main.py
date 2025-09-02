@@ -21,7 +21,6 @@ class Credit(QtWidgets.QMainWindow):
     # TODO
     # ====
     # - Add PDF Export for Salary Slip
-    # - handle the chrage edit when button save is clicked
     # - work with the charge page
     # - handle all the search functions
     # - handle edit for other function that need it
@@ -35,6 +34,7 @@ class Credit(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
         self.db = Database()
+        self.CURRENT_MONTH = TODAY.strftime("%Y-%m")
 
         # Track menu state
         self.menu_expanded = True
@@ -134,8 +134,7 @@ class Credit(QtWidgets.QMainWindow):
         self.on_toggle_menu()
         self.goto_page('credit')  # Default page
         self.ui.labelDate.setText(f"{TODAY.date()}")
-        #
-        self.populate_cbBoxEmployeAccompte()    # Populate EmployeOperationByName ComboBox
+        #        
         self.showMaximized()
 
     # -- Window UPBAR Controls --
@@ -591,15 +590,11 @@ class Credit(QtWidgets.QMainWindow):
         Display the total sums of Prime, Retenu, and Avance for all employees.
         """
         sums = self.db.get_sums_operations(month)
+        print(sums)
         logger.info(f"Total Sums of accompte for month({month}): {sums}")
-        for sum in sums:
-            if sum is None:
-                sums = (0, 0, 0)
-                break
-        total_prime, total_retenu, total_avance = sums
-        self.ui.labelSumAvance.setText(f"{utils.format_money(total_avance)} DA")
-        self.ui.labelSumRetenu.setText(f"{utils.format_money(total_retenu)} DA")
-        self.ui.labelSumPrime.setText(f"{utils.format_money(total_prime)} DA")
+        self.ui.labelSumAvance.setText(f"{utils.format_money(sums.total_avance)} DA")
+        self.ui.labelSumRetenu.setText(f"{utils.format_money(sums.total_retenu)} DA")
+        self.ui.labelSumPrime.setText(f"{utils.format_money(sums.total_prime)} DA")
 
     def display_accomptes(self, rows=None, headers_type="all", **kwargs):
         """
@@ -608,13 +603,19 @@ class Credit(QtWidgets.QMainWindow):
         :param headers_type: Type of headers to display, "all" for all operations or "one" for one employe.
         """
         if rows is None:
-            rows = self.db.dump_operations()
-            self.display_totals()  # Display total sums of operations
+            month = self.CURRENT_MONTH
+            rows = self.db.dump_operations(month)
+            self.display_totals(month)  # Display total sums of operations
+
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
-        # Block ComboBoxSignals
-        self.ui.cbBoxEmployeOperationByName.blockSignals(True)
-        self.ui.cbBoxEmployeOperationByType.blockSignals(True)
-        self.ui.cbBoxEmployeOperationByDate.blockSignals(True)
+
+        cbboxes = [
+            self.ui.cbBoxEmployeOperationByName, 
+            self.ui.cbBoxEmployeOperationByType, 
+            self.ui.cbBoxEmployeOperationByDate
+        ]
+        # Block CBBoxes Signals
+        for cbbox in cbboxes: cbbox.blockSignals(True)
 
         if headers_type == 'all':
             # setup the comboBoxes
@@ -626,24 +627,13 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxEmployeOperationByName.setCurrentText(kwargs.get("employee"))
             self.ui.cbBoxEmployeOperationByDate.setCurrentText(kwargs.get("month"))
             self.ui.labelAccompteEdit.setText('True')   # Enable Edit or Delete
-
-        self.ui.cbBoxEmployeOperationByName.blockSignals(False)
-        self.ui.cbBoxEmployeOperationByType.blockSignals(False)
-        self.ui.cbBoxEmployeOperationByDate.blockSignals(False)
         self.ui.labelAccompteEdit.hide()
-
-        # month = kwargs.get("month") if kwargs.get("month") is not None else "Tous"
-        # self.display_totals(month)  # Display total sums of operations
+        for cbbox in cbboxes: cbbox.blockSignals(False)     # Unblock signals
+        
         # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.accompteTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.accompteTableWidget, 220, 170, 170, 170, 200)
         self.ui.labelEmployesOprationCount.setText(f"Total: {len(rows)}")
-
-    def populate_cbBoxEmployeAccompte(self):
-        # Populate EmployeOperationByName ComboBox
-        employes = self.db.get_names('employes')
-        employes.insert(0, 'Tous')  # Add 'Tous' option for all employes
-        utils.populate_comboBox(self.ui.cbBoxEmployeOperationByName, employes)
 
     def filter_accomptes(self):
         """
@@ -688,7 +678,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # Here the date for displaying result
         # the month to display in ComboBox
-        date = f"{TODAY.strftime(f"%Y-%m")}" if not month else f"{TODAY.strftime(f"%Y")}-{month}"
+        date = f"{self.CURRENT_MONTH}" if not month else f"{TODAY.strftime(f"%Y")}-{month}"
         rows = self.db.employee_accompts(emp_id, date)
         self.display_accomptes(rows, headers_type="one", employee=emp_name, month=month)
         self.goto_page(page='operations', from_btn=False)
@@ -1347,6 +1337,12 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Charge Page ==
     # =================
+    def populate_cbBoxEmployeAccompte(self):
+        # Populate EmployeOperationByName ComboBox
+        employes = self.db.get_names('employes')
+        employes.insert(0, 'Tous')  # Add 'Tous' option for all employes
+        utils.populate_comboBox(self.ui.cbBoxEmployeOperationByName, employes)
+
     def display_charge(self, rows=None):
         """
         Display all versements in the table widget.
@@ -1354,10 +1350,15 @@ class Credit(QtWidgets.QMainWindow):
         # headers = ['ID', 'Date', 'Montant', 'Observation']
         # utils.populate_table_widget(self.ui.versementTableWidget, rows, headers)
         # self.ui.labelVersementCount.setText(f"Total: {len(rows)}")
-        logger.debug('Display Charge Records')
+        month = self.CURRENT_MONTH       
         rows = self.db.dump_charges() if rows is None else rows
+        total_charges = self.db.sum_charges(month)
+        
+        logger.debug('Display Charge Records')
+        self.ui.labelTotalCharge.setText(f"Total Charges Mois '{month}' = {utils.format_money(total_charges.total_charges)}")
         utils.populate_table_widget(self.ui.chargeTableWidget, rows, utils.CHARGE_HEADERS)
         utils.set_table_column_sizes(self.ui.chargeTableWidget, 80, 170, 250, 200)
+        self.populate_cbBoxEmployeAccompte()    # Populate EmployeOperationByName ComboBox
         self.ui.labelChargeCount.setText(f"Total: {len(rows)}")
 
     def ui_create_charge(self, edit=False):
