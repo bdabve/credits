@@ -187,11 +187,11 @@ def main_icons_callbacks(root):
         (root.ui.buttonEmployeSaveOperation, SAVE_ICON, root.save_new_operation),
         # refresh to all
         (
-            root.ui.buttonRefreshEmpolyeOperationTable,
+            root.ui.buttonRefreshAccompteTable,
             REFRESH_ICON,
             lambda: root.display_accomptes(rows=None, headers_type="all")
         ),
-        (root.ui.buttonDeleteEmployeOperation, TRASH_ICON, root.delete_accompte),
+        (root.ui.buttonDeleteAccompte, TRASH_ICON, root.delete_accompte),
         # ==================================================================================================
         # == Charge Page ==
         # ==================
@@ -264,6 +264,7 @@ def main_icons_callbacks(root):
     # == ComboBox Signals
     root.ui.cbBoxCreditByStatus.currentIndexChanged.connect(root.filter_credit_by_status)
     root.ui.cbBoxSalaireEmpMonth.currentIndexChanged.connect(lambda: root.calculate_salaire(from_btn=False))
+    root.ui.cbBoxChargeByMonth.currentIndexChanged.connect(lambda: root.display_charge(rows=None))
 
     # filter accompte
     for cbBox in (
@@ -276,9 +277,20 @@ def main_icons_callbacks(root):
     # root.ui.cbBoxEmployeOperationByDate.currentIndexChanged.connect(root.filter_accomptes)
 
     # == LineEdit Signals
-    root.ui.editSearchCredit.textChanged.connect(root.filter_credits)
-    root.ui.editSearchClients.textChanged.connect(root.filter_clients)
-    root.ui.editSearchEmploye.textChanged.connect(root.filter_employe)
+    lineEdits = [
+        (root.ui.editSearchCredit, root.filter_credits),
+        (root.ui.editSearchClients, root.filter_clients),
+        (root.ui.editSearchEmploye, root.filter_employe),
+        (root.ui.editSearchCharge, root.filter_charge),
+    ]
+    for edit, callback in lineEdits:
+        edit.textChanged.connect(callback)
+        edit.returnPressed.connect(callback)
+
+    # root.ui.editSearchCredit.textChanged.connect(root.filter_credits)
+    # root.ui.editSearchCredit.returnPressed.connect(root.filter_credits)
+    # root.ui.editSearchClients.textChanged.connect(root.filter_clients)
+    # root.ui.editSearchEmploye.textChanged.connect(root.filter_employe)
 
 
 def pagebuttons_stats(root):

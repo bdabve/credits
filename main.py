@@ -87,7 +87,7 @@ class Credit(QtWidgets.QMainWindow):
                 ),
                 'buttons': lambda self: (
                     self.ui.accompteTableWidget,
-                    (self.ui.buttonDeleteEmployeOperation,)
+                    (self.ui.buttonDeleteAccompte,)
                 )
             },
             'credit': {
@@ -134,7 +134,7 @@ class Credit(QtWidgets.QMainWindow):
         self.on_toggle_menu()
         self.goto_page('credit')  # Default page
         self.ui.labelDate.setText(f"{TODAY.date()}")
-        #        
+        #
         self.showMaximized()
 
     # -- Window UPBAR Controls --
@@ -590,7 +590,6 @@ class Credit(QtWidgets.QMainWindow):
         Display the total sums of Prime, Retenu, and Avance for all employees.
         """
         sums = self.db.get_sums_operations(month)
-        print(sums)
         logger.info(f"Total Sums of accompte for month({month}): {sums}")
         self.ui.labelSumAvance.setText(f"{utils.format_money(sums.total_avance)} DA")
         self.ui.labelSumRetenu.setText(f"{utils.format_money(sums.total_retenu)} DA")
@@ -608,10 +607,11 @@ class Credit(QtWidgets.QMainWindow):
             self.display_totals(month)  # Display total sums of operations
 
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
+        # FIXME: fix this
 
         cbboxes = [
-            self.ui.cbBoxEmployeOperationByName, 
-            self.ui.cbBoxEmployeOperationByType, 
+            self.ui.cbBoxEmployeOperationByName,
+            self.ui.cbBoxEmployeOperationByType,
             self.ui.cbBoxEmployeOperationByDate
         ]
         # Block CBBoxes Signals
@@ -619,6 +619,7 @@ class Credit(QtWidgets.QMainWindow):
 
         if headers_type == 'all':
             # setup the comboBoxes
+            self.populate_cbBoxEmployeAccompte()
             self.ui.cbBoxEmployeOperationByName.setCurrentText('Tous')
             self.ui.cbBoxEmployeOperationByDate.setCurrentText('Tous')
             self.ui.cbBoxEmployeOperationByType.setCurrentText('Tous')
@@ -629,11 +630,11 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.labelAccompteEdit.setText('True')   # Enable Edit or Delete
         self.ui.labelAccompteEdit.hide()
         for cbbox in cbboxes: cbbox.blockSignals(False)     # Unblock signals
-        
+
         # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.accompteTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.accompteTableWidget, 220, 170, 170, 170, 200)
-        self.ui.labelEmployesOprationCount.setText(f"Total: {len(rows)}")
+        self.ui.labelAccompteCount.setText(f"Total: {len(rows)}")
 
     def filter_accomptes(self):
         """
@@ -646,14 +647,15 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelAccompteEmpID.hide()
 
         operation = self.ui.cbBoxEmployeOperationByType.currentText().lower()
-        month = self.ui.cbBoxEmployeOperationByDate.currentText()
+        month_text = self.ui.cbBoxEmployeOperationByDate.currentText()
+        month = f"{TODAY.year}-{month_text}" if month_text != 'Tous' else 'Tous'
+
         logger.info(f"Filter Operation: Operation({operation}), Month({month}), Employee({employe})")
 
-        date = f"{TODAY.year}-{month}" if month != 'Tous' else 'Tous'
-        rows = self.db.filter_accomptes(employe, operation, date)
+        rows = self.db.filter_accomptes(employe, operation, month)
 
         # Display Result in QTableWidget
-        self.display_totals(date)  # Display total sums of operations
+        self.display_totals(month_text)                     # Display total sums of operations
         self.display_accomptes(rows, headers_type="one")
         self.goto_page(page='operations', from_btn=False)
 
@@ -682,6 +684,12 @@ class Credit(QtWidgets.QMainWindow):
         rows = self.db.employee_accompts(emp_id, date)
         self.display_accomptes(rows, headers_type="one", employee=emp_name, month=month)
         self.goto_page(page='operations', from_btn=False)
+
+    def populate_cbBoxEmployeAccompte(self):
+        # Populate EmployeOperationByName ComboBox
+        employes = self.db.get_names('employes')
+        employes.insert(0, 'Tous')  # Add 'Tous' option for all employes
+        utils.populate_comboBox(self.ui.cbBoxEmployeOperationByName, employes)
 
     def ui_employe_opration(self, operation):
         """"""
@@ -1105,7 +1113,6 @@ class Credit(QtWidgets.QMainWindow):
         versement = utils.get_column_value(self.ui.creditTableWidget, self.ui.creditTableWidget.currentRow(), 5)
         logger.info(f"Edit Client({credit_id}) at Row({row}), Column({col}), New Text({text})")
         versment = utils.format_to_decimal(versement)
-        # print(versement)
         if not versment['success']:
             self.show_error_message(f"Erreur: {versment['error']}", success=False)
             return
@@ -1219,7 +1226,6 @@ class Credit(QtWidgets.QMainWindow):
         # conver to Decimal in place
         logger.info(f"Add payment for Credit({credit_id}), ClientID({client_id}), reste({reste})")
         reste_decimal = utils.format_to_decimal(reste)
-        # print(result)
         if not reste_decimal['success']:
             self.show_error_message(f"Erreur: {reste_decimal['error']}", success=False)
             return
@@ -1337,29 +1343,42 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Charge Page ==
     # =================
-    def populate_cbBoxEmployeAccompte(self):
-        # Populate EmployeOperationByName ComboBox
-        employes = self.db.get_names('employes')
-        employes.insert(0, 'Tous')  # Add 'Tous' option for all employes
-        utils.populate_comboBox(self.ui.cbBoxEmployeOperationByName, employes)
-
     def display_charge(self, rows=None):
         """
         Display all versements in the table widget.
         """
-        # headers = ['ID', 'Date', 'Montant', 'Observation']
-        # utils.populate_table_widget(self.ui.versementTableWidget, rows, headers)
-        # self.ui.labelVersementCount.setText(f"Total: {len(rows)}")
-        month = self.CURRENT_MONTH       
-        rows = self.db.dump_charges() if rows is None else rows
+        MONTHS_FR = {
+            "01": "janvier",
+            "02": "février",
+            "03": "mars",
+            "04": "avril",
+            "05": "mai",
+            "06": "juin",
+            "07": "juillet",
+            "08": "août",
+            "09": "septembre",
+            "10": "octobre",
+            "11": "novembre",
+            "12": "décembre"
+        }
+
+        month_text = self.ui.cbBoxChargeByMonth.currentText()
+        month_name = MONTHS_FR.get(month_text) if month_text != 'Mois' else MONTHS_FR.get(TODAY.strftime("%m"))
+        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{TODAY.strftime('%Y')}-{month_text}"
+        # Get result from database
+        rows = self.db.dump_charges(month) if rows is None else rows
         total_charges = self.db.sum_charges(month)
-        
-        logger.debug('Display Charge Records')
-        self.ui.labelTotalCharge.setText(f"Total Charges Mois '{month}' = {utils.format_money(total_charges.total_charges)}")
+
+        logger.debug(f'Display Charge Records for {month}')
+        message = f"Total Charges {month_name.title()}: {utils.format_money(total_charges.total_charges)}"
+        self.ui.labelTotalCharge.setText(message)
+        # Display records in QTable
         utils.populate_table_widget(self.ui.chargeTableWidget, rows, utils.CHARGE_HEADERS)
         utils.set_table_column_sizes(self.ui.chargeTableWidget, 80, 170, 250, 200)
-        self.populate_cbBoxEmployeAccompte()    # Populate EmployeOperationByName ComboBox
         self.ui.labelChargeCount.setText(f"Total: {len(rows)}")
+
+    def filter_charge(self):
+        logger.info('Filter Charges')
 
     def ui_create_charge(self, edit=False):
         """
@@ -1381,12 +1400,15 @@ class Credit(QtWidgets.QMainWindow):
             logger.info("Editing an existing charge...")
             charge_id = self.get_item_id(self.ui.chargeTableWidget)
             self.ui.labelChargeID.setText(charge_id)
+            self.ui.labelChargeID.hide()
             self.ui.labelChargeEditEnabled.setText('True')
+            self.ui.labelChargeEditEnabled.hide()
 
             charge = self.db.get_charge_by_id(charge_id)
             if not charge:
                 self.show_error_message("Erreur: Charge introuvable.", success=False)
                 return
+
             # Populate fields with existing data
             date_obj = QtCore.QDate.fromString(charge.date_charge, 'yyyy-MM-dd')
             self.ui.dateEditChargeDate.setDate(date_obj)
