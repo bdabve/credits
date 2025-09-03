@@ -13,8 +13,6 @@ from gui.h_credit import Ui_MainWindow
 from logger import logger
 from datetime import datetime
 
-TODAY = datetime.now()
-
 
 class Credit(QtWidgets.QMainWindow):
     # #######################################
@@ -34,7 +32,12 @@ class Credit(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
         self.db = Database()
-        self.CURRENT_MONTH = TODAY.strftime("%Y-%m")
+        # Setup current date values
+        self.CURRENT_DATE = datetime.now()
+        self.CURRENT_MONTH = self.CURRENT_DATE.strftime("%Y-%m")
+        self.CURRENT_MONTH_TEXT = self.CURRENT_DATE.strftime("%m")
+        self.CURRENT_YEAR = self.CURRENT_DATE.strftime("%Y")
+        
 
         # Track menu state
         self.menu_expanded = True
@@ -133,7 +136,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         self.on_toggle_menu()
         self.goto_page('credit')  # Default page
-        self.ui.labelDate.setText(f"{TODAY.date()}")
+        self.ui.labelDate.setText(f"{self.CURRENT_DATE.date()}")
         #
         self.showMaximized()
 
@@ -443,7 +446,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # Clear the inputs and setFucus to name edit
         self.ui.editNewPersonName.setFocus()
-        self.ui.editNewPersonDateEmbauche.setDate(TODAY)
+        self.ui.editNewPersonDateEmbauche.setDate(self.CURRENT_DATE)
 
         # Hide inused inputs
         if persone_type == 'client':
@@ -585,12 +588,14 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================
     # == Employee Accompte ( Prime, Retenu, Avance) ==
     # ================================================
-    def display_totals(self, month='Tous'):
+    def display_accompte_totals(self, month='Tous'):
         """
-        Display the total sums of Prime, Retenu, and Avance for all employees.
+        This function display the SUM of (Prime, Retenu, Avance) for all employees.
+        :param month: Month to filter the sums, default is 'Tous' for all months.
+        :return: Populates the UI labels with the total sums.
         """
-        sums = self.db.get_sums_operations(month)
-        logger.info(f"Total Sums of accompte for month({month}): {sums}")
+        sums = self.db.sum_accompte(month)
+        logger.info(f"Total Accompte Sums month({month}): {sums}")
         self.ui.labelSumAvance.setText(f"{utils.format_money(sums.total_avance)} DA")
         self.ui.labelSumRetenu.setText(f"{utils.format_money(sums.total_retenu)} DA")
         self.ui.labelSumPrime.setText(f"{utils.format_money(sums.total_prime)} DA")
@@ -603,12 +608,12 @@ class Credit(QtWidgets.QMainWindow):
         """
         if rows is None:
             month = self.CURRENT_MONTH
+            month_text = self.CURRENT_MONTH_TEXT
             rows = self.db.dump_operations(month)
-            self.display_totals(month)  # Display total sums of operations
+            self.display_accompte_totals(month)  # Display total sums of operations
 
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
-        # FIXME: fix this
-
+        
         cbboxes = [
             self.ui.cbBoxEmployeOperationByName,
             self.ui.cbBoxEmployeOperationByType,
@@ -621,7 +626,7 @@ class Credit(QtWidgets.QMainWindow):
             # setup the comboBoxes
             self.populate_cbBoxEmployeAccompte()
             self.ui.cbBoxEmployeOperationByName.setCurrentText('Tous')
-            self.ui.cbBoxEmployeOperationByDate.setCurrentText('Tous')
+            self.ui.cbBoxEmployeOperationByDate.setCurrentText(month_text)
             self.ui.cbBoxEmployeOperationByType.setCurrentText('Tous')
             self.ui.labelAccompteEdit.setText('False')  # Disable Edit or Delete
         elif headers_type == 'one':
@@ -648,14 +653,14 @@ class Credit(QtWidgets.QMainWindow):
 
         operation = self.ui.cbBoxEmployeOperationByType.currentText().lower()
         month_text = self.ui.cbBoxEmployeOperationByDate.currentText()
-        month = f"{TODAY.year}-{month_text}" if month_text != 'Tous' else 'Tous'
+        month = f"{self.CURRENT_YEAR}-{month_text}" if month_text != 'Tous' else 'Tous'
 
         logger.info(f"Filter Operation: Operation({operation}), Month({month}), Employee({employe})")
 
         rows = self.db.filter_accomptes(employe, operation, month)
 
         # Display Result in QTableWidget
-        self.display_totals(month_text)                     # Display total sums of operations
+        self.display_accompte_totals(month)                     # Display total sums of operations
         self.display_accomptes(rows, headers_type="one")
         self.goto_page(page='operations', from_btn=False)
 
@@ -671,7 +676,7 @@ class Credit(QtWidgets.QMainWindow):
                 self.ui.employesTableWidget.currentRow(),
                 1
             )
-            month = TODAY.strftime("%m")
+            month = self.CURRENT_MONTH_TEXT
         else:
             emp_name = self.db.get_item('employes', 'nom', emp_id)
             month = kwargs.get("month")
@@ -680,7 +685,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # Here the date for displaying result
         # the month to display in ComboBox
-        date = f"{self.CURRENT_MONTH}" if not month else f"{TODAY.strftime(f"%Y")}-{month}"
+        date = f"{self.CURRENT_MONTH}" if not month else f"{self.CURRENT_YEAR}-{month}"
         rows = self.db.employee_accompts(emp_id, date)
         self.display_accomptes(rows, headers_type="one", employee=emp_name, month=month)
         self.goto_page(page='operations', from_btn=False)
@@ -707,7 +712,7 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelEmployeOperationType.setText(operation)    # Label Operation Type
         self.ui.labelEmployeOperationType.hide()
 
-        self.ui.dateEditEmployeOperationDate.setDate(TODAY)
+        self.ui.dateEditEmployeOperationDate.setDate(self.CURRENT_DATE)
 
         title = f"{operation.title()} {employe_name}"
         self.setup_extraCenter_ui(title, self.ui.AddEmpOperationPage)
@@ -763,7 +768,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # setup Date
         if from_btn:
-            month = TODAY.strftime('%m')
+            month = self.CURRENT_MONTH_TEXT  # Get current month
             # Set current month in the comboBox
             self.ui.cbBoxSalaireEmpMonth.blockSignals(True)
             self.ui.cbBoxSalaireEmpMonth.setCurrentText(month)
@@ -771,7 +776,7 @@ class Credit(QtWidgets.QMainWindow):
         else:
             month = self.ui.cbBoxSalaireEmpMonth.currentText()
 
-        date = f"{TODAY.strftime('%Y')}-{month}"  # Get month from comboBox
+        date = f"{self.CURRENT_YEAR}-{month}"  # Get month from comboBox
         # Get db result
         result = self.db.calculate_salaire_mensuel(date, employe_id)
 
@@ -1068,7 +1073,7 @@ class Credit(QtWidgets.QMainWindow):
         else:
             self.ui.cbBoxAddCreditClients.setEnabled(True)
 
-        self.ui.dateEditCreditDate.setDate(TODAY)  # Set current date as default
+        self.ui.dateEditCreditDate.setDate(self.CURRENT_DATE)  # Set current date as default
         self.setup_extraCenter_ui("Créer un nouveau crédit", self.ui.AddCreditPage)
 
     def save_new_credit(self):
@@ -1220,7 +1225,7 @@ class Credit(QtWidgets.QMainWindow):
         # remove DA
         # self.ui.labelAddVersementMontant.setText(f"{reste} DA")
         self.ui.labelAddVersementMontant.setText(f"{reste}")
-        self.ui.dateEditVersementDate.setDate(TODAY)
+        self.ui.dateEditVersementDate.setDate(self.CURRENT_DATE)
 
         # maximum value for reste restrict user
         # conver to Decimal in place
@@ -1363,8 +1368,8 @@ class Credit(QtWidgets.QMainWindow):
         }
 
         month_text = self.ui.cbBoxChargeByMonth.currentText()
-        month_name = MONTHS_FR.get(month_text) if month_text != 'Mois' else MONTHS_FR.get(TODAY.strftime("%m"))
-        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{TODAY.strftime('%Y')}-{month_text}"
+        month_name = MONTHS_FR.get(month_text) if month_text != 'Mois' else MONTHS_FR.get(self.CURRENT_MONTH_TEXT)
+        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{self.CURRENT_YEAR}-{month_text}"
         # Get result from database
         rows = self.db.dump_charges(month) if rows is None else rows
         total_charges = self.db.sum_charges(month)
@@ -1427,7 +1432,7 @@ class Credit(QtWidgets.QMainWindow):
                 self.ui.editChargeMotif
             ]
             utils.clear_inputs(inputs_to_clear)
-            self.ui.dateEditChargeDate.setDate(TODAY)  # Set current date as default
+            self.ui.dateEditChargeDate.setDate(self.CURRENT_DATE)  # Set current date as default
             title = "Ajouter Une Charge"
             self.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=utils.SKYPE_COLOR))
             self.ui.extraLabelTitle.setStyleSheet(f"color: {utils.SKYPE_COLOR};")

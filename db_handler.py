@@ -369,7 +369,7 @@ class Database:
     # ========================
     # == Accompte Functions ==
     # ========================
-    def get_sums_operations(self, month):
+    def sum_accompte(self, month):
         """
         Retrieves the sum of 'prime', 'retenu', and 'avance' operations for a given month.
 
@@ -377,7 +377,7 @@ class Database:
             month (str): The month in 'YYYY-MM' format to filter operations. If 'Tous', sums are calculated for all months.
 
         Returns:
-            tuple: A tuple containing the total sums for 'prime', 'retenu', and 'avance' operations, respectively.
+            namedtuple: A named tuple with fields 'total_prime', 'total_retenu', and 'total_avance'.
         """
         query = """
         SELECT
