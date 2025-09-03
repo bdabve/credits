@@ -197,7 +197,7 @@ def main_icons_callbacks(root):
         # ==================
         (
             root.ui.buttonChargePage,
-            qta.icon('mdi6.cash-minus', color=TRASH_COLOR),
+            qta.icon('mdi6.cash-minus', color=EDIT_COLOR),
             lambda: root.goto_page('charge', from_btn=True)
         ),
         (root.ui.buttonNewCharge, PLUS_ICON, root.ui_create_charge),
@@ -214,15 +214,25 @@ def main_icons_callbacks(root):
     root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=WHITE_COLOR))
     root.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=SKYPE_COLOR))
 
-    # == TableWidget Signals
-    root.ui.clientsTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('client'))
-    root.ui.employesTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('employe'))
-    root.ui.creditTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('credit'))
-    root.ui.versementTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('payment'))
-    root.ui.accompteTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('operations'))
-    root.ui.chargeTableWidget.itemSelectionChanged.connect(lambda: root.enable_buttons('charge'))
+    # =============================
+    # == QTableWidget Signals
+    # ==============================
+    # Enable/Disable buttons based on selection
+    # Map each table widget to its page key
+    tables = [
+        (root.ui.clientsTableWidget, "client"),
+        (root.ui.employesTableWidget, "employe"),
+        (root.ui.creditTableWidget, "credit"),
+        (root.ui.versementTableWidget, "payment"),
+        (root.ui.accompteTableWidget, "operations"),
+        (root.ui.chargeTableWidget, "charge"),
+    ]
 
-    # == Table Edits
+    # Connect signals dynamically
+    for table, page in tables:
+        table.itemSelectionChanged.connect(lambda p=page: root.enable_buttons(p))
+
+    # Commit edits when editing is finished
     table_edits = [
         (root.ui.employesTableWidget, root.edit_employe),
         (root.ui.accompteTableWidget, root.edit_accompte),
@@ -232,13 +242,9 @@ def main_icons_callbacks(root):
     ]
     for table, callback in table_edits:
         table.editingFinished.connect(callback)
-    # root.ui.employesTableWidget.editingFinished.connect(root.edit_employe)
-    # root.ui.clientsTableWidget.editingFinished.connect(root.edit_client)
-    # root.ui.creditTableWidget.editingFinished.connect(root.edit_credit)
-    # root.ui.chargeTableWidget.editingFinished.connect(root.edit_charge)
-    # root.ui.
 
-    # == tableWidget Menu
+    # == Context Menus for Tables ==
+    # Clients Menu
     employe_table_actions = [
         (
             'L. Accompte',
@@ -261,22 +267,30 @@ def main_icons_callbacks(root):
     ]
     setup_table_context_menu(root.ui.chargeTableWidget, charge_table_actions)
 
+    # ============================== 
     # == ComboBox Signals
-    root.ui.cbBoxCreditByStatus.currentIndexChanged.connect(root.filter_credit_by_status)
-    root.ui.cbBoxSalaireEmpMonth.currentIndexChanged.connect(lambda: root.calculate_salaire(from_btn=False))
-    root.ui.cbBoxChargeByMonth.currentIndexChanged.connect(lambda: root.display_charge(rows=None))
-
-    # filter accompte
+    # ==============================
+    # QComboBox for Credit, Salaire, Charge
+    cbBoxes = [
+        (root.ui.cbBoxCreditByStatus, root.filter_credit_by_status),
+        (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
+        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
+    ]
+    for cbBox, callback in cbBoxes:
+        cbBox.currentIndexChanged.connect(callback)
+    
+    # QComboBox for Accomptes
     for cbBox in (
             root.ui.cbBoxEmployeOperationByName,
             root.ui.cbBoxEmployeOperationByType,
             root.ui.cbBoxEmployeOperationByDate
     ):
         cbBox.currentIndexChanged.connect(root.filter_accomptes)
-    # root.ui.cbBoxEmployeOperationByType.currentIndexChanged.connect(root.filter_accomptes)
-    # root.ui.cbBoxEmployeOperationByDate.currentIndexChanged.connect(root.filter_accomptes)
 
+    # ================================ 
     # == LineEdit Signals
+    # ================================
+    # QLineEdit for Search
     lineEdits = [
         (root.ui.editSearchCredit, root.filter_credits),
         (root.ui.editSearchClients, root.filter_clients),
@@ -286,11 +300,6 @@ def main_icons_callbacks(root):
     for edit, callback in lineEdits:
         edit.textChanged.connect(callback)
         edit.returnPressed.connect(callback)
-
-    # root.ui.editSearchCredit.textChanged.connect(root.filter_credits)
-    # root.ui.editSearchCredit.returnPressed.connect(root.filter_credits)
-    # root.ui.editSearchClients.textChanged.connect(root.filter_clients)
-    # root.ui.editSearchEmploye.textChanged.connect(root.filter_employe)
 
 
 def pagebuttons_stats(root):

@@ -1007,6 +1007,38 @@ class Database:
             cursor.execute(query, (month, ))
             return cursor.fetchall()
 
+    def search_charge(self, search_word, month):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+
+            query = f"""
+                SELECT {", ".join(self.charge_fields)}
+                FROM charges ch
+                LEFT JOIN employes emp ON emp.id = ch.effectue_par
+            """
+            conditions = []
+            params = []
+
+            # Add search conditions if a word is provided
+            if search_word:
+                conditions.append("(emp.nom LIKE ? OR ch.motif LIKE ? OR ch.date_charge LIKE ?)")
+                params.extend([f"%{search_word}%"] * 3)
+
+            # Add month condition if not "Tous"
+            if month != "Tous":
+                conditions.append("strftime('%Y-%m', ch.date_charge) = ?")
+                params.append(month)
+
+            # Add WHERE if there are conditions
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+
+            query += " ORDER BY ch.date_charge DESC"
+
+            cursor.execute(query, params)
+            return cursor.fetchall()
+
+    
     def get_charge_by_id(self, charge_id):
         with self.connect() as conn:
             cursor = conn.cursor()

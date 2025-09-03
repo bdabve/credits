@@ -700,12 +700,7 @@ class Credit(QtWidgets.QMainWindow):
         """"""
         employe_id = self.get_item_id(self.ui.employesTableWidget)
         employe_name = utils.get_column_value(self.ui.employesTableWidget, self.ui.employesTableWidget.currentRow(), 1)
-        # operation_dict = {  # For Title
-            # 'prime': f"Nouveau Prime pour {employe_name}",
-            # 'retenu': "Nouveau Retenu pour {employe_name}",
-            # 'avance': "Nouveau Avance pour {employe_name}"
-        # }
-
+    
         self.ui.labelEmployeOperationEmpID.setText(employe_id)
         self.ui.labelEmployeOperationEmpID.hide()
 
@@ -1348,42 +1343,59 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Charge Page ==
     # =================
-    def display_charge(self, rows=None):
+    def display_charge(self, rows=None, month_text=None):
         """
-        Display all versements in the table widget.
+        Display all versements (charges) in the table widget.
         """
         MONTHS_FR = {
-            "01": "janvier",
-            "02": "février",
-            "03": "mars",
-            "04": "avril",
-            "05": "mai",
-            "06": "juin",
-            "07": "juillet",
-            "08": "août",
-            "09": "septembre",
-            "10": "octobre",
-            "11": "novembre",
-            "12": "décembre"
+            "01": "janvier", "02": "février", "03": "mars", "04": "avril",
+            "05": "mai", "06": "juin", "07": "juillet", "08": "août",
+            "09": "septembre", "10": "octobre", "11": "novembre", "12": "décembre"
         }
 
-        month_text = self.ui.cbBoxChargeByMonth.currentText()
-        month_name = MONTHS_FR.get(month_text) if month_text != 'Mois' else MONTHS_FR.get(self.CURRENT_MONTH_TEXT)
-        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{self.CURRENT_YEAR}-{month_text}"
-        # Get result from database
-        rows = self.db.dump_charges(month) if rows is None else rows
-        total_charges = self.db.sum_charges(month)
+        # Normalize month_text
+        if not month_text or month_text == "Mois":
+            month_text = self.CURRENT_MONTH_TEXT
 
-        logger.debug(f'Display Charge Records for {month}')
+        # Resolve month name
+        month_name = MONTHS_FR.get(month_text, "")
+
+        # Fetch rows depending on input
+        if rows is None:
+            month = self.CURRENT_MONTH
+            rows = self.db.dump_charges(month)
+            self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+        else:
+            month = (
+                self.CURRENT_MONTH
+                if month_text == "Mois"
+                else f"{self.CURRENT_YEAR}-{month_text}"
+            )
+
+        logger.debug(f"Display Charge Records for {month_text}")
+        logger.debug(rows)
+
+        # Calculate and display totals
+        total_charges = self.db.sum_charges(month)
         message = f"Total Charges {month_name.title()}: {utils.format_money(total_charges.total_charges)}"
         self.ui.labelTotalCharge.setText(message)
+
         # Display records in QTable
         utils.populate_table_widget(self.ui.chargeTableWidget, rows, utils.CHARGE_HEADERS)
         utils.set_table_column_sizes(self.ui.chargeTableWidget, 80, 170, 250, 200)
+
+        # Update row count
         self.ui.labelChargeCount.setText(f"Total: {len(rows)}")
 
+
     def filter_charge(self):
-        logger.info('Filter Charges')
+        """
+        """      
+        search_text = self.ui.editSearchCharge.text()
+        month_text = self.ui.cbBoxChargeByMonth.currentText()
+        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{self.CURRENT_YEAR}-{month_text}"
+        rows = self.db.search_charge(search_text, month)
+        self.display_charge(rows, month_text)
 
     def ui_create_charge(self, edit=False):
         """
