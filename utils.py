@@ -196,10 +196,11 @@ def main_icons_callbacks(root):
         # == Charge Page ==
         # ==================
         (
-            root.ui.buttonChargePage,
-            qta.icon('mdi6.cash-minus', color=EDIT_COLOR),
+            root.ui.buttonChargePage, 
+            qta.icon('mdi6.cash-minus', color=EDIT_COLOR), 
             lambda: root.goto_page('charge', from_btn=True)
         ),
+        (root.ui.buttonRefreshChargeTable, REFRESH_ICON, lambda: root.display_charge(rows=None, month_text=None)),
         (root.ui.buttonNewCharge, PLUS_ICON, root.ui_create_charge),
         (root.ui.buttonSaveCharge, SAVE_ICON, root.insert_new_charge),
         (root.ui.buttonDeleteCharge, TRASH_ICON, root.delete_charge),
@@ -244,7 +245,7 @@ def main_icons_callbacks(root):
         table.editingFinished.connect(callback)
 
     # == Context Menus for Tables ==
-    # Clients Menu
+    # == Employee Menu
     employe_table_actions = [
         (
             'L. Accompte',
@@ -256,9 +257,29 @@ def main_icons_callbacks(root):
             qta.icon('mdi.calculator-variant', color=WHITE_COLOR),
             lambda: root.calculate_salaire(from_btn=False)
         ),
+        ('separator', None, None),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_employe),
     ]
     setup_table_context_menu(root.ui.employesTableWidget, employe_table_actions)
+
+    # == Clients Menu
+    client_table_actions = [
+        ('N. Crédit', CASH_PLUS_ICON, lambda: root.ui_create_credit(client=True)),
+        ('L. Crédits', LIST_ICON, root.client_credit_list),
+        ('separator', None, None),
+        ('Supprimer', TRASH_ICON, root.delete_client),
+    ]
+    setup_table_context_menu(root.ui.clientsTableWidget, client_table_actions)
+
+    # == Crédits Menu    
+    credit_table_actions = [
+        ('A. Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
+        ('L. Versements', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.credit_list_versement),
+        ('Régler', qta.icon('mdi6.cash-check', color=NEW_COLOR), root.regle_credit),
+        ('separator', None, None),
+        ('Supprimer', TRASH_ICON, root.delete_credit),
+    ]
+    setup_table_context_menu(root.ui.creditTableWidget, credit_table_actions)
 
     # Charge Menu
     charge_table_actions = [
@@ -428,6 +449,9 @@ def show_table_context_menu(table_widget: QtWidgets.QTableWidget, actions: list,
 
     menu = QtWidgets.QMenu(table_widget)
     for label, icon, callback in actions:
+        if label == 'separator':
+            menu.addSeparator()
+            continue
         action = QtWidgets.QAction(icon, label, table_widget) if icon else QtWidgets.QAction(label, table_widget)
         action.triggered.connect(callback)
         menu.addAction(action)

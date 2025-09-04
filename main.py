@@ -942,7 +942,7 @@ class Credit(QtWidgets.QMainWindow):
         Display all credits for the selected persone.
         """
         client_id = self.get_item_id(self.ui.clientsTableWidget)
-        logger.info(f"Displaying credits for the selected client: {client_id}...")
+        logger.info(f"Displaying credits for the selected client({client_id})...")
         rows = self.db.get_client_credits(client_id)
         if not rows:
             self.show_error_message("Aucun crédit trouvé pour ce client.", success=False)
@@ -1191,51 +1191,58 @@ class Credit(QtWidgets.QMainWindow):
 
     def ui_add_versement(self):
         """
-        This function set up the UI for creating a new credit.
+        Set up the UI for creating a new versement (payment) on a credit.
         """
-        # Check if credit has Reste
+        # Get remaining balance
         reste = utils.get_column_value(
             self.ui.creditTableWidget,
             self.ui.creditTableWidget.currentRow(),
             6
         )
+
         if reste == '0,00':
-            self.show_error_message("Ce crédit est déjà terminé. Aucun versement n'est nécessaire.", success=False)
+            self.show_error_message(
+                "Ce crédit est déjà terminé. Aucun versement n'est nécessaire.",
+                success=False
+            )
             return
 
-        # Setup Usefull Information
+        # Get credit and client info
         credit_id = self.get_item_id(self.ui.creditTableWidget)
-        client = utils.get_column_value(
+        client_name = utils.get_column_value(
             self.ui.creditTableWidget,
             self.ui.creditTableWidget.currentRow(),
             2
         )
-        # add client_id
-        client_id = self.db.get_item_id('clients', 'nom', client)
-        self.ui.labelVersementCreditID.setText(f"{credit_id}")
-        self.ui.labelVersementCreditID.hide()
-        self.ui.labelVersementClientID.setText(f"{client_id}")
-        self.ui.labelVersementClientID.hide()
+        client_id = self.db.get_item_id('clients', 'nom', client_name)
 
-        # remove DA
-        # self.ui.labelAddVersementMontant.setText(f"{reste} DA")
-        self.ui.labelAddVersementMontant.setText(f"{reste}")
+        # Update hidden labels
+        self.ui.labelVersementCreditID.setText(str(credit_id))
+        self.ui.labelVersementClientID.setText(str(client_id))
+        for label in (self.ui.labelVersementCreditID, self.ui.labelVersementClientID):
+            label.hide()
+
+        # Show remaining amount (without "DA")
+        self.ui.labelAddVersementMontant.setText(reste)
         self.ui.dateEditVersementDate.setDate(self.CURRENT_DATE)
 
-        # maximum value for reste restrict user
-        # conver to Decimal in place
-        logger.info(f"Add payment for Credit({credit_id}), ClientID({client_id}), reste({reste})")
+        # Restrict maximum input value
+        logger.info(
+            f"Add payment for Credit({credit_id}), "
+            f"ClientID({client_id}), reste({reste})"
+        )
         reste_decimal = utils.format_to_decimal(reste)
         if not reste_decimal['success']:
-            self.show_error_message(f"Erreur: {reste_decimal['error']}", success=False)
+            self.show_error_message(
+                f"Erreur: {reste_decimal['error']}", success=False
+            )
             return
         self.ui.editVersementMontant.setMaximum(reste_decimal['value'])
 
-        # hide the ID Labels
-        for label in [self.ui.labelVersementCreditID, self.ui.labelVersementClientID]:
-            label.hide()
-
-        self.setup_extraCenter_ui('Ajouter un versement', self.ui.AddCreditVersementPage)
+        # Finalize UI
+        self.setup_extraCenter_ui(
+            'Ajouter un versement', self.ui.AddCreditVersementPage
+        )
 
     def save_new_versement(self):
         """
@@ -1279,6 +1286,16 @@ class Credit(QtWidgets.QMainWindow):
             self.show_error_message("Versement ajouté avec succès.", success=True)
             self.toggle_left_box(close=True)
             self.goto_page('credit', title='Crédits')
+            # clear inputs
+            inputs_to_clear = [
+                self.ui.labelVersementCreditID,
+                self.ui.labelVersementClientID,
+                self.ui.labelAddVersementMontant,
+                self.ui.dateEditVersementDate,
+                self.ui.editVersementMontant,
+                self.ui.editVersementDescription
+            ]
+            utils.clear_inputs(inputs_to_clear)
         else:
             self.show_error_message(f"Erreur: {result['error']}", success=False)
 
@@ -1365,6 +1382,7 @@ class Credit(QtWidgets.QMainWindow):
             month = self.CURRENT_MONTH
             rows = self.db.dump_charges(month)
             self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+            self.ui.editSearchCharge.clear()
         else:
             month = (
                 self.CURRENT_MONTH
@@ -1386,7 +1404,6 @@ class Credit(QtWidgets.QMainWindow):
 
         # Update row count
         self.ui.labelChargeCount.setText(f"Total: {len(rows)}")
-
 
     def filter_charge(self):
         """

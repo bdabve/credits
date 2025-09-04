@@ -760,7 +760,7 @@ class Database:
         with self.connect() as conn:
             cursor = conn.cursor()
             # Check for credit
-            cursor.execute('SELECT COUNT(id) FROM credit WHERE client_id = ?', (client_id))
+            cursor.execute('SELECT COUNT(id) FROM credit WHERE client_id = ?', (client_id,))
             if cursor.fetchone()[0] == 0:
                 return False
 
