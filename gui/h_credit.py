@@ -173,7 +173,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "/* ==== LINES ====== */\n"
-"#line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7 {\n"
+"#line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7, #line_8 {\n"
 "    background-color: #4a4a4a;\n"
 "}\n"
 "/* /////////////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -2378,7 +2378,7 @@ class Ui_MainWindow(object):
         self.buttonIconSumPrime.setObjectName("buttonIconSumPrime")
         self.horizontalLayout_28.addWidget(self.buttonIconSumPrime)
         self.verticalLayout_33 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_33.setContentsMargins(-1, 15, -1, -1)
+        self.verticalLayout_33.setContentsMargins(15, 0, -1, -1)
         self.verticalLayout_33.setObjectName("verticalLayout_33")
         self.labelSumPrime = QtWidgets.QLabel(self.frameSum)
         self.labelSumPrime.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft)
@@ -2410,7 +2410,7 @@ class Ui_MainWindow(object):
         self.buttonIconSumAvance.setObjectName("buttonIconSumAvance")
         self.horizontalLayout_27.addWidget(self.buttonIconSumAvance)
         self.verticalLayout_35 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_35.setContentsMargins(-1, 15, -1, -1)
+        self.verticalLayout_35.setContentsMargins(15, 0, -1, -1)
         self.verticalLayout_35.setObjectName("verticalLayout_35")
         self.labelSumAvance = QtWidgets.QLabel(self.frameSum_2)
         self.labelSumAvance.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft)
@@ -2463,6 +2463,7 @@ class Ui_MainWindow(object):
         self.groupBox = QtWidgets.QGroupBox(self.empOperationWidgetContainer)
         self.groupBox.setObjectName("groupBox")
         self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.groupBox)
+        self.horizontalLayout_25.setContentsMargins(-1, 22, -1, -1)
         self.horizontalLayout_25.setObjectName("horizontalLayout_25")
         self.labelAccompteEdit = QtWidgets.QLabel(self.groupBox)
         self.labelAccompteEdit.setText("")
@@ -2715,6 +2716,17 @@ class Ui_MainWindow(object):
         self.editSearchCharge.setClearButtonEnabled(True)
         self.editSearchCharge.setObjectName("editSearchCharge")
         self.horizontalLayout_31.addWidget(self.editSearchCharge)
+        self.line_8 = QtWidgets.QFrame(self.groupBoxToolBar_4)
+        self.line_8.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_8.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_8.setObjectName("line_8")
+        self.horizontalLayout_31.addWidget(self.line_8)
+        self.horizontalLayout_32 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_32.setContentsMargins(-1, -1, 0, -1)
+        self.horizontalLayout_32.setObjectName("horizontalLayout_32")
+        self.label_31 = QtWidgets.QLabel(self.groupBoxToolBar_4)
+        self.label_31.setObjectName("label_31")
+        self.horizontalLayout_32.addWidget(self.label_31)
         self.cbBoxChargeByMonth = QtWidgets.QComboBox(self.groupBoxToolBar_4)
         self.cbBoxChargeByMonth.setMinimumSize(QtCore.QSize(141, 40))
         self.cbBoxChargeByMonth.setObjectName("cbBoxChargeByMonth")
@@ -2731,7 +2743,8 @@ class Ui_MainWindow(object):
         self.cbBoxChargeByMonth.addItem("")
         self.cbBoxChargeByMonth.addItem("")
         self.cbBoxChargeByMonth.addItem("")
-        self.horizontalLayout_31.addWidget(self.cbBoxChargeByMonth)
+        self.horizontalLayout_32.addWidget(self.cbBoxChargeByMonth)
+        self.horizontalLayout_31.addLayout(self.horizontalLayout_32)
         self.buttonRefreshChargeTable = QtWidgets.QPushButton(self.groupBoxToolBar_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -2816,7 +2829,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.extraCenter.setCurrentIndex(5)
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.toggleMenuButton, self.buttonAccomptePage)
         MainWindow.setTabOrder(self.buttonAccomptePage, self.extraCloseColumnBtn)
@@ -3131,6 +3144,7 @@ class Ui_MainWindow(object):
         self.labelTotalCharge.setText(_translate("MainWindow", "Total Charges"))
         self.groupBoxToolBar_4.setTitle(_translate("MainWindow", "Opération"))
         self.editSearchCharge.setPlaceholderText(_translate("MainWindow", "Recherche...."))
+        self.label_31.setText(_translate("MainWindow", "Mois"))
         self.cbBoxChargeByMonth.setItemText(0, _translate("MainWindow", "Mois"))
         self.cbBoxChargeByMonth.setItemText(1, _translate("MainWindow", "01"))
         self.cbBoxChargeByMonth.setItemText(2, _translate("MainWindow", "02"))
