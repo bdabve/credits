@@ -203,20 +203,19 @@ class Database:
             result = cursor.fetchone()
             return result[0] if result and result[0] is not None else 0
 
-    def get_total_credit_by_client(self):
+    def get_total_credit_by_client(self, client_id):
         """
         Retrieve the total amount of all credits.
         """
         with self.connect() as conn:
             cursor = conn.cursor()
             query = """
-                SELECT SUM(cr.reste) FROM credit AS cr
+                SELECT IFNULL(SUM(cr.reste), 0) AS client_total_credit FROM credit AS cr
                 LEFT JOIN clients AS c ON cr.client_id = c.id
-                WHERE cr.statut = "en cours"
+                WHERE cr.statut = "en cours" AND c.id = ?
             """
-            cursor.execute(query)
-            result = cursor.fetchone()
-            return result[0] if result and result[0] is not None else 0
+            result = self.fetch_namedtuple(cursor, query, params=(client_id,), tuple_name="TOTAL_CREDIT_BY_CLIENT")
+            return result[0] if result else 0
 
     def delete_item(self, table, item_id):
         """
@@ -868,8 +867,15 @@ class Database:
                 elif text < reste:
                     return {'success': False, 'error': 'Montant doit être supérieur ou égal au reste.'}
 
-                cursor.execute("UPDATE credit SET montant = ? WHERE id = ?", ("{:.2f}".format(text), client_id))
-                message = 'Montant mis à jour avec succès.'
+                # Get current reste from database
+                montant = text                                          # Type Decimal
+                db_reste = self.get_item('credit', 'reste', client_id)
+                reste = montant - (db_reste if reste else 0)            # Type Decimal
+                statut = 'terminé' if reste == 0 else 'en cours'
+                # return {'success': True, "message": f"UPDATE NEW CREDITE: New Montant({text}), New Reste({reste}), Statut({statut})"}
+                query = "UPDATE credit SET montant = ?, reste = ?, statut = ? WHERE id = ?"
+                cursor.execute(query, (str(montant), str(reste), statut, client_id))
+                message = f"Montant mis à jour avec succès: Montant({montant}), Reste({reste}), Status({statut})."
             else:
                 # invalid colonne
                 return {'success': False, 'error': 'Colonne invalide.'}

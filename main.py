@@ -367,21 +367,6 @@ class Credit(QtWidgets.QMainWindow):
         for btn in buttons:
             btn.setEnabled(has_selection)
 
-    def set_total_credits(self) -> None:
-        """
-        Updates the UI labels to display the total credits for all clients.
-
-        Retrieves the total credit amount from the database, formats it as currency,
-        and sets the text of the corresponding UI labels to show the total credits in DA.
-
-        Returns:
-            None
-        """
-        # Get the total credits by client type
-        total_credit = self.db.get_total_credit()
-        self.ui.labelTotalCredits.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
-        self.ui.labelTotalCreditClients.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
-
     def setup_extraCenter_ui(self, title, page):
         """
         Set up the extra center stackedWidget UI.
@@ -946,8 +931,9 @@ class Credit(QtWidgets.QMainWindow):
         if not rows:
             self.show_error_message("Aucun crédit trouvé pour ce client.", success=False)
             return
-        self.display_credits(rows)
-
+        
+        # Display credits
+        self.display_credits(rows, client_id=client_id)
         client = utils.get_column_value(self.ui.clientsTableWidget, self.ui.clientsTableWidget.currentRow(), 1)
         self.goto_page('credit', title=f"Crédits ({client})", from_btn=False)
 
@@ -1006,7 +992,32 @@ class Credit(QtWidgets.QMainWindow):
     # ========================================
     # == Credits Functions ==
     # =======================
-    def display_credits(self, rows=None):
+    def set_total_credits(self, client_id=None) -> None:
+        """
+        Updates the UI labels to display the total credits for all clients.
+
+        Retrieves the total credit amount from the database, formats it as currency,
+        and sets the text of the corresponding UI labels to show the total credits in DA.
+
+        Returns:
+            None
+        """
+        # Get total credit from the database
+        total_credit = self.db.get_total_credit()
+        logger.info(f"Total Credits: {total_credit} DA")
+        # Update UI labels        
+        self.ui.labelTotalCreditClients.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
+        self.ui.labelTotalCredits.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
+        
+        if client_id:
+            client = self.db.get_item('clients', 'nom', client_id)         
+            total_credit_client = self.db.get_total_credit_by_client(client_id)
+            total_credit_client = total_credit_client.client_total_credit
+            logger.info(f"Calculating total credits for client ID: {client_id} -> {total_credit_client} DA")
+            self.ui.labelTotalCredits.setText(f"Total Crédits {client.upper()}: {utils.format_money(total_credit_client)} DA")
+            
+
+    def display_credits(self, rows=None, client_id=None):
         """
         Display all credits in the table widget.
         """
@@ -1015,7 +1026,7 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.creditTableWidget, rows, utils.CREDITS_HEADERS)
         utils.set_table_column_sizes(self.ui.creditTableWidget, 80, 220, 300, 200, 270, 270)
         self.ui.labelCreditCount.setText(f"Total: {len(rows)}")
-        self.set_total_credits()
+        self.set_total_credits(client_id)
 
     def refresh_credit_table(self):
         logger.info('Refreshing credit table...')
