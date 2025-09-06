@@ -1038,7 +1038,6 @@ class Database:
             cursor.execute(query, params)
             return cursor.fetchall()
 
-    
     def get_charge_by_id(self, charge_id):
         with self.connect() as conn:
             cursor = conn.cursor()

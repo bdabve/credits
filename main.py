@@ -37,7 +37,6 @@ class Credit(QtWidgets.QMainWindow):
         self.CURRENT_MONTH = self.CURRENT_DATE.strftime("%Y-%m")
         self.CURRENT_MONTH_TEXT = self.CURRENT_DATE.strftime("%m")
         self.CURRENT_YEAR = self.CURRENT_DATE.strftime("%Y")
-        
 
         # Track menu state
         self.menu_expanded = True
@@ -613,7 +612,7 @@ class Credit(QtWidgets.QMainWindow):
             self.display_accompte_totals(month)  # Display total sums of operations
 
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
-        
+
         cbboxes = [
             self.ui.cbBoxEmployeOperationByName,
             self.ui.cbBoxEmployeOperationByType,
@@ -700,7 +699,7 @@ class Credit(QtWidgets.QMainWindow):
         """"""
         employe_id = self.get_item_id(self.ui.employesTableWidget)
         employe_name = utils.get_column_value(self.ui.employesTableWidget, self.ui.employesTableWidget.currentRow(), 1)
-    
+
         self.ui.labelEmployeOperationEmpID.setText(employe_id)
         self.ui.labelEmployeOperationEmpID.hide()
 
@@ -1407,7 +1406,7 @@ class Credit(QtWidgets.QMainWindow):
 
     def filter_charge(self):
         """
-        """      
+        """
         search_text = self.ui.editSearchCharge.text()
         month_text = self.ui.cbBoxChargeByMonth.currentText()
         month = self.CURRENT_MONTH if month_text == 'Mois' else f"{self.CURRENT_YEAR}-{month_text}"
