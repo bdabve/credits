@@ -931,7 +931,7 @@ class Credit(QtWidgets.QMainWindow):
         if not rows:
             self.show_error_message("Aucun crédit trouvé pour ce client.", success=False)
             return
-        
+
         # Display credits
         self.display_credits(rows, client_id=client_id)
         client = utils.get_column_value(self.ui.clientsTableWidget, self.ui.clientsTableWidget.currentRow(), 1)
@@ -1005,17 +1005,16 @@ class Credit(QtWidgets.QMainWindow):
         # Get total credit from the database
         total_credit = self.db.get_total_credit()
         logger.info(f"Total Credits: {total_credit} DA")
-        # Update UI labels        
+        # Update UI labels
         self.ui.labelTotalCreditClients.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
         self.ui.labelTotalCredits.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
-        
+
         if client_id:
-            client = self.db.get_item('clients', 'nom', client_id)         
+            client = self.db.get_item('clients', 'nom', client_id)
             total_credit_client = self.db.get_total_credit_by_client(client_id)
             total_credit_client = total_credit_client.client_total_credit
             logger.info(f"Calculating total credits for client ID: {client_id} -> {total_credit_client} DA")
             self.ui.labelTotalCredits.setText(f"Total Crédits {client.upper()}: {utils.format_money(total_credit_client)} DA")
-            
 
     def display_credits(self, rows=None, client_id=None):
         """
@@ -1121,13 +1120,15 @@ class Credit(QtWidgets.QMainWindow):
         logger.info("Editing an existing credit...")
         credit_id = self.get_item_id(self.ui.creditTableWidget)
         versement = utils.get_column_value(self.ui.creditTableWidget, self.ui.creditTableWidget.currentRow(), 5)
+
         logger.info(f"Edit Client({credit_id}) at Row({row}), Column({col}), New Text({text})")
         versment = utils.format_to_decimal(versement)
         if not versment['success']:
             self.show_error_message(f"Erreur: {versment['error']}", success=False)
             return
 
-        if col in (2, 5, 6, 7):
+        if col in (0, 2, 5, 6, 7):
+            # Prevent editing those columns(id, client, versement, reste, status)
             self.display_credits()
         elif col == 1:
             # Validate the date

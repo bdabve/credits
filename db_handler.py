@@ -10,8 +10,6 @@
 import sqlite3
 from datetime import datetime
 from collections import namedtuple
-# import utils
-# from decimal import Decimal
 
 
 class Database:
@@ -849,41 +847,53 @@ class Database:
         """
         with self.connect() as conn:
             cursor = conn.cursor()
-            if column in (2, 5, 6, 7):
-                # Montant, Motif, Date
-                return {'success': False, 'error': 'Modification non autorisée pour cette colonne.'}
-            elif column == 1:   # Date
-                cursor.execute("UPDATE credit SET date_credit = ? WHERE id = ?", (text, client_id))
-                message = 'Date mis à jour avec succès.'
-            elif column == 3:   # motif
-                cursor.execute("UPDATE credit SET motif = ? WHERE id = ?", (text, client_id))
-                message = 'Motif mis à jour avec succès.'
-            elif column == 4:   # montant                
-                # Get current reste from database
-                montant = text                                          # Type Decimal
-                db_reste = self.get_item('credit', 'reste', client_id)
-                # -----------------------------------------------------
-                # FIXME:  check if versement is lower than the montant
-                # db_versement = self.get_item("credit", "versement", client_id)
-                # ----------------------------------------------------------------
-                
-                if montant <= 0:
-                    return {'success': False, 'error': 'Montant doit être supérieur à zéro.'}
-                elif montant < db_reste:
-                    return {'success': False, 'error': 'Montant doit être supérieur ou égal au reste.'}
-                # calculate new reste and statut and save to db
-                reste = montant - versement            # Type Decimal
-                statut = 'terminé' if reste == 0 else 'en cours'
-                print(f"DEBUG: montant={montant}, versement={versement}, db_reste={db_reste}")
-                # return {'success': True, "message": f"UPDATE NEW CREDITE: New Montant({text}), New Reste({reste}), Statut({statut})"}
-                query = "UPDATE credit SET montant = ?, reste = ?, statut = ? WHERE id = ?"
-                cursor.execute(query, (str(montant), str(reste), statut, client_id))
-                message = f"Montant mis à jour avec succès: Montant({montant}), Reste({reste}), Status({statut})."
-            else:
-                # invalid colonne
-                return {'success': False, 'error': 'Colonne invalide.'}
-            conn.commit()
-            return {'success': True, 'message': message}
+            try:
+                # Bloquer colonnes interdites
+                if column in (2, 5, 6, 7):
+                    # Montant, Motif, Date
+                    return {'success': False, 'error': 'Modification non autorisée pour cette colonne.'}
+
+                # --- Mise à jour de la date ---
+                elif column == 1:   # Date
+                    cursor.execute(
+                        "UPDATE credit SET date_credit = ? WHERE id = ?",
+                        (text, client_id)
+                    )
+                    message = 'Date mis à jour avec succès.'
+
+                # --- Mise à jour du motif ---
+                elif column == 3:   # motif
+                    cursor.execute(
+                        "UPDATE credit SET motif = ? WHERE id = ?",
+                        (text, client_id)
+                    )
+                    message = 'Motif mis à jour avec succès.'
+                # --- Mise à jour du montant ---
+                elif column == 4:
+                    montant = text        # Type Decimal
+
+                    if montant <= 0:
+                        return {'success': False, 'error': 'Montant doit être supérieur à zéro.'}
+                    if montant < versement:
+                        error = f"Montant({montant}) ne peut pas être inférieur au versement déjà payé ({versement})."
+                        return {'success': False, 'error': error}
+
+                    # Calculer le nouveau reste et statut
+                    reste = montant - versement
+                    statut = 'terminé' if reste == 0 else 'en cours'
+                    cursor.execute(
+                        "UPDATE credit SET montant = ?, reste = ?, statut = ? WHERE id = ?"
+                        (str(montant), str(reste), statut, client_id)
+                    )
+                    message = f"Montant mis à jour avec succès: Montant({montant}), Reste({reste}), Status({statut})."
+                else:
+                    # invalid colonne
+                    return {'success': False, 'error': 'Colonne invalide.'}
+                conn.commit()
+                return {'success': True, 'message': message}
+            except Exception as e:
+                conn.rollback()
+                return {'success': False, 'error': f"Erreur lors de la mise à jour: {e}"}
 
     # ====================================
     # === PAYMENTS(VERSEMENT) METHODES ===
