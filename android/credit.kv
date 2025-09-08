@@ -1,0 +1,32 @@
+ScreenManager:
+    MenuScreen:
+    CreditScreen:
+
+<MenuScreen>:
+    name: "menu"
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: dp(20)
+        MDRectangleFlatIconButton:
+            text: "List Des Crédits"
+            icon: "currency-usd"
+            size_hint_x: 1  # full width horizontally
+            pos_hint: {"center_y": 0.5}
+            on_release: app.root.current = "credit"
+
+<CreditScreen>:
+    name: "credit"
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(10)
+        padding: dp(10)
+
+        MDTextField:
+            id: search_credit
+            hint_text: "Recherche..."
+            icon_left: "magnify"
+            on_text: root.search_credit(self.text)
+        
+        BoxLayout:
+            id: credit_table_box
+            orientation: "vertical"

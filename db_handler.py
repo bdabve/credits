@@ -701,11 +701,11 @@ class Database:
                 FROM credit cr
                 JOIN clients c ON cr.client_id = c.id
                 LEFT JOIN paiement v on v.credit_id = cr.id
-                WHERE cr.motif LIKE ? OR c.nom LIKE ? OR cr.date_credit LIKE ?
+                WHERE cr.motif LIKE ? OR c.nom LIKE ? OR cr.date_credit LIKE ? OR cr.montant LIKE ?
                 GROUP BY cr.id
                 ORDER BY c.nom DESC
             """
-            params = [search_word] * 3
+            params = [search_word] * 4
             cursor.execute(query, params)  # Search pattern for all three fields
             return cursor.fetchall()
 
@@ -882,7 +882,7 @@ class Database:
                     reste = montant - versement
                     statut = 'terminé' if reste == 0 else 'en cours'
                     cursor.execute(
-                        "UPDATE credit SET montant = ?, reste = ?, statut = ? WHERE id = ?"
+                        "UPDATE credit SET montant = ?, reste = ?, statut = ? WHERE id = ?",
                         (str(montant), str(reste), statut, client_id)
                     )
                     message = f"Montant mis à jour avec succès: Montant({montant}), Reste({reste}), Status({statut})."
