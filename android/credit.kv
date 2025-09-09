@@ -1,19 +1,41 @@
+<MenuButton>:
+    size_hint_x: 1                      # full width 
+    height: dp(60)
+    font_size: "18sp"
+    padding: [0, dp(15), 0, dp(15)]     # [left, top, right, bottom] padding inside
+    pos_hint: {"center_x": 0.5}     # center horizontally   
+    
 ScreenManager:
     MenuScreen:
     CreditScreen:
+    VersementScreen:
 
 <MenuScreen>:
     name: "menu"
     MDBoxLayout:
         orientation: "vertical"
+        spacing: dp(10)
         padding: dp(20)
-        MDRectangleFlatIconButton:
-            text: "List Des Crédits"
-            icon: "currency-usd"
-            size_hint_x: 1  # full width horizontally
-            pos_hint: {"center_y": 0.5}
-            on_release: app.root.current = "credit"
 
+        # Empty space to center the button
+        Widget:
+            size_hint_y: 0.4
+
+        MenuButton:
+            text: "List Des Crédits"
+            icon: "cash-clock"                       
+            on_release: app.change_screen("credit", "show_credits", "left")
+        
+        MenuButton:
+            text: "List Des Versements"
+            icon: "cash-register"
+            on_release: app.change_screen("versement", "show_versements", "left")
+
+        # Empty space below
+        Widget:
+            size_hint_y: 0.6
+
+# ---------------------------------------------------------
 <CreditScreen>:
     name: "credit"
     MDBoxLayout:
@@ -21,12 +43,101 @@ ScreenManager:
         spacing: dp(10)
         padding: dp(10)
 
+        # Top bar
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(60)
+
+            # Content row
+            MDBoxLayout:
+                orientation: "horizontal"
+                spacing: dp(10)
+                padding: dp(10)
+                md_bg_color: 0.1, 0.5, 0.8, 1  # blue-like background (RGBA)
+
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_icon_color: "Custom"
+                    icon_color: 1, 1, 1, 1
+                    on_release:
+                        app.root.transition.direction = "right"
+                        app.root.current = "menu"
+
+                MDLabel:
+                    text: "Crédit des clients"
+                    halign: "center"
+                    bold: True
+                    font_style: "H6"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+
+            # Bottom border
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(1)
+                md_bg_color: 0.8, 0.8, 0.8, 1  # light gray border
+
         MDTextField:
             id: search_credit
             hint_text: "Recherche..."
             icon_left: "magnify"
             on_text: root.search_credit(self.text)
-        
+
         BoxLayout:
             id: credit_table_box
+            orientation: "vertical"
+
+
+# ---------------------------------------------------------
+<VersementScreen>:
+    name: "versement"
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(10)
+        padding: dp(10)
+
+        # Top bar
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(60)
+
+            # Content row
+            MDBoxLayout:
+                orientation: "horizontal"
+                spacing: dp(10)
+                padding: dp(10)
+                md_bg_color: 0.1, 0.5, 0.8, 1  # blue-like background (RGBA)
+
+                MDIconButton:
+                    icon: "arrow-left"
+                    theme_icon_color: "Custom"
+                    icon_color: 1, 1, 1, 1
+                    on_release:
+                        app.root.transition.direction = "right"
+                        app.root.current = "menu"
+
+                MDLabel:
+                    text: "Versements des Clients"
+                    halign: "center"
+                    bold: True
+                    font_style: "H6"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+
+            # Bottom border
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(1)
+                md_bg_color: 0.8, 0.8, 0.8, 1  # light gray border
+
+        MDTextField:
+            id: search_versement
+            hint_text: "Recherche..."
+            icon_left: "magnify"
+            on_text: root.search_versement(self.text)
+
+        BoxLayout:
+            id: versement_table_box
             orientation: "vertical"
