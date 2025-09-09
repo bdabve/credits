@@ -1,9 +1,16 @@
+#:import hex kivy.utils.get_color_from_hex
+
 <MenuButton>:
-    size_hint_x: 1                      # full width 
+    size_hint_x: 1                      # full width
     height: dp(60)
-    font_size: "18sp"
+    font_size: "20sp"
     padding: [0, dp(15), 0, dp(15)]     # [left, top, right, bottom] padding inside
     pos_hint: {"center_x": 0.5}     # center horizontally   
+    theme_text_color: 'Custom'
+    text_color: hex('#ffffff')
+    icon_color: hex('#ffffff')
+    line_color: hex('#ffffff')
+    markup: True
     
 ScreenManager:
     MenuScreen:
@@ -24,11 +31,13 @@ ScreenManager:
         MenuButton:
             text: "List Des Crédits"
             icon: "cash-clock"                       
+            md_bg_color: hex('#e84118')
             on_release: app.change_screen("credit", "show_credits", "left")
         
         MenuButton:
             text: "List Des Versements"
             icon: "cash-register"
+            md_bg_color: hex('#40739e')
             on_release: app.change_screen("versement", "show_versements", "left")
 
         # Empty space below
@@ -45,44 +54,40 @@ ScreenManager:
 
         # Top bar
         MDBoxLayout:
-            orientation: "vertical"
-            size_hint_y: None
+            # title bar
+            canvas.before:
+                Color:
+                    #rgba: hex('#ff9f1a')       # Nice yellow color
+                    rgba: hex('#e84118')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             height: dp(60)
+            size_hint_y: None
 
-            # Content row
-            MDBoxLayout:
-                orientation: "horizontal"
-                spacing: dp(10)
-                padding: dp(10)
-                md_bg_color: 0.1, 0.5, 0.8, 1  # blue-like background (RGBA)
+            # Return Button
+            MDIconButton:
+                icon: 'arrow-left-bold-outline'
+                pos_hint: {'center_y': .5}
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = "menu"
 
-                MDIconButton:
-                    icon: "arrow-left"
-                    theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
-                    on_release:
-                        app.root.transition.direction = "right"
-                        app.root.current = "menu"
-
-                MDLabel:
-                    text: "Crédit des clients"
-                    halign: "center"
-                    bold: True
-                    font_style: "H6"
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-
-            # Bottom border
-            MDBoxLayout:
-                size_hint_y: None
-                height: dp(1)
-                md_bg_color: 0.8, 0.8, 0.8, 1  # light gray border
+            MDLabel:
+                text: "Crédit des clients"
+                halign: "center"
+                valign: "top"
+                bold: True
+                font_style: "H5"
+                font_name: '../images/fonts/Sofia-Regular.ttf'
 
         MDTextField:
             id: search_credit
+            mode: "rectangle"
+            md_bg_color: app.theme_cls.primary_light
             hint_text: "Recherche..."
             icon_left: "magnify"
-            on_text: root.search_credit(self.text)
+            on_text: root.filter_credits(self.text)
 
         BoxLayout:
             id: credit_table_box
@@ -99,38 +104,32 @@ ScreenManager:
 
         # Top bar
         MDBoxLayout:
-            orientation: "vertical"
-            size_hint_y: None
+            # title bar
+            canvas.before:
+                Color:
+                    #rgba: hex('#ff9f1a')
+                    rgba: hex('#40739e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             height: dp(60)
+            size_hint_y: None
 
-            # Content row
-            MDBoxLayout:
-                orientation: "horizontal"
-                spacing: dp(10)
-                padding: dp(10)
-                md_bg_color: 0.1, 0.5, 0.8, 1  # blue-like background (RGBA)
+            # Return Button
+            MDIconButton:
+                icon: 'arrow-left-bold-outline'
+                pos_hint: {'center_y': .5}
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = "menu"
 
-                MDIconButton:
-                    icon: "arrow-left"
-                    theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
-                    on_release:
-                        app.root.transition.direction = "right"
-                        app.root.current = "menu"
-
-                MDLabel:
-                    text: "Versements des Clients"
-                    halign: "center"
-                    bold: True
-                    font_style: "H6"
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-
-            # Bottom border
-            MDBoxLayout:
-                size_hint_y: None
-                height: dp(1)
-                md_bg_color: 0.8, 0.8, 0.8, 1  # light gray border
+            MDLabel:
+                text: "Versements des Clients"
+                halign: "center"
+                bold: True
+                valign: "top"
+                font_style: "H5"
+                font_name: '../images/fonts/Sofia-Regular.ttf'
 
         MDTextField:
             id: search_versement

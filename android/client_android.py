@@ -6,13 +6,10 @@ from kivymd.uix.button import MDRectangleFlatIconButton
 from kivy.core.window import Window
 
 # Example: 360x640 (like a small Android phone screen)
-Window.size = (360, 640)
+Window.size = (360, 600)
 
-import sys, os
-# Go up one directory (from app/ to my_project/) and add to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import db_handler  # Ensure database handler is imported
-
+import requests
+BASE_URL = "http://127.0.0.1:8000"  # ton API FastAPI
 
 
 class MenuButton(MDRectangleFlatIconButton):
@@ -32,39 +29,73 @@ class CreditScreen(MDScreen):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.db = db_handler.Database()
 
     def show_credits(self):
-        rows = self.db.dump_credits()
-        self.add_table(rows)
+        """
+        Charger les crédits depuis l'API et afficher dans un tableau
+        """
+        # self.ids.client_table_box.clear_widgets()
+        try:
+            resp = requests.get(f"{BASE_URL}/credits")
+            self.all_data = resp.json()
+        except Exception as e:
+            self.all_data = []
+            print("Erreur API:", e)
+        else:
+            self.build_table(self.all_data)
 
-    def add_table(self, rows):
-        # Clear old table if it exists
+    def filter_credits(self, query):
+        """
+        Filtrer les crédits en fonction de la requête
+        """
+        # query = self.ids.search_credit_client.text
+        if not hasattr(self, 'all_data'):
+            return
+        if query.strip() == "":
+            filtered_data = self.all_data
+        else:
+            filtered_data = [d for d in self.all_data if query.lower() in d["client"].lower()]
+
+        self.build_table(filtered_data)
+
+    def build_table(self, data):
+        """Charger les crédits depuis l'API et afficher dans un tableau"""
+
         self.ids.credit_table_box.clear_widgets()
-        
-        # ID, Date, Client, Reste
-        rows = [(str(row[0]), row[1], row[2], str(row[6])) for row in rows] # Adjust based on your table structure
+        rows = [(d["id"], d["credit_date"], d["client"], f"{d['montant']:.2f}") for d in data]
 
+        # Créer le tableau
         table = MDDataTable(
-            size_hint=(1, 0.7),
-            use_pagination=True,
+            size_hint=(1, 1),
+            background_color_header=("#227093"),
             column_data=[
                 ("ID", dp(10)),
                 ("Date", dp(20)),
-                ("Client", dp(40)),
-                ("Credit", dp(30)),
+                ("Nom", dp(40)),
+                ("Crédit", dp(30)),
             ],
-            row_data=[row for row in rows],
-        )        
+            row_data=rows,
+            use_pagination=True,
+        )
+
+        table.bind(on_row_press=self.on_row_press)
+        # Vider le conteneur avant de recréer la table
         self.ids.credit_table_box.add_widget(table)
-    
-    def search_credit(self, search_word):
-        search_word = f"%{search_word.strip()}%"
-        if search_word == "":
-            rows = self.db.dump_credits()
+
+    def on_row_press(self, instance_table, instance_row):
+        """
+        Gérer l'événement de pression sur une ligne du tableau
+        """
+        print(f"Ligne sélectionnée: {instance_row}")
+        try:
+            start_index, end_index = instance_row.table.recycle_data[instance_row.index]["range"]
+            credit_id = instance_row.table.recycle_data[start_index]
+            client_name = instance_row.table.recycle_data[start_index + 2]
+        except Exception as e:
+            print("Erreur lors de la récupération de l'ID du crédit:", e)
+            return
         else:
-            rows = self.db.search_credits(search_word)
-        self.add_table(rows)
+            print(f"ID du crédit sélectionné: {credit_id['text']}, Client: {client_name['text']}")
 
 
 class VersementScreen(MDScreen):
@@ -77,18 +108,18 @@ class VersementScreen(MDScreen):
 
 class CreditApp(MDApp):
     def build(self):
-         # Enable dark mode
-        self.theme_cls.theme_style = "Light"
+        # Enable dark mode
+        self.theme_cls.theme_style = "Dark"
         # Choose an accent color palette (blue, green, red, etc.)
-        # palette 
-        # ['Red', 'Pink', 'Purple', 'DeepPurple', 'Indigo', 'Blue', 'LightBlue', 'Cyan', 'Teal', 
+        # palette
+        # ['Red', 'Pink', 'Purple', 'DeepPurple', 'Indigo', 'Blue', 'LightBlue', 'Cyan', 'Teal',
         # 'Green', 'LightGreen', 'Lime', 'Yellow', 'Amber', 'Orange', 'DeepOrange', 'Brown', 'Gray', 'BlueGray']
-        self.theme_cls.primary_palette = "Indigo"
+        self.theme_cls.primary_palette = "BlueGray"
 
         # self.theme_cls.accent_palette = "Amber"
         # Optional: change accent hue (like "A400")
         # self.theme_cls.primary_hue = "500"
-    
+
     def change_screen(self, screen_name, callback, direction="left"):
         sm = self.root
         sm.transition.direction = direction
@@ -98,7 +129,7 @@ class CreditApp(MDApp):
         screen = sm.get_screen(screen_name)
         if hasattr(screen, callback):
             getattr(screen, callback)()
-    
+
 
 if __name__ == "__main__":
     CreditApp().run()
