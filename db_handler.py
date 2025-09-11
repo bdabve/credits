@@ -1006,6 +1006,7 @@ class Database:
     # === Charge Methods ===
     # ======================
     def sum_charges(self, month=None):
+        # Note: not used
         query = "SELECT IFNULL(SUM(montant), 0) AS total_charges FROM charges"
         params = ()
         if month:

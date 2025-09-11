@@ -926,7 +926,7 @@ class Credit(QtWidgets.QMainWindow):
         Display all credits for the selected persone.
         """
         client_id = self.get_item_id(self.ui.clientsTableWidget)
-        logger.info(f"Displaying credits for the selected client({client_id})...")
+        # logger.info(f"Displaying credits for the selected client({client_id})...")
         rows = self.db.get_client_credits(client_id)
         if not rows:
             self.show_error_message("Aucun crédit trouvé pour ce client.", success=False)
@@ -993,42 +993,46 @@ class Credit(QtWidgets.QMainWindow):
     # == Credits Functions ==
     # =======================
     def set_total_credits(self, rows: list, page: str, client_id=None) -> None:
-        """
-        Updates the UI labels to display the total credits for all clients.
-
-        Retrieves the total credit amount from the database, formats it as currency,
-        and sets the text of the corresponding UI labels to show the total credits in DA.
-
-        Returns:
-            None
-        """
-        # Get total credit from the database
-        total_credit = self.db.get_total_credit()
-        logger.info(f"Total Credits: {total_credit} DA")
-
-        # Calculate the total
         try:
-            if page == "credits":
-                total_credit = sum(r[6] for r in rows if r[0] is not None)  # Assuming 'reste' is at index 6
-                credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
-            elif page == "clients":
-                total_credit = sum(r[2] for r in rows if r[0] is not None)  # Assuming 'reste' is at index 6
-                credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
+            if not rows:
+                self.ui.labelTotalCredits.setText("Total Crédits: 0 DA")
+                self.ui.labelTotalCreditClients.setText("Total Crédits: 0 DA")
+                return
 
-                if client_id:
+            if page == "credits":
+                total_credit = sum(r[6] for r in rows if len(r) > 6 and r[0] is not None)
+                credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
+                
+                if client_id is not None:
+                    logger.debug(f"Calculating total credits for client ID: {client_id}")
                     client = self.db.get_item('clients', 'nom', client_id)
-                    credit_str = f"Total Crédits {client.upper()}: {utils.format_money(total_credit)} DA"
+                    client_name = client.upper() if client else str(client_id)
+                    credit_str = f"Total Crédits {client_name}: {utils.format_money(total_credit)} DA"
+                    
+            elif page == "clients":
+                total_credit = sum(r[2] for r in rows if len(r) > 2 and r[0] is not None)
+                credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
+                print(client_id)
+                
+
+            else:
+                credit_str = "Total Crédits: 0 DA"
+
+            # update only the relevant label
+            if page == "credits":
+                self.ui.labelTotalCredits.setText(credit_str)
+            elif page == "clients":
+                self.ui.labelTotalCreditClients.setText(credit_str)
 
         except Exception as e:
             logger.error(f"Error calculating total credits: {e}")
-            total_credit = 0.0
-        else:
-            self.ui.labelTotalCredits.setText(credit_str)
-            self.ui.labelTotalCreditClients.setText(credit_str)
+            self.ui.labelTotalCredits.setText("Erreur de calcul")
+            self.ui.labelTotalCreditClients.setText("Erreur de calcul")
 
     def display_credits(self, rows=None, client_id=None):
         """
         Display all credits in the table widget.
+        :client_id: If provided, it indicates that the credits are being displayed for a specific client.
         """
         if rows is None:
             rows = self.db.dump_credits()
@@ -1197,6 +1201,8 @@ class Credit(QtWidgets.QMainWindow):
             else:
                 self.show_error_message(f"{result['error']}", success=False)
 
+    def excel_export_credits(self):
+        logger.debug("Exporting credits to Excel...")
     # =================================================================================
     # == Payments(Versement) Functions ==
     # ===================================
@@ -1421,11 +1427,10 @@ class Credit(QtWidgets.QMainWindow):
             )
 
         logger.debug(f"Display Charge Records for {month_text}")
-        logger.debug(rows)
 
         # Calculate and display totals
-        total_charges = self.db.sum_charges(month)
-        message = f"Total Charges {month_name.title()}: {utils.format_money(total_charges.total_charges)}"
+        total_charges = sum(r[3] for r in rows)  # Assuming 'montant' is at index 3
+        message = f"Total Charges {month_name.title()}: {utils.format_money(total_charges)}"
         self.ui.labelTotalCharge.setText(message)
 
         # Display records in QTable

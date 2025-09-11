@@ -88,7 +88,8 @@ def main_icons_callbacks(root):
     EDIT_ICON = qta.icon('ph.pencil-line-light', color=EDIT_COLOR)
     LIST_ICON = qta.icon('ph.list', color=WHITE_COLOR)
 
-    # Create the Plus menu
+    # == PushButtons Menus
+    # New Button with Menu
     create_menu(
         root,
         root.ui.plusButtonShurtcut,
@@ -98,6 +99,16 @@ def main_icons_callbacks(root):
             ("Crédit", root.ui_create_credit, "ph.plus"),
             ("Employée", lambda: root.ui_create_persone('employee'), "ph.plus"),
             ("Charge", root.ui_create_charge, "ph.plus"),
+        ],
+        with_icons=True
+    )
+    # Actions Menu
+    create_menu(
+        root,
+        root.ui.buttonCreditActions,
+        "mdi6.cog-outline",  # main button icon (QtAwesome)
+        [
+            ("Exporté", root.excel_export_credits, "mdi6.file-excel"),            
         ],
         with_icons=True
     )
@@ -494,7 +505,7 @@ def create_menu(root, menu_button, icon_name, actions, with_icons=False):
     for action in actions:
         if with_icons:
             label, callback, icon_path = action
-            act = menu.addAction(qta.icon(icon_name, color=NEW_COLOR), label)
+            act = menu.addAction(qta.icon(icon_path, color=NEW_COLOR), label)
         else:
             label, callback = action
             act = menu.addAction(label)
