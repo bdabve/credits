@@ -3482,7 +3482,7 @@ Content App */
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>4</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3746,6 +3746,19 @@ Content App */
                          </property>
                          <property name="text">
                           <string>L. Crédit</string>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>22</width>
+                           <height>22</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="buttonClientActions">
+                         <property name="text">
+                          <string>Actions</string>
                          </property>
                          <property name="iconSize">
                           <size>
@@ -4053,6 +4066,9 @@ Content App */
                            <height>40</height>
                           </size>
                          </property>
+                         <property name="currentIndex">
+                          <number>0</number>
+                         </property>
                          <item>
                           <property name="text">
                            <string>Tous</string>
@@ -4247,6 +4263,19 @@ Content App */
                         <widget class="Line" name="line">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="buttonCreditActions">
+                         <property name="text">
+                          <string>Actions</string>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>22</width>
+                           <height>22</height>
+                          </size>
                          </property>
                         </widget>
                        </item>

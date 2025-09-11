@@ -919,7 +919,7 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.clientsTableWidget, rows, utils.CLIENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.clientsTableWidget, 80, 320, 270, 200, 300)
         self.ui.labelClientsCount.setText(f"Total: {len(rows)}")
-        self.set_total_credits()
+        self.set_total_credits(rows, page="clients")
 
     def client_credit_list(self):
         """
@@ -992,7 +992,7 @@ class Credit(QtWidgets.QMainWindow):
     # ========================================
     # == Credits Functions ==
     # =======================
-    def set_total_credits(self, client_id=None) -> None:
+    def set_total_credits(self, rows: list, page: str, client_id=None) -> None:
         """
         Updates the UI labels to display the total credits for all clients.
 
@@ -1005,16 +1005,26 @@ class Credit(QtWidgets.QMainWindow):
         # Get total credit from the database
         total_credit = self.db.get_total_credit()
         logger.info(f"Total Credits: {total_credit} DA")
-        # Update UI labels
-        self.ui.labelTotalCreditClients.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
-        self.ui.labelTotalCredits.setText(f"Total Crédits: {utils.format_money(total_credit)} DA")
 
-        if client_id:
-            client = self.db.get_item('clients', 'nom', client_id)
-            total_credit_client = self.db.get_total_credit_by_client(client_id)
-            total_credit_client = total_credit_client.client_total_credit
-            logger.info(f"Calculating total credits for client ID: {client_id} -> {total_credit_client} DA")
-            self.ui.labelTotalCredits.setText(f"Total Crédits {client.upper()}: {utils.format_money(total_credit_client)} DA")
+        # Calculate the total
+        try:
+            if page == "credits":
+                total_credit = sum(r[6] for r in rows if r[0] is not None)  # Assuming 'reste' is at index 6
+                credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
+            elif page == "clients":
+                total_credit = sum(r[2] for r in rows if r[0] is not None)  # Assuming 'reste' is at index 6
+                credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
+
+                if client_id:
+                    client = self.db.get_item('clients', 'nom', client_id)
+                    credit_str = f"Total Crédits {client.upper()}: {utils.format_money(total_credit)} DA"
+
+        except Exception as e:
+            logger.error(f"Error calculating total credits: {e}")
+            total_credit = 0.0
+        else:
+            self.ui.labelTotalCredits.setText(credit_str)
+            self.ui.labelTotalCreditClients.setText(credit_str)
 
     def display_credits(self, rows=None, client_id=None):
         """
@@ -1022,14 +1032,20 @@ class Credit(QtWidgets.QMainWindow):
         """
         if rows is None:
             rows = self.db.dump_credits()
+            # self.ui.cbBoxCreditByStatus.setCurrentIndex(0)      # 'Tous'
+
+        # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.creditTableWidget, rows, utils.CREDITS_HEADERS)
         utils.set_table_column_sizes(self.ui.creditTableWidget, 80, 220, 300, 200, 270, 270)
+
+        # Total rows
         self.ui.labelCreditCount.setText(f"Total: {len(rows)}")
-        self.set_total_credits(client_id)
+
+        # Calculate the total
+        self.set_total_credits(rows, page="credits", client_id=client_id)
 
     def refresh_credit_table(self):
         logger.info('Refreshing credit table...')
-        self.ui.cbBoxCreditByStatus.setCurrentText("Tous")  # Reset filter
         self.display_credits()
 
     def filter_credits(self):
@@ -1037,9 +1053,12 @@ class Credit(QtWidgets.QMainWindow):
         Search Credits
         """
         search_word = self.ui.editSearchCredit.text()
+        statut = self.ui.cbBoxCreditByStatus.currentText().strip().lower()
+
         if not search_word: return  # or show a message to the user that the search input is empty
         else: search_word = f"%{search_word}%"
-        rows = self.db.search_credits(search_word)
+
+        rows = self.db.search_credits(search_word, statut)
         self.display_credits(rows)
 
     def filter_credit_by_status(self):

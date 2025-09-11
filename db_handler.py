@@ -687,10 +687,11 @@ class Database:
                 GROUP BY cr.id
                 ORDER BY c.nom DESC
             """
+            # WHERE cr.status = 'en cours'
             cursor.execute(query)
             return cursor.fetchall()
 
-    def search_credits(self, search_word):
+    def search_credits(self, search_word, statut):
         """
         Search for credits by description or persone name.
         """
@@ -701,11 +702,13 @@ class Database:
                 FROM credit cr
                 JOIN clients c ON cr.client_id = c.id
                 LEFT JOIN paiement v on v.credit_id = cr.id
-                WHERE cr.motif LIKE ? OR c.nom LIKE ? OR cr.date_credit LIKE ? OR cr.montant LIKE ?
-                GROUP BY cr.id
-                ORDER BY c.nom DESC
+                WHERE (cr.motif LIKE ? OR c.nom LIKE ? OR cr.date_credit LIKE ? OR cr.montant LIKE ?)
             """
             params = [search_word] * 4
+            if statut != "tous":
+                query += " AND cr.statut = ?"
+                params.append(statut)
+            query += " GROUP BY cr.id ORDER BY c.nom DESC"
             cursor.execute(query, params)  # Search pattern for all three fields
             return cursor.fetchall()
 
