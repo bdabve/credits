@@ -1002,18 +1002,17 @@ class Credit(QtWidgets.QMainWindow):
             if page == "credits":
                 total_credit = sum(r[6] for r in rows if len(r) > 6 and r[0] is not None)
                 credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
-                
+
                 if client_id is not None:
                     logger.debug(f"Calculating total credits for client ID: {client_id}")
                     client = self.db.get_item('clients', 'nom', client_id)
                     client_name = client.upper() if client else str(client_id)
                     credit_str = f"Total Crédits {client_name}: {utils.format_money(total_credit)} DA"
-                    
+
             elif page == "clients":
                 total_credit = sum(r[2] for r in rows if len(r) > 2 and r[0] is not None)
                 credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
                 print(client_id)
-                
 
             else:
                 credit_str = "Total Crédits: 0 DA"
@@ -1201,8 +1200,20 @@ class Credit(QtWidgets.QMainWindow):
             else:
                 self.show_error_message(f"{result['error']}", success=False)
 
-    def excel_export_credits(self):
+    def excel_export_credits(self, page="credits"):
+        if page == "credits":
+            table = self.ui.creditTableWidget
+            file_name = "credit_clients_details"
+            title = "Crédits Detaillés"
+        elif page == "clients":
+            table = self.ui.clientsTableWidget
+            file_name = "credit_client_generale"
+            title = "Crédits Générale"
+
+        result = utils.export_tablewidget_to_excel(table, file_name=file_name, title=title)
+        self.show_error_message(f"{result}.", success=True)
         logger.debug("Exporting credits to Excel...")
+
     # =================================================================================
     # == Payments(Versement) Functions ==
     # ===================================

@@ -5,11 +5,18 @@
 # created       :
 # desc          :
 # ----------------------------------------------------------------------------
+import os
 from datetime import datetime
-from PyQt5 import QtWidgets, QtCore         # , QtGui
-from gui.h_confirm_dialog import Ui_Dialog
-import qtawesome as qta
 import decimal
+from PyQt5 import QtWidgets, QtCore         # , QtGui
+import qtawesome as qta
+
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment
+from openpyxl.utils import get_column_letter
+
+from gui.h_confirm_dialog import Ui_Dialog
+
 
 # ---- Global Var ---- #
 NEW_COLOR = "#1dd1a1"
@@ -106,13 +113,25 @@ def main_icons_callbacks(root):
     create_menu(
         root,
         root.ui.buttonCreditActions,
-        "mdi6.cog-outline",  # main button icon (QtAwesome)
+        "fa6s.file-export",  # main button icon (QtAwesome)
         [
-            ("Exporté", root.excel_export_credits, "mdi6.file-excel"),            
+            ("Exporté", lambda: root.excel_export_credits("credits"), "mdi6.microsoft-excel"),
         ],
+        icon_color=BLUE_COLOR,
         with_icons=True
     )
-
+    # action clients page
+    create_menu(
+        root,
+        root.ui.buttonClientActions,
+        "fa6s.file-export",  # main button icon (QtAwesome)
+        [
+            ("Exporté", lambda: root.excel_export_credits(page="clients"), "mdi6.microsoft-excel"),
+        ],
+        icon_color=BLUE_COLOR,
+        with_icons=True
+    )
+    # =============================
     buttons = [
         # --- MENUS
         # (root.ui.toggleMenuButton, False, lambda: root.toggle_menu(from_btn=True)),
@@ -207,8 +226,8 @@ def main_icons_callbacks(root):
         # == Charge Page ==
         # ==================
         (
-            root.ui.buttonChargePage, 
-            qta.icon('mdi6.cash-minus', color=EDIT_COLOR), 
+            root.ui.buttonChargePage,
+            qta.icon('mdi6.cash-minus', color=EDIT_COLOR),
             lambda: root.goto_page('charge', from_btn=True)
         ),
         (root.ui.buttonRefreshChargeTable, REFRESH_ICON, lambda: root.display_charge(rows=None, month_text=None)),
@@ -282,7 +301,7 @@ def main_icons_callbacks(root):
     ]
     setup_table_context_menu(root.ui.clientsTableWidget, client_table_actions)
 
-    # == Crédits Menu    
+    # == Crédits Menu
     credit_table_actions = [
         ('A. Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
         ('L. Versements', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.credit_list_versement),
@@ -299,7 +318,7 @@ def main_icons_callbacks(root):
     ]
     setup_table_context_menu(root.ui.chargeTableWidget, charge_table_actions)
 
-    # ============================== 
+    # ==============================
     # == ComboBox Signals
     # ==============================
     # QComboBox for Credit, Salaire, Charge
@@ -310,7 +329,7 @@ def main_icons_callbacks(root):
     ]
     for cbBox, callback in cbBoxes:
         cbBox.currentIndexChanged.connect(callback)
-    
+
     # QComboBox for Accomptes
     for cbBox in (
             root.ui.cbBoxEmployeOperationByName,
@@ -319,7 +338,7 @@ def main_icons_callbacks(root):
     ):
         cbBox.currentIndexChanged.connect(root.filter_accomptes)
 
-    # ================================ 
+    # ================================
     # == LineEdit Signals
     # ================================
     # QLineEdit for Search
@@ -364,11 +383,11 @@ def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: li
     :param rows: A list of rows where each row is a list or tuple of values.
     :param headers: A list of column headers.
     """
-    table.clear()
-    table.setSortingEnabled(False)
+    table.clearContents()
     table.setColumnCount(len(headers))
     table.setRowCount(len(rows))
     table.setHorizontalHeaderLabels(headers)
+    table.setSortingEnabled(False)
 
     # These columns will be formatted as money
     money_headers = {'Salaire', 'Crédit', 'Montant Total', 'Versement', 'Reste', 'Montant'}
@@ -470,6 +489,73 @@ def show_table_context_menu(table_widget: QtWidgets.QTableWidget, actions: list,
     menu.exec_(table_widget.viewport().mapToGlobal(pos))
 
 
+def export_tablewidget_to_excel(table: QtWidgets.QTableWidget, file_name: str = "export", title: str = "Export") -> str:
+    """
+    Export the contents of a QTableWidget to an Excel file with a date and title.
+    File is saved inside 'excel_fichier' directory, auto-created if missing.
+
+    :param table: The QTableWidget instance.
+    :param file_name: Base file name (without extension).
+    :param title: The title to display in the Excel file.
+    :return: Full path of the saved file.
+    """
+    # ---- Ensure directory exists ----
+    output_dir = "excel_fichier"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # ---- Build filename with timestamp ----
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = os.path.join(output_dir, f"{file_name}_{timestamp}.xlsx")
+
+    wb = Workbook()
+    ws = wb.active
+
+    # ---- Date in first line ----
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=table.columnCount())
+    ws["A1"] = datetime.now().strftime("%d-%m-%Y %H:%M")
+    ws["A1"].font = Font(bold=True, italic=True, size=11)
+    ws["A1"].alignment = Alignment(horizontal="right")
+
+    # ---- Title in second line ----
+    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=table.columnCount())
+    ws["A2"] = title
+    ws["A2"].font = Font(bold=True, size=14)
+    ws["A2"].alignment = Alignment(horizontal="center")
+
+    # ---- Headers in third line ----
+    headers = []
+    for col in range(table.columnCount()):
+        header_item = table.horizontalHeaderItem(col)
+        headers.append(header_item.text() if header_item else f"Column {col + 1}")
+    ws.append(headers)
+
+    for col_num, _ in enumerate(headers, start=1):
+        cell = ws.cell(row=3, column=col_num)
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal="center")
+
+    # ---- Data rows ----
+    for row in range(table.rowCount()):
+        row_data = []
+        for col in range(table.columnCount()):
+            item = table.item(row, col)
+            row_data.append(item.text() if item else "")
+        ws.append(row_data)
+
+    # ---- Auto column width ----
+    for col in range(1, table.columnCount() + 1):
+        max_length = 0
+        col_letter = get_column_letter(col)
+        for cell in ws[col_letter]:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+        ws.column_dimensions[col_letter].width = max_length + 2
+
+    # ---- Save file ----
+    wb.save(filename)
+    return f"✅ Exporté {table.rowCount()} ligne X {table.columnCount()} avec succès dans '{filename}'."
+
+
 # == QComboBox
 def populate_comboBox(combobox: QtWidgets.QComboBox, items: list):
     """
@@ -484,7 +570,7 @@ def populate_comboBox(combobox: QtWidgets.QComboBox, items: list):
     combobox.blockSignals(False)
 
 
-def create_menu(root, menu_button, icon_name, actions, with_icons=False):
+def create_menu(root, menu_button, icon_name, actions, icon_color=NEW_COLOR, with_icons=False):
     """
     Create and attach a menu to a QPushButton.
 
@@ -497,7 +583,7 @@ def create_menu(root, menu_button, icon_name, actions, with_icons=False):
     :param with_icons: Whether actions include icons.
     """
     # Set main button icon
-    menu_button.setIcon(qta.icon(icon_name, color=NEW_COLOR))
+    menu_button.setIcon(qta.icon(icon_name, color=icon_color))
 
     # Create the menu
     menu = QtWidgets.QMenu(root)
