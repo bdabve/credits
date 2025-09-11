@@ -604,8 +604,8 @@ QComboBox QAbstractItemView {
 	selection-background-color: #3d3d3d;
 
 }
-QComboBox QAbstractItemView::item  {
-	padding: 10px;
+QComboBox QAbstractItemView::item {
+	padding: 8px 10px;
 }
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 Sliders 

@@ -19,11 +19,9 @@ class Credit(QtWidgets.QMainWindow):
     # TODO
     # ====
     # - Add PDF Export for Salary Slip
-    # - work with the charge page
-    # - handle all the search functions
-    # - handle edit for other function that need it
     # - Add more validations
     # ####################################################
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
