@@ -296,7 +296,7 @@ class Credit(QtWidgets.QMainWindow):
         Animate the height of the QTextBrowser.
         :close: bool True to close; False to open
         """
-        msgs_frame = self.ui.widgetMessages
+        msgs_frame = self.ui.frameMsgs
         width = msgs_frame.maximumWidth()
         new_width = 0 if close else 900
         # Create the animation object
@@ -384,6 +384,38 @@ class Credit(QtWidgets.QMainWindow):
             row = tableWidget.currentRow()
             item_id = utils.get_column_value(tableWidget, row, 0)
             return item_id
+
+    def run_server(self):
+        logger.debug("Running the server")
+        self.ui.labelServerIsOn.setText('Surver is running')
+
+        label_ssheet = """
+            color: #44e37b;
+            background-color: rgba(60, 184, 127, 47);
+            padding: 5px 7px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        """
+        self.ui.labelServerIsOn.setStyleSheet(label_ssheet)
+        self.close_label_server(close=False)
+
+    def close_label_server(self, close=True):
+        """
+        Animate the height of the QTextBrowser.
+        :close: bool True to close; False to open
+        """
+        label = self.ui.labelServerIsOn
+        width = label.maximumWidth()
+        new_width = 0 if close else 200
+        # Create the animation object
+        self.close_label_server = QtCore.QPropertyAnimation(label, b"maximumWidth")
+        self.close_label_server.setDuration(250)  # Duration in milliseconds
+        self.close_label_server.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+        self.close_label_server.setStartValue(width)
+        self.close_label_server.setEndValue(new_width)
+
+        # Start the animation
+        self.close_label_server.start()
 
     # =======================
     # == Employe & Clients ==

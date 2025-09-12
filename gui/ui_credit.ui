@@ -128,7 +128,10 @@ QWidget{
 #labelAddVersementMontant,
 #labelTotalCharge {
 	font: 14pt &quot;Lucida Casual&quot;;	
-	color: rgb(237, 51, 59);
+	background: #3b3230;
+	color: #f77861;
+	padding: 10px;
+	border-radius: 5px;
 }
 
 /* ==== LABEL COUNTS ===== */
@@ -3138,6 +3141,25 @@ Content App */
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <widget class="QLabel" name="labelServerIsOn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>0</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
@@ -3172,7 +3194,7 @@ Content App */
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="buttonLanguage">
+                 <widget class="QPushButton" name="buttonSettings">
                   <property name="minimumSize">
                    <size>
                     <width>40</width>
@@ -3360,7 +3382,7 @@ Content App */
               <widget class="QWidget" name="widgetMessages" native="true">
                <property name="maximumSize">
                 <size>
-                 <width>0</width>
+                 <width>16777215</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -3396,7 +3418,7 @@ Content App */
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>16777215</width>
+                    <width>0</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -3473,6 +3495,19 @@ Content App */
                   </layout>
                  </widget>
                 </item>
+                <item>
+                 <spacer name="horizontalSpacer_12">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                </layout>
               </widget>
              </item>
@@ -3505,13 +3540,13 @@ Content App */
                   <widget class="QWidget" name="ClientsWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_24">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>5</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
                     <property name="topMargin">
-                     <number>10</number>
+                     <number>0</number>
                     </property>
                     <property name="rightMargin">
                      <number>0</number>
@@ -3853,6 +3888,12 @@ Content App */
                     </item>
                     <item>
                      <widget class="QLabel" name="labelTotalCreditClients">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="text">
                        <string>labelTotalCredit ByClientType</string>
                       </property>
@@ -3998,7 +4039,7 @@ Content App */
                   <widget class="QWidget" name="CreditWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_23">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>5</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -4435,7 +4476,7 @@ Content App */
                     <item>
                      <widget class="QLabel" name="labelTotalCredits">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -4568,7 +4609,7 @@ Content App */
                   <widget class="QWidget" name="employeWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>5</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -5139,6 +5180,21 @@ Content App */
                  <item>
                   <widget class="QWidget" name="empOperationWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_31">
+                    <property name="spacing">
+                     <number>5</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QFrame" name="frameAccompteSum">
                       <property name="sizePolicy">
@@ -5407,7 +5463,7 @@ Content App */
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_25">
                        <property name="topMargin">
-                        <number>25</number>
+                        <number>10</number>
                        </property>
                        <item>
                         <widget class="QLabel" name="labelAccompteEdit">
@@ -5813,16 +5869,16 @@ Content App */
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QWidget" name="ClientsWidgetContainer_2" native="true">
+                  <widget class="QWidget" name="ChargeWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_36">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>5</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
                     <property name="topMargin">
-                     <number>10</number>
+                     <number>0</number>
                     </property>
                     <property name="rightMargin">
                      <number>0</number>
@@ -5851,16 +5907,6 @@ Content App */
                        <property name="bottomMargin">
                         <number>0</number>
                        </property>
-                       <item>
-                        <widget class="QLabel" name="labelTotalCharge">
-                         <property name="text">
-                          <string>Total Charges</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
                       </layout>
                      </widget>
                     </item>
@@ -6159,6 +6205,22 @@ Content App */
                      </widget>
                     </item>
                     <item>
+                     <widget class="QLabel" name="labelTotalCharge">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Total Charges</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
                      <widget class="MyTable" name="chargeTableWidget">
                       <property name="minimumSize">
                        <size>
@@ -6194,7 +6256,7 @@ Content App */
                        <bool>true</bool>
                       </property>
                       <property name="columnCount">
-                       <number>0</number>
+                       <number>4</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
                        <bool>true</bool>
@@ -6214,6 +6276,26 @@ Content App */
                       <attribute name="verticalHeaderVisible">
                        <bool>false</bool>
                       </attribute>
+                      <column>
+                       <property name="text">
+                        <string>New Column</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>New Column</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>New Column</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>New Column</string>
+                       </property>
+                      </column>
                      </widget>
                     </item>
                    </layout>
@@ -6260,7 +6342,7 @@ Content App */
   <tabstop>buttonSaveVersement</tabstop>
   <tabstop>buttonDeleteVersement</tabstop>
   <tabstop>versementTableWidget</tabstop>
-  <tabstop>buttonLanguage</tabstop>
+  <tabstop>buttonSettings</tabstop>
   <tabstop>minimizeAppBtn</tabstop>
   <tabstop>maximizeRestoreAppBtn</tabstop>
   <tabstop>closeAppBtn</tabstop>

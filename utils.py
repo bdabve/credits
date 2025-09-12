@@ -109,26 +109,37 @@ def main_icons_callbacks(root):
         ],
         with_icons=True
     )
-    # Actions Menu
+    # Settings Menu
+    create_menu(
+        root,
+        root.ui.buttonSettings,
+        "fa6s.gear",  # main button icon (QtAwesome)
+        [
+            ("Run Server", root.run_server, "mdi6.play-pause"),
+        ],
+        icon_color=WHITE_COLOR,
+        with_icons=True
+    )
+    # Actions Credit Menu
     create_menu(
         root,
         root.ui.buttonCreditActions,
-        "fa6s.file-export",  # main button icon (QtAwesome)
+        "fa5s.chevron-down",  # main button icon (QtAwesome)
         [
             ("Exporté", lambda: root.excel_export_credits("credits"), "mdi6.microsoft-excel"),
         ],
-        icon_color=BLUE_COLOR,
+        icon_color=WHITE_COLOR,
         with_icons=True
     )
     # action clients page
     create_menu(
         root,
         root.ui.buttonClientActions,
-        "fa6s.file-export",  # main button icon (QtAwesome)
+        "fa5s.chevron-down",  # main button icon (QtAwesome)
         [
             ("Exporté", lambda: root.excel_export_credits(page="clients"), "mdi6.microsoft-excel"),
         ],
-        icon_color=BLUE_COLOR,
+        icon_color=WHITE_COLOR,
         with_icons=True
     )
     # =============================
