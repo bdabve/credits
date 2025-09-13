@@ -3,6 +3,7 @@
 #
 
 import sys
+from datetime import datetime
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 import qtawesome as qta
@@ -11,7 +12,6 @@ import utils
 from db_handler import Database
 from gui.h_credit import Ui_MainWindow
 from logger import logger
-from datetime import datetime
 
 
 class Credit(QtWidgets.QMainWindow):
@@ -30,6 +30,12 @@ class Credit(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
         self.db = Database()
+        logger.info("Connected to Database.")
+        logger.info(f"Creating tables if not exists: {self.db._create_tables()}")
+        
+        self.server_thread: utils.ServerThread | None = None   # type hint for clarity
+        self.server_running = False
+
         # Setup current date values
         self.CURRENT_DATE = datetime.now()
         self.CURRENT_MONTH = self.CURRENT_DATE.strftime("%Y-%m")
@@ -385,10 +391,10 @@ class Credit(QtWidgets.QMainWindow):
             item_id = utils.get_column_value(tableWidget, row, 0)
             return item_id
 
-    def run_server(self):
-        logger.debug("Running the server")
-        self.ui.labelServerIsOn.setText('Surver is running')
-
+    # ======================
+    # == Server Controls ===
+    # =======================
+    def toggle_server(self):
         label_ssheet = """
             color: #44e37b;
             background-color: rgba(60, 184, 127, 47);
@@ -397,7 +403,19 @@ class Credit(QtWidgets.QMainWindow):
             border-bottom-left-radius: 5px;
         """
         self.ui.labelServerIsOn.setStyleSheet(label_ssheet)
-        self.close_label_server(close=False)
+        if not self.server_running:
+            # Start server
+            self.server_thread = utils.ServerThread()
+            self.server_thread.start()
+            self.server_running = True
+            self.ui.labelServerIsOn.setText("✅ Server running at http://127.0.0.1:8000")
+            self.close_label_server(close=False)
+        else:
+            # Stop server
+            if self.server_thread and self.server_thread.is_alive():
+                self.server_thread.stop()
+                self.ui.labelServerIsOn.setText("⛔ Server stopping...")
+            self.server_running = False
 
     def close_label_server(self, close=True):
         """
@@ -406,7 +424,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         label = self.ui.labelServerIsOn
         width = label.maximumWidth()
-        new_width = 0 if close else 200
+        new_width = 0 if close else 300
         # Create the animation object
         self.close_label_server = QtCore.QPropertyAnimation(label, b"maximumWidth")
         self.close_label_server.setDuration(250)  # Duration in milliseconds

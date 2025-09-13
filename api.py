@@ -3,11 +3,11 @@ from pydantic import BaseModel
 
 import sys, os
 # Go up one directory (from app/ to my_project/) and add to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import db_handler  # Ensure database handler is imported
 
 app = FastAPI(title="LifeTipaza API", version="1.0.0")
-db = db_handler.Database("../lifeTipazaDB.db")
+db = db_handler.Database("./lifeTipazaDB.db")
 
 
 # === MODELES ===

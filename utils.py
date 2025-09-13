@@ -8,6 +8,11 @@
 import os
 from datetime import datetime
 import decimal
+# Server for api
+from threading import Thread
+import uvicorn
+from api import app as server_app
+
 from PyQt5 import QtWidgets, QtCore         # , QtGui
 import qtawesome as qta
 
@@ -115,7 +120,7 @@ def main_icons_callbacks(root):
         root.ui.buttonSettings,
         "fa6s.gear",  # main button icon (QtAwesome)
         [
-            ("Run Server", root.run_server, "mdi6.play-pause"),
+            ("Run Server", root.toggle_server, "mdi6.play-pause"),
         ],
         icon_color=WHITE_COLOR,
         with_icons=True
@@ -611,6 +616,19 @@ def create_menu(root, menu_button, icon_name, actions, icon_color=NEW_COLOR, wit
 
     # Attach menu to button
     menu_button.setMenu(menu)
+
+
+class ServerThread(Thread):
+    def __init__(self):
+        super().__init__(daemon=True)
+        config = uvicorn.Config(server_app, host="127.0.0.1", port=8000, log_level="info")
+        self.server = uvicorn.Server(config)
+
+    def run(self):
+        self.server.run()
+
+    def stop(self):
+        self.server.should_exit = True
 
 
 class ConfirmDialog(QtWidgets.QDialog):

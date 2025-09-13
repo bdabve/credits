@@ -16,8 +16,6 @@ class Database:
     def __init__(self, db_name='lifeTipazaDB.db'):
         self.db_name = db_name
         # Enable foreign key constraints
-        result = self._create_tables()
-        print(f'Creating Tables Result: {result}')
 
         # employe and his tables
         self.employes_fields = [
