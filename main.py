@@ -32,7 +32,7 @@ class Credit(QtWidgets.QMainWindow):
         self.db = Database()
         logger.info("Connected to Database.")
         logger.info(f"Creating tables if not exists: {self.db._create_tables()}")
-        
+
         self.server_thread: utils.ServerThread | None = None   # type hint for clarity
         self.server_running = False
 
@@ -1060,7 +1060,6 @@ class Credit(QtWidgets.QMainWindow):
             elif page == "clients":
                 total_credit = sum(r[2] for r in rows if len(r) > 2 and r[0] is not None)
                 credit_str = f"Total Crédits: {utils.format_money(total_credit)} DA"
-                print(client_id)
 
             else:
                 credit_str = "Total Crédits: 0 DA"

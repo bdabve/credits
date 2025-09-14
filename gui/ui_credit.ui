@@ -130,7 +130,7 @@ QWidget{
 	font: 14pt &quot;Lucida Casual&quot;;	
 	background: #3b3230;
 	color: #f77861;
-	padding: 10px;
+	padding: 7px 10px;
 	border-radius: 5px;
 }
 
@@ -348,7 +348,7 @@ QGroupBox .QPushButton:pressed {
 QTableWidget */
 QTableWidget {	
 	background-color: transparent;
-	padding: 10px 0px;
+	padding: 5px 0px;
 	border-radius: 5px;
 	gridline-color: rgb(52, 59, 72);
 	border-bottom: 1px solid rgb(44, 49, 60);	
@@ -469,7 +469,7 @@ QScrollBar:horizontal {
 	border-radius: 0px;
 }
 QScrollBar::handle:horizontal {
-    background: rgb(189, 147, 249);
+    background: #1dd1a1;
     min-width: 25px;
 	border-radius: 4px
 }
@@ -507,7 +507,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
 	border-radius: 0px;
  }
  QScrollBar::handle:vertical {	
-	background: rgb(189, 147, 249);
+	background: #1dd1a1;
     min-height: 25px;
 	border-radius: 4px
  }
@@ -1212,8 +1212,8 @@ Content App */
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>28</width>
-                    <height>28</height>
+                    <width>30</width>
+                    <height>30</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -1321,8 +1321,8 @@ Content App */
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>28</width>
-                    <height>28</height>
+                    <width>30</width>
+                    <height>30</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -3356,29 +3356,6 @@ Content App */
               <number>6</number>
              </property>
              <item>
-              <widget class="QPushButton" name="plusButtonShurtcut">
-               <property name="maximumSize">
-                <size>
-                 <width>41</width>
-                 <height>41</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../resources.qrc">
-                 <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QWidget" name="widgetMessages" native="true">
                <property name="maximumSize">
                 <size>
@@ -3402,6 +3379,42 @@ Content App */
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item>
+                 <widget class="QPushButton" name="plusButtonShurtcut">
+                  <property name="maximumSize">
+                   <size>
+                    <width>41</width>
+                    <height>41</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_12">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                 <item>
                  <widget class="QFrame" name="frameMsgs">
                   <property name="sizePolicy">
@@ -3495,19 +3508,6 @@ Content App */
                   </layout>
                  </widget>
                 </item>
-                <item>
-                 <spacer name="horizontalSpacer_12">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                </layout>
               </widget>
              </item>
@@ -3517,7 +3517,7 @@ Content App */
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>4</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3807,13 +3807,16 @@ Content App */
                            <height>41</height>
                           </size>
                          </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::RightToLeft</enum>
+                         </property>
                          <property name="text">
-                          <string>Actions</string>
+                          <string>Actions  </string>
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>22</width>
-                           <height>22</height>
+                           <width>18</width>
+                           <height>18</height>
                           </size>
                          </property>
                         </widget>
@@ -3876,6 +3879,62 @@ Content App */
                          </property>
                         </spacer>
                        </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame_5">
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_18">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="labelTotalCreditClients">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>labelTotalCredit ByClientType</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_14">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>480</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
                        <item>
                         <widget class="QLabel" name="labelClientsCount">
                          <property name="text">
@@ -3884,25 +3943,6 @@ Content App */
                         </widget>
                        </item>
                       </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="labelTotalCreditClients">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>labelTotalCredit ByClientType</string>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="wordWrap">
-                       <bool>false</bool>
-                      </property>
                      </widget>
                     </item>
                     <item>
@@ -4148,22 +4188,6 @@ Content App */
                         </spacer>
                        </item>
                        <item>
-                        <spacer name="horizontalSpacer_4">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Expanding</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>40</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item>
                         <widget class="QLabel" name="label_12">
                          <property name="text">
                           <string>Status</string>
@@ -4392,13 +4416,16 @@ Content App */
                            <height>41</height>
                           </size>
                          </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::RightToLeft</enum>
+                         </property>
                          <property name="text">
-                          <string> Actions</string>
+                          <string>Actions  </string>
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>22</width>
-                           <height>22</height>
+                           <width>18</width>
+                           <height>18</height>
                           </size>
                          </property>
                         </widget>
@@ -4454,6 +4481,59 @@ Content App */
                          </property>
                         </spacer>
                        </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame_6">
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_19">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="labelTotalCredits">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>Total Credit 5000</string>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_15">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>582</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
                        <item>
                         <widget class="QLabel" name="labelCreditCount">
                          <property name="font">
@@ -4471,22 +4551,6 @@ Content App */
                         </widget>
                        </item>
                       </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="labelTotalCredits">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>Total Credit 5000</string>
-                      </property>
-                      <property name="wordWrap">
-                       <bool>false</bool>
-                      </property>
                      </widget>
                     </item>
                     <item>
@@ -6194,6 +6258,59 @@ Content App */
                          </property>
                         </spacer>
                        </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame_4">
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_15">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="labelTotalCharge">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>Total Charges</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_13">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
                        <item>
                         <widget class="QLabel" name="labelChargeCount">
                          <property name="text">
@@ -6202,22 +6319,6 @@ Content App */
                         </widget>
                        </item>
                       </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="labelTotalCharge">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>Total Charges</string>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property>
                      </widget>
                     </item>
                     <item>

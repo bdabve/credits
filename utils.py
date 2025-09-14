@@ -26,6 +26,7 @@ from gui.h_confirm_dialog import Ui_Dialog
 # ---- Global Var ---- #
 NEW_COLOR = "#1dd1a1"
 # NEW_COLOR = "#228447"
+MENU_COLOR = "#f5f6fa"
 SAVE_COLOR = '#17c0eb'
 BLUE_COLOR = '#4074a3'
 TRASH_COLOR = '#f77861'
@@ -96,9 +97,9 @@ def main_icons_callbacks(root):
     CASH_PLUS_ICON = qta.icon('mdi6.cash-plus', color=NEW_COLOR)
     SAVE_ICON = qta.icon('mdi.content-save', color=BLUE_COLOR)
     TRASH_ICON = qta.icon('msc.trashcan', color=TRASH_COLOR)
-    REFRESH_ICON = qta.icon("mdi6.refresh", color=WHITE_COLOR)
+    REFRESH_ICON = qta.icon("mdi6.refresh", color=ICON_COLOR)
     EDIT_ICON = qta.icon('ph.pencil-line-light', color=EDIT_COLOR)
-    LIST_ICON = qta.icon('ph.list', color=WHITE_COLOR)
+    LIST_ICON = qta.icon('ph.list', color=ICON_COLOR)
 
     # == PushButtons Menus
     # New Button with Menu
@@ -122,36 +123,37 @@ def main_icons_callbacks(root):
         [
             ("Run Server", root.toggle_server, "mdi6.play-pause"),
         ],
-        icon_color=WHITE_COLOR,
+        icon_color=ICON_COLOR,
         with_icons=True
     )
     # Actions Credit Menu
     create_menu(
         root,
         root.ui.buttonCreditActions,
-        "fa5s.chevron-down",  # main button icon (QtAwesome)
+        # ph.caret-down
+        "ph.caret-down-bold",  # main button icon (QtAwesome)
         [
             ("Exporté", lambda: root.excel_export_credits("credits"), "mdi6.microsoft-excel"),
         ],
-        icon_color=WHITE_COLOR,
+        icon_color=ICON_COLOR,
         with_icons=True
     )
     # action clients page
     create_menu(
         root,
         root.ui.buttonClientActions,
-        "fa5s.chevron-down",  # main button icon (QtAwesome)
+        "ph.caret-down-bold",  # main button icon (QtAwesome)
         [
             ("Exporté", lambda: root.excel_export_credits(page="clients"), "mdi6.microsoft-excel"),
         ],
-        icon_color=WHITE_COLOR,
+        icon_color=ICON_COLOR,
         with_icons=True
     )
     # =============================
     buttons = [
         # --- MENUS
         # (root.ui.toggleMenuButton, False, lambda: root.toggle_menu(from_btn=True)),
-        (root.ui.toggleMenuButton, qta.icon("ri.menu-fold-fill", color=WHITE_COLOR), root.on_toggle_menu),
+        (root.ui.toggleMenuButton, qta.icon("ri.menu-fold-fill", color=ICON_COLOR), root.on_toggle_menu),
 
         # TEST:
         (root.ui.extraCloseColumnBtn, False, lambda: root.toggle_left_box(close=True)),
@@ -167,8 +169,11 @@ def main_icons_callbacks(root):
 
         # == Credit Page ==
         (
+            # mdi6.cash
+            # ph.currency-circle-dollar-fill
+            # ph.currency-circle-dollar-light
             root.ui.buttonCreditPage,
-            qta.icon('mdi6.cash', color=NEW_COLOR),
+            qta.icon('ph.currency-circle-dollar', color=MENU_COLOR),
             lambda: root.goto_page('credit')
         ),
         (root.ui.buttonRefreshCreditTable, REFRESH_ICON, root.refresh_credit_table),
@@ -194,7 +199,14 @@ def main_icons_callbacks(root):
         # ==================================================================================================
         # == Clients Page ==
         # ==================
-        (root.ui.buttonClientsPage, qta.icon('ph.user', color=NEW_COLOR), lambda: root.goto_page('client')),
+        (
+            # ph.users-three-thin
+            # ph.users-three-light
+            # ph.users-three
+            root.ui.buttonClientsPage,
+            qta.icon('ph.users', color=MENU_COLOR),
+            lambda: root.goto_page('client')
+        ),
         (root.ui.buttonNewClient, PLUS_ICON, lambda: root.ui_create_persone('client')),
         (root.ui.buttonRefreshClientsTable, REFRESH_ICON, lambda: root.display_clients(rows=None)),
         (root.ui.buttonClientNewCredit, CASH_PLUS_ICON, lambda: root.ui_create_credit(client=True)),
@@ -203,7 +215,11 @@ def main_icons_callbacks(root):
         # ================================================================================================
         # == Employes Page ==
         # ==================
-        (root.ui.buttonEmployesPage, qta.icon('mdi.account-hard-hat', color=NEW_COLOR), lambda: root.goto_page('employe')),
+        (
+            root.ui.buttonEmployesPage,
+            qta.icon('mdi.account-hard-hat', color=MENU_COLOR),
+            lambda: root.goto_page('employe')
+        ),
         (root.ui.buttonNewEmploye, PLUS_ICON, lambda: root.ui_create_persone('employe')),
         (root.ui.buttonRefreshEmpolyeTable, REFRESH_ICON, lambda: root.display_employes(rows=None)),
         # button save new both (EMPLOYE & CLIENTS)
@@ -212,8 +228,10 @@ def main_icons_callbacks(root):
 
         # == Accompte Employee ==
         (
+            # fa6s.sack-dollar
+            # fa5s.file-invoice-dollar
             root.ui.buttonAccomptePage,
-            qta.icon('fa6s.sack-dollar', color=NEW_COLOR),
+            qta.icon('fa6s.file-invoice-dollar', color=MENU_COLOR),
             lambda: root.goto_page('operations', from_btn=True)
         ),
         (root.ui.buttonEmployeNewAvance, CASH_PLUS_ICON, lambda: root.ui_employe_opration('avance')),
@@ -225,7 +243,7 @@ def main_icons_callbacks(root):
         ),
         (
             root.ui.buttonCalculateSalaire,
-            qta.icon('mdi.calculator-variant', color=WHITE_COLOR),
+            qta.icon('mdi.calculator-variant', color=ICON_COLOR),
             lambda: root.calculate_salaire(from_btn=True)
         ),
 
@@ -256,9 +274,9 @@ def main_icons_callbacks(root):
         if callback: button.clicked.connect(callback)
 
     # == Just Icons for Buttons ==
-    root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=WHITE_COLOR))
-    root.ui.buttonIconSumAvance.setIcon(qta.icon('fa5s.comment-medical', color=WHITE_COLOR))
-    root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=WHITE_COLOR))
+    root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=ICON_COLOR))
+    root.ui.buttonIconSumAvance.setIcon(qta.icon('fa5s.comment-medical', color=ICON_COLOR))
+    root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=ICON_COLOR))
     root.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=SKYPE_COLOR))
 
     # =============================
@@ -300,7 +318,7 @@ def main_icons_callbacks(root):
         ),
         (
             'Calculer Salaire',
-            qta.icon('mdi.calculator-variant', color=WHITE_COLOR),
+            qta.icon('mdi.calculator-variant', color=ICON_COLOR),
             lambda: root.calculate_salaire(from_btn=False)
         ),
         ('separator', None, None),
