@@ -66,8 +66,7 @@ QMenu::icon:checked {
     <string notr="true">/* /////////////////////////////////////////////////////////////////////////////////////////////////
 
 SET APP STYLESHEET - FULL STYLES HERE
-DARK THEME - DRACULA COLOR BASED
-
+DARK THEME -
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
 /*------------------------------------------------------*/
@@ -89,98 +88,10 @@ QWidget{
 	color: rgb(221, 221, 221);
 }
 
-#centralWidget {	
-	background-color: rgb(33, 37, 43);
-	border: 1px solid rgb(44, 49, 58);
-}
 
-#contentWidget {	
-	background-color: #202020;
-	border: 1px solid rgb(44, 49, 58);
-}
-
-#widgetMainContent {
-	background-color: #252525;
-	border-top-left-radius:  15px;
-}
-
-#EmployesPage, 
-#ClientsPage,
- #CreditPage, 
-#VersementPage,
-#EmployeOperationsPage,
-#ChargePage
-{	
-	background-color: #252525;
-}
-
-#frameEmployeNewOperation {
-	border: 1px solid rgb(44, 49, 60);
-}
-#labelDate,
-#labelHijri {
-	/* font: 14pt &quot;Noto Sans Arabic&quot;;*/
-	padding-right: 10px;
-}
-
-#labelTotalCredits,
-#labelTotalCreditClients,
-#labelAddVersementMontant,
-#labelTotalCharge {
-	font: 14pt &quot;Lucida Casual&quot;;	
-	background: #3b3230;
-	color: #f77861;
-	padding: 7px 10px;
-	border-radius: 5px;
-}
-
-/* ==== LABEL COUNTS ===== */
-#labelClientsCount,
-#labelCreditCount,
-#labelEmployesCount,
-#labelAccompteCount,
-#labelVersementCount,
-#labelChargeCount
-{	
-	font: 10pt &quot;Lucida Casual&quot;;
-	background-color: #0d4c3f;
-	color: #c4d0cd;
-	padding: 0px 10px;
-	border-radius: 6px;
-}
-
-/* ==== Operation Label SUM ===== */
-#frameSum, 
-#frameSum_2, 
-#frameSum_3
-{
-	background-color: #1d1f1f;
-	border-radius: 15px;
-}
-
-#frameSum QPushButton {
-	min-width: 78px;
-}
-#labelSumAvance, 
-#labelSumRetenu, 
-#labelSumPrime {
-	color: #21c063;
-	font: italic 15pt &quot;Lucida Casual&quot;;
-}
-
-#labelTitleSumAvance, 
-#labelTitleSumRetenu, 
-#labelTitleSumPrime {
-	color: #929393;
-	font: 9pt &quot;Lucida Sans&quot;;
-}
-
-/* ==== LINES ====== */
-#line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7, #line_8 {
-	background-color: #4a4a4a;
-}
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-Tooltip */
+/* ==================
+	== Tooltip
+   ================== */
 QToolTip {
 	color: #ffffff;
 	background-color: #202020;
@@ -192,6 +103,9 @@ QToolTip {
 	border-radius: 5px;
 }
 
+/* ==================
+	== QGroupBox
+   ================== */
 QGroupBox {
     background-color: #202020;
     border: 2px solid #303030;
@@ -206,28 +120,33 @@ QGroupBox::title {
 	margin-left: 10px;
     background-color: transparent;
 }
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-Button */
+/* ==================
+	== QPushButtons
+   ================== */
 QPushButton {
 	font: 13pt &quot;Lucida Casual&quot;;
 	border-radius: 5px;
 	background-color: #343434;	
 	min-height: 41px;
 	font-size: 11pt;
-	padding: 0 10px;
+	padding: 0px 12px;
 }
+/* == Hover == */
 QPushButton:hover {
 	background-color: #383838;
 }
+/* == Pressed == */
 QPushButton:pressed {	
 	background-color: transparent;
 	border: 2px solid #303030;
 }
+/* == !Enabled == */
 QPushButton:!enabled {
 	color: #73797b;
 	background-color: #202020;
 }
 
+/* == Remove Menu Indicator from Button with Menu == */
 QPushButton::menu-indicator {
 	image: none;
 }
@@ -271,9 +190,11 @@ QGroupBox .QPushButton:hover {
 QGroupBox .QPushButton:pressed {	
 	background-color: transparent;
 }
-/* =======================================*/
-/* Close/Maximaze/Minimize QPushButtons */
-/* Btn Close ExtraLeftContent */
+
+/*
+  == Close/Maximaze/Minimize QPushButtons ==
+  == Btn Close ExtraLeftContent ==
+*/
 #extraIconPlus {
 	background-color: transparent; 
 	border: none;  
@@ -293,12 +214,16 @@ QGroupBox .QPushButton:pressed {
 	min-width: 40px;
 	padding: 0;
 }
+
+/* == Hover == */
 #rightButtons QPushButton:hover,
 #extraCloseColumnBtn:hover  { 
 	background-color: #3d3d3d; 
 	border-style: solid; 
 	border-radius: 4px;
 }
+
+/* == Pressed == */
 #rightButtons QPushButton:pressed,
 #extraCloseColumnBtn:pressed { 
 	background-color: rgb(23, 26, 30); 
@@ -310,27 +235,34 @@ QGroupBox .QPushButton:pressed {
 #extraCloseColumnBtn:hover {
 	background-color: rgb(237, 51, 59);
 }
-/* MENUS */
+
+/* == LEFT MENU Buttons == */
 #topMenu .QPushButton {	
 	font: 13pt &quot;Lucida Casual&quot;;
 	border-radius: 7px;
 	background-color: transparent;
 	min-height: 45px;
 }
+
+/* == Hover == */
 #topMenu .QPushButton:hover {
 	background-color: #383838;
 }
+
+/* == Pressed == */
 #topMenu .QPushButton:pressed {	
 	background-color: transparent;
 	color: rgb(255, 255, 255);
 }
+
+/* == Checked == */
 #topMenu .QPushButton:checked {
 	/*background-color: rgb(40, 44, 52);*/	
 	background-color: #454545;
 	color: rgb(255, 255, 255);
 }
 
-/* Toggle Button */
+/* == Toggle Button == */
 #toggleMenuButton {
 	border: none;
 	border-radius: 7px;
@@ -344,8 +276,9 @@ QGroupBox .QPushButton:pressed {
 	background-color: rgb(189, 147, 249);
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-QTableWidget */
+/* ==================
+	== QTableWidget
+   ================== */
 QTableWidget {	
 	background-color: transparent;
 	padding: 5px 0px;
@@ -379,9 +312,9 @@ QHeaderView::section:horizontal
 	padding: 3px;
 }
 
-/* ///////////////////////////////////////////////////////////
-			-- LineEdit 
-*/
+/* ==================================================
+	== QLineEdit, QSpinBox, QDoubleSpinbox, QDateEdit
+   ================================================== */
 QLineEdit, 
 QSpinBox, 
 QDoubleSpinBox, 
@@ -396,14 +329,11 @@ QDateEdit
 	min-height: 36px;
 }
 
-#editSearchCharge {
-	border: 1px solid #303030;
-}
-
 QLineEdit {
 	min-width: 350px;
 }
 
+/* == Hover == */
 QLineEdit:hover,
 QSpinBox:hover,
 QDoubleSpinBox:hover,
@@ -411,9 +341,7 @@ QDateEdit:hover {
 	border: 2px solid #303030;
 }
 
-#editSearchCharge:hover {
-	border: 2px solid #303030;
-}
+/* == Focus == */
 QLineEdit:focus,
 QSpinbox:focus,
 QDoubleSpinBox:focus,
@@ -421,24 +349,29 @@ QDateEdit:focus {
 	border: 2px solid #303030;
 }
 
-#editSearchCharge:focus {
-	border: 2px solid #303030;
-}
-QLineEdit:!enabled, 
-QSpinBox:!enabled, 
+/* == !Enabled == */
+QLineEdit:!enabled,
+QSpinBox:!enabled,
 QDoubleSpinBox:!enabled,
 QDateEdit:!enabled {
 	background-color: #202020;
 }
 
-#editSearchClient,
-#editSearchEmploye,
-#editSearchCredit {
-	min-height: 39px
+#editSearchCharge {
+	border: 1px solid #303030;
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-PlainTextEdit */
+#editSearchCharge:hover {
+	border: 2px solid #303030;
+}
+
+#editSearchCharge:focus {
+	border: 2px solid #303030;
+}
+
+/* ============================
+   == QPlainText ==
+   ============================ */
 QPlainTextEdit {
 	background-color: #202020;
 	border-radius: 5px;
@@ -459,8 +392,9 @@ QPlainTextEdit:focus {
 	border: 2px solid #303030;
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-ScrollBars */
+/* ============================
+   == QScrollBar ==
+   ============================ */
 QScrollBar:horizontal {
     border: none;
     background: rgb(52, 59, 72);
@@ -537,8 +471,9 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
      background: none;
  }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-CheckBox */
+/* ============================
+   == QCheckBox ==
+   ============================ */
 QCheckBox::indicator {
     border: 3px solid rgb(52, 59, 72);
 	width: 15px;
@@ -555,8 +490,9 @@ QCheckBox::indicator:checked {
 	background-image: url(:/icons/images/icons/cil-check-alt.png);
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-RadioButton */
+/* ============================
+   == QRadioButtons ==
+   ============================ */
 QRadioButton::indicator {
     border: 3px solid rgb(52, 59, 72);
 	width: 15px;
@@ -572,9 +508,9 @@ QRadioButton::indicator:checked {
 	border: 3px solid rgb(52, 59, 72);	
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-ComboBox 
-========== */
+/* ============================
+   == QComboBox ==
+   ============================ */
 QComboBox {
     background-color: #202020;
 	border-radius: 5px;
@@ -610,9 +546,9 @@ QComboBox QAbstractItemView {
 QComboBox QAbstractItemView::item {
 	padding: 8px 10px;
 }
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-Sliders 
-*/
+/* ============================
+   == QSlider ==
+   ============================ */
 QSlider::groove:horizontal {
     border-radius: 5px;
     height: 10px;
@@ -661,9 +597,9 @@ QSlider::handle:vertical:pressed {
     background-color: rgb(255, 121, 198);
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-CommandLinkButton
-*/
+/* ============================
+   == QCommandLinkButton ==
+   ============================ */
 QCommandLinkButton {	
 	color: rgb(255, 121, 198);
 	border-radius: 5px;
@@ -678,14 +614,49 @@ QCommandLinkButton:pressed {
 	color: rgb(189, 147, 249);
 	background-color: rgb(52, 58, 71);
 }
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-Left Menu 
-*/
-#leftMenuBg {	
+
+/* ================================
+   == Background Colors
+   ================================ */
+#centralWidget {
+	background-color: rgb(33, 37, 43);
+	border: 1px solid rgb(44, 49, 58);
+}
+
+#contentWidget {
+	background-color: #202020;
+	border: 1px solid rgb(44, 49, 58);
+}
+
+#widgetMainContent {
+	background-color: #252525;
+	border-top-left-radius:  15px;
+}
+
+#EmployesPage,
+#ClientsPage,
+#CreditPage,
+#VersementPage,
+#EmployeOperationsPage,
+#ChargePage
+{
+	background-color: #252525;
+}
+
+#labelDate,
+#labelHijri {
+	/* font: 14pt &quot;Noto Sans Arabic&quot;;*/
+	padding-right: 10px;
+}
+
+/* ============================
+   == Left Menu ==
+   ============================ */
+#leftMenuBg {
 	background-color: #202020;
 }
 #buttonIcon {
-	/*background-color: rgb(33, 37, 43);	
+	/*background-color: rgb(33, 37, 43);
 	/*background-image: url(:/images/images/images/app_icon.png);
 	background-position: center;
 	background-repeat: no-repeat;*/
@@ -693,24 +664,91 @@ Left Menu
 	border: none;
 }
 
-#labelUsername { 
+#labelUsername {
 	font: 11pt &quot;Lucida Casual&quot;;
 }
 
-#labelUserGroupe { 
+#labelUserGroupe {
 	font: 8pt &quot;Lucida Casual&quot;;
-	color: rgb(189, 147, 249); 
+	color: rgb(189, 147, 249);
 }
 
 /* Title Menu */
-#titleRightInfo { 
-	
+#titleRightInfo
+{
 	font: 75 italic 17pt &quot;Lucida Casual&quot;;
-	padding-left: 10px; 
+	padding-left: 10px;
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-Extra Tab */
+/* ============================
+	== QLabels
+===============================*/
+
+/* == SUM Labels ==*/
+#labelTotalCredits,
+#labelTotalCreditClients,
+#labelAddVersementMontant,
+#labelTotalCharge {
+	font: 14pt &quot;Lucida Casual&quot;;
+	background: #3b3230;
+	color: #f77861;
+	padding: 7px 10px;
+	border-radius: 5px;
+}
+
+/* == LABEL COUNTS === */
+#labelClientsCount,
+#labelCreditCount,
+#labelEmployesCount,
+#labelAccompteCount,
+#labelVersementCount,
+#labelChargeCount
+{
+	font: 10pt &quot;Lucida Casual&quot;;
+	background-color: #0d4c3f;
+	color: #c4d0cd;
+	padding: 0px 10px;
+	border-radius: 6px;
+}
+
+/* == Accompte SUMS == */
+#frameSum,
+#frameSum_2,
+#frameSum_3
+{
+	background-color: #1d1f1f;
+	border-radius: 15px;
+}
+
+#frameSum QPushButton {
+	min-width: 78px;
+}
+#labelSumAvance,
+#labelSumRetenu,
+#labelSumPrime {
+	color: #21c063;
+	font: italic 15pt &quot;Lucida Casual&quot;;
+}
+
+#labelTitleSumAvance,
+#labelTitleSumRetenu,
+#labelTitleSumPrime {
+	color: #929393;
+	font: 9pt &quot;Lucida Sans&quot;;
+}
+
+/* =============
+	== LINES
+   ============= */
+#line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7, #line_8 {
+	background-color: #4a4a4a;
+}
+
+
+
+/* ==================
+   == ExtraLeftBox
+   ================== */
 #extraLeftBox {
 	background-color: #272727;
 	border: 2px solid #202020;
@@ -730,7 +768,7 @@ Extra Tab */
 	background-color: #202020;
 }
 
-/* Icon */
+/* == Icon == */
 #extraIcon {
 	background-position: center;
 	background-repeat: no-repeat;
@@ -748,12 +786,14 @@ Extra Tab */
 	border-left: none;
 	border-right: none;
 }
-/* Extra Content */
+
+/* == Extra Content == */
 #extraContent{
 	/*border-top: 3px solid #2a2a2a;*/
 		border-top-left-radius: 15px;
 }
-/* Extra Top Menus */
+
+/* == Extra Top Menus == */
 #extraTopMenu .QPushButton {
 background-position: left center;
     background-repeat: no-repeat;
@@ -771,13 +811,16 @@ background-position: left center;
 	color: rgb(255, 255, 255);
 }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-Content App */
+/* =================
+   == UPBAR
+   ================= */
 #contentTopBg{	
 	background-color: #202020;
 }
 
-/* ============== Frame Messages ============*/
+/* ==================
+   == Frame Messages
+   ================== */
 #frameMsgs {
 	/*background: rgba(38, 162, 105, 88);*/
 	background-color: rgba(60, 184, 127, 47);
@@ -801,7 +844,8 @@ Content App */
 }
 #frameMsgs QPushButton:hover {
 	border: none;
-}</string>
+}
+</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <property name="spacing">
@@ -3517,7 +3561,7 @@ Content App */
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3803,7 +3847,7 @@ Content App */
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>150</width>
+                           <width>0</width>
                            <height>41</height>
                           </size>
                          </property>
@@ -4113,7 +4157,7 @@ Content App */
                          <property name="minimumSize">
                           <size>
                            <width>362</width>
-                           <height>43</height>
+                           <height>40</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -4412,7 +4456,7 @@ Content App */
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>150</width>
+                           <width>0</width>
                            <height>41</height>
                           </size>
                          </property>
@@ -4585,11 +4629,11 @@ Content App */
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
                       <attribute name="horizontalHeaderMinimumSectionSize">
                        <number>31</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -4719,7 +4763,7 @@ Content App */
                          <property name="minimumSize">
                           <size>
                            <width>362</width>
-                           <height>43</height>
+                           <height>40</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -5314,13 +5358,13 @@ Content App */
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>86</width>
+                              <width>102</width>
                               <height>80</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>86</width>
+                              <width>90</width>
                               <height>80</height>
                              </size>
                             </property>
@@ -5393,13 +5437,13 @@ Content App */
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>86</width>
+                              <width>90</width>
                               <height>80</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>86</width>
+                              <width>90</width>
                               <height>80</height>
                              </size>
                             </property>
@@ -5466,13 +5510,13 @@ Content App */
                            <widget class="QPushButton" name="buttonIconSumRetenu">
                             <property name="minimumSize">
                              <size>
-                              <width>86</width>
+                              <width>90</width>
                               <height>80</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>86</width>
+                              <width>90</width>
                               <height>80</height>
                              </size>
                             </property>
@@ -5705,7 +5749,7 @@ Content App */
                                 <height>44</height>
                                </size>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5759,9 +5803,9 @@ Content App */
                                </size>
                               </property>
                               <property name="currentText">
-                               <string>Tous</string>
+                               <string/>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
