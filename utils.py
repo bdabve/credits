@@ -26,7 +26,7 @@ from gui.h_confirm_dialog import Ui_Dialog
 # ---- Global Var ---- #
 NEW_COLOR = "#1dd1a1"
 # NEW_COLOR = "#228447"
-MENU_COLOR = "#f5f6fa"
+MENU_COLOR = "#DDDDDD"
 SAVE_COLOR = '#17c0eb'
 BLUE_COLOR = '#4074a3'
 TRASH_COLOR = '#f77861'
