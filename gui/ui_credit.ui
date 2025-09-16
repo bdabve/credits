@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1138</width>
+    <width>1219</width>
     <height>790</height>
    </rect>
   </property>
@@ -63,789 +63,7 @@ QMenu::icon:checked {
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">/* /////////////////////////////////////////////////////////////////////////////////////////////////
-
-SET APP STYLESHEET - FULL STYLES HERE
-DARK THEME -
-///////////////////////////////////////////////////////////////////////////////////////////////// */
-
-/*------------------------------------------------------*/
-/*
-
-TopMenu: #202020;
-GreenColor: #114b35;
-ContentColor: #252525;
-HoverColor: ##383838;
-checkedbutton: #454545
-BorderColor:#303030;
-*/
-
-* {	
-	font: 13pt &quot;Lucida Casual&quot;;
-}
-
-QWidget{
-	color: rgb(221, 221, 221);
-}
-
-
-/* ==================
-	== Tooltip
-   ================== */
-QToolTip {
-	color: #ffffff;
-	background-color: #202020;
-	border: 1px solid #696969;
-	text-align: left;
-	margin: 0px;
-	padding: 3px;	
-	font: 9pt &quot;Lucida Casual&quot;;
-	border-radius: 5px;
-}
-
-/* ==================
-	== QGroupBox
-   ================== */
-QGroupBox {
-    background-color: #202020;
-    border: 2px solid #303030;
-    border-radius: 5px;
-    margin-top: 1ex; /* leave space at the top for the title */
-}
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top left; /* position at the top center */
-    padding: 0 3px;
-	margin-left: 10px;
-    background-color: transparent;
-}
-/* ==================
-	== QPushButtons
-   ================== */
-QPushButton {
-	font: 13pt &quot;Lucida Casual&quot;;
-	border-radius: 5px;
-	background-color: #343434;	
-	min-height: 41px;
-	font-size: 11pt;
-	padding: 0px 12px;
-}
-/* == Hover == */
-QPushButton:hover {
-	background-color: #383838;
-}
-/* == Pressed == */
-QPushButton:pressed {	
-	background-color: transparent;
-	border: 2px solid #303030;
-}
-/* == !Enabled == */
-QPushButton:!enabled {
-	color: #73797b;
-	background-color: #202020;
-}
-
-/* == Remove Menu Indicator from Button with Menu == */
-QPushButton::menu-indicator {
-	image: none;
-}
-
-/* === Buttons Just Icons == */
-#buttonRefreshClientsTable,
-#buttonDeleteClient,
-
-#buttonRefreshEmpolyeTable,
-#buttonDeleteEmploye,
-
-#buttonRefreshEmpolyeOperationTable,
-#buttonDeleteEmployeOperation,
-
-#buttonRefreshCreditTable,
-#buttonRefreshChargeTable,
-
-#buttonDeleteCredit,
-#buttonDeleteVersement {
-	min-width: 41px;
-	padding: 0;
-}
-
-#frameSum QPushButton, 
-#frameSum_2 QPushButton, 
-#frameSum_3 QPushButton {
-	min-height: 80px;
-	min-width: 66px;
-	max-height: 80px;
-	max-width: 66px;
-	border-radius: 40px;
-	background-color: #25d366;
-}
-
-QGroupBox .QPushButton {
-	background: rgba(56, 56, 56, 109);
-}
-QGroupBox .QPushButton:hover {		
-	background-color: rgba(56, 56, 56, 167);
-}
-QGroupBox .QPushButton:pressed {	
-	background-color: transparent;
-}
-
-/*
-  == Close/Maximaze/Minimize QPushButtons ==
-  == Btn Close ExtraLeftContent ==
-*/
-#extraIconPlus {
-	background-color: transparent; 
-	border: none;  
-	border-radius: 5px; 
-	min-height: 30px;
-	min-width: 30px;
-	padding: 0;
-}
-
-#rightButtons QPushButton,
-#extraCloseColumnBtn
- { 
-	background-color: transparent; 
-	border: none;  
-	border-radius: 5px; 
-	min-height: 30px;
-	min-width: 40px;
-	padding: 0;
-}
-
-/* == Hover == */
-#rightButtons QPushButton:hover,
-#extraCloseColumnBtn:hover  { 
-	background-color: #3d3d3d; 
-	border-style: solid; 
-	border-radius: 4px;
-}
-
-/* == Pressed == */
-#rightButtons QPushButton:pressed,
-#extraCloseColumnBtn:pressed { 
-	background-color: rgb(23, 26, 30); 
-	border-style: solid; 
-	border-radius: 4px; 
-}
-
-#rightButtons #closeAppBtn:hover,
-#extraCloseColumnBtn:hover {
-	background-color: rgb(237, 51, 59);
-}
-
-/* == LEFT MENU Buttons == */
-#topMenu .QPushButton {	
-	font: 13pt &quot;Lucida Casual&quot;;
-	border-radius: 7px;
-	background-color: transparent;
-	min-height: 45px;
-}
-
-/* == Hover == */
-#topMenu .QPushButton:hover {
-	background-color: #383838;
-}
-
-/* == Pressed == */
-#topMenu .QPushButton:pressed {	
-	background-color: transparent;
-	color: rgb(255, 255, 255);
-}
-
-/* == Checked == */
-#topMenu .QPushButton:checked {
-	/*background-color: rgb(40, 44, 52);*/	
-	background-color: #454545;
-	color: rgb(255, 255, 255);
-}
-
-/* == Toggle Button == */
-#toggleMenuButton {
-	border: none;
-	border-radius: 7px;
-	background-color: rgb(37, 41, 48);
-	color: rgb(113, 126, 149);
-}
-#toggleMenuButton:hover {
-	background-color: rgb(40, 44, 52);
-}
-#toggleMenuButton:pressed {
-	background-color: rgb(189, 147, 249);
-}
-
-/* ==================
-	== QTableWidget
-   ================== */
-QTableWidget {	
-	background-color: transparent;
-	padding: 5px 0px;
-	border-radius: 5px;
-	gridline-color: rgb(52, 59, 72);
-	border-bottom: 1px solid rgb(44, 49, 60);	
-}
-QTableWidget::item{
-	border-color: #303030;
-	padding-left: 5px;
-	padding-right: 5px;
-	gridline-color: rgb(44, 49, 60);
-}
-QTableWidget::item:selected{
-	background-color: #3d3d3d;
-}
-QHeaderView::section{
-	background-color: #202020;
-	max-width: 30px;
-	border: 1px solid #303030;
-	border-style: none;
-    border-bottom: 1px solid rgb(44, 49, 60);
-    border-right: 1px solid #303030;
-}
-QTableWidget::horizontalHeader {	
-	background-color: rgb(33, 37, 43);
-}
-QHeaderView::section:horizontal
-{
-    border: 1px solid #303030;
-	padding: 3px;
-}
-
-/* ==================================================
-	== QLineEdit, QSpinBox, QDoubleSpinbox, QDateEdit
-   ================================================== */
-QLineEdit, 
-QSpinBox, 
-QDoubleSpinBox, 
-QDateEdit
-{
-	background-color: #202020;
-	border-radius: 5px;
-	padding: 2px;
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: #3d3d3d;
-	min-height: 36px;
-}
-
-QLineEdit {
-	min-width: 350px;
-}
-
-/* == Hover == */
-QLineEdit:hover,
-QSpinBox:hover,
-QDoubleSpinBox:hover,
-QDateEdit:hover {
-	border: 2px solid #303030;
-}
-
-/* == Focus == */
-QLineEdit:focus,
-QSpinbox:focus,
-QDoubleSpinBox:focus,
-QDateEdit:focus {
-	border: 2px solid #303030;
-}
-
-/* == !Enabled == */
-QLineEdit:!enabled,
-QSpinBox:!enabled,
-QDoubleSpinBox:!enabled,
-QDateEdit:!enabled {
-	background-color: #202020;
-}
-
-#editSearchCharge {
-	border: 1px solid #303030;
-}
-
-#editSearchCharge:hover {
-	border: 2px solid #303030;
-}
-
-#editSearchCharge:focus {
-	border: 2px solid #303030;
-}
-
-/* ============================
-   == QPlainText ==
-   ============================ */
-QPlainTextEdit {
-	background-color: #202020;
-	border-radius: 5px;
-	padding: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-QPlainTextEdit  QScrollBar:vertical {
-    width: 8px;
- }
-QPlainTextEdit  QScrollBar:horizontal {
-    height: 8px;
- }
-QPlainTextEdit:hover {
-	border: 2px solid #303030;
-}
-QPlainTextEdit:focus {
-	border: 2px solid #303030;
-}
-
-/* ============================
-   == QScrollBar ==
-   ============================ */
-QScrollBar:horizontal {
-    border: none;
-    background: rgb(52, 59, 72);
-    height: 8px;
-    margin: 0px 21px 0 21px;
-	border-radius: 0px;
-}
-QScrollBar::handle:horizontal {
-    background: #1dd1a1;
-    min-width: 25px;
-	border-radius: 4px
-}
-QScrollBar::add-line:horizontal {
-    border: none;
-    background: rgb(55, 63, 77);
-    width: 20px;
-	border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-}
-QScrollBar::sub-line:horizontal {
-    border: none;
-    background: rgb(55, 63, 77);
-    width: 20px;
-	border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
-{
-     background: none;
-}
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
-{
-     background: none;
-}
- QScrollBar:vertical {
-	border: none;
-    background: rgb(52, 59, 72);
-    width: 8px;
-    margin: 21px 0 21px 0;
-	border-radius: 0px;
- }
- QScrollBar::handle:vertical {	
-	background: #1dd1a1;
-    min-height: 25px;
-	border-radius: 4px
- }
- QScrollBar::add-line:vertical {
-     border: none;
-    background: rgb(55, 63, 77);
-     height: 20px;
-	border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-     subcontrol-position: bottom;
-     subcontrol-origin: margin;
- }
- QScrollBar::sub-line:vertical {
-	border: none;
-    background: rgb(55, 63, 77);
-     height: 20px;
-	border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-     subcontrol-position: top;
-     subcontrol-origin: margin;
- }
- QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-     background: none;
- }
-
- QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-     background: none;
- }
-
-/* ============================
-   == QCheckBox ==
-   ============================ */
-QCheckBox::indicator {
-    border: 3px solid rgb(52, 59, 72);
-	width: 15px;
-	height: 15px;
-	border-radius: 10px;
-    background: rgb(44, 49, 60);
-}
-QCheckBox::indicator:hover {
-    border: 3px solid rgb(58, 66, 81);
-}
-QCheckBox::indicator:checked {
-    background: 3px solid rgb(52, 59, 72);
-	border: 3px solid rgb(52, 59, 72);	
-	background-image: url(:/icons/images/icons/cil-check-alt.png);
-}
-
-/* ============================
-   == QRadioButtons ==
-   ============================ */
-QRadioButton::indicator {
-    border: 3px solid rgb(52, 59, 72);
-	width: 15px;
-	height: 15px;
-	border-radius: 10px;
-    background: rgb(44, 49, 60);
-}
-QRadioButton::indicator:hover {
-    border: 3px solid rgb(58, 66, 81);
-}
-QRadioButton::indicator:checked {
-    background: 3px solid rgb(94, 106, 130);
-	border: 3px solid rgb(52, 59, 72);	
-}
-
-/* ============================
-   == QComboBox ==
-   ============================ */
-QComboBox {
-    background-color: #202020;
-	border-radius: 5px;
-	border: 2px solid #303030;
-	padding: 0px 5px;
-	padding-left: 10px;
-	min-height: 40px;
-}
-QComboBox:hover{
-	border: 2px solid #3d3d3d;
-}
-QComboBox::drop-down {
-	subcontrol-origin: padding;
-	subcontrol-position: top right;
-	width: 25px; 
-	border-left-width: 3px;
-	border-left-color: #303030;
-	border-left-style: solid;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;	
-	background-image: url(:/icons/images/icons/cil-arrow-bottom.png);
-	background-position: center;
-	background-repeat: no-reperat;    
- }
-QComboBox QAbstractItemView {
-	color: #1dd1a1;	
-	background-color: #18191c;
-	border: 1px solid hsla(0, 0%, 100%, 0.3);
-	padding: 8px 10px;
-	selection-background-color: #3d3d3d;
-
-}
-QComboBox QAbstractItemView::item {
-	padding: 8px 10px;
-}
-/* ============================
-   == QSlider ==
-   ============================ */
-QSlider::groove:horizontal {
-    border-radius: 5px;
-    height: 10px;
-	margin: 0px;
-	background-color: rgb(52, 59, 72);
-}
-QSlider::groove:horizontal:hover {
-	background-color: rgb(55, 62, 76);
-}
-QSlider::handle:horizontal {
-    background-color: rgb(189, 147, 249);
-    border: none;
-    height: 10px;
-    width: 10px;
-    margin: 0px;
-	border-radius: 5px;
-}
-QSlider::handle:horizontal:hover {
-    background-color: rgb(195, 155, 255);
-}
-QSlider::handle:horizontal:pressed {
-    background-color: rgb(255, 121, 198);
-}
-
-QSlider::groove:vertical {
-    border-radius: 5px;
-    width: 10px;
-    margin: 0px;
-	background-color: rgb(52, 59, 72);
-}
-QSlider::groove:vertical:hover {
-	background-color: rgb(55, 62, 76);
-}
-QSlider::handle:vertical {
-    background-color: rgb(189, 147, 249);
-	border: none;
-    height: 10px;
-    width: 10px;
-    margin: 0px;
-	border-radius: 5px;
-}
-QSlider::handle:vertical:hover {
-    background-color: rgb(195, 155, 255);
-}
-QSlider::handle:vertical:pressed {
-    background-color: rgb(255, 121, 198);
-}
-
-/* ============================
-   == QCommandLinkButton ==
-   ============================ */
-QCommandLinkButton {	
-	color: rgb(255, 121, 198);
-	border-radius: 5px;
-	padding: 5px;
-	color: rgb(255, 170, 255);
-}
-QCommandLinkButton:hover {	
-	color: rgb(255, 170, 255);
-	background-color: rgb(44, 49, 60);
-}
-QCommandLinkButton:pressed {	
-	color: rgb(189, 147, 249);
-	background-color: rgb(52, 58, 71);
-}
-
-/* ================================
-   == Background Colors
-   ================================ */
-#centralWidget {
-	background-color: rgb(33, 37, 43);
-	border: 1px solid rgb(44, 49, 58);
-}
-
-#contentWidget {
-	background-color: #202020;
-	border: 1px solid rgb(44, 49, 58);
-}
-
-#widgetMainContent {
-	background-color: #252525;
-	border-top-left-radius:  15px;
-}
-
-#EmployesPage,
-#ClientsPage,
-#CreditPage,
-#VersementPage,
-#EmployeOperationsPage,
-#ChargePage
-{
-	background-color: #252525;
-}
-
-#labelDate,
-#labelHijri {
-	/* font: 14pt &quot;Noto Sans Arabic&quot;;*/
-	padding-right: 10px;
-}
-
-/* ============================
-   == Left Menu ==
-   ============================ */
-#leftMenuBg {
-	background-color: #202020;
-}
-#buttonIcon {
-	/*background-color: rgb(33, 37, 43);
-	/*background-image: url(:/images/images/images/app_icon.png);
-	background-position: center;
-	background-repeat: no-repeat;*/
-	padding: 0;
-	border: none;
-}
-
-#labelUsername {
-	font: 11pt &quot;Lucida Casual&quot;;
-}
-
-#labelUserGroupe {
-	font: 8pt &quot;Lucida Casual&quot;;
-	color: rgb(189, 147, 249);
-}
-
-/* Title Menu */
-#titleRightInfo
-{
-	font: 75 italic 17pt &quot;Lucida Casual&quot;;
-	padding-left: 10px;
-}
-
-/* ============================
-	== QLabels
-===============================*/
-
-/* == SUM Labels ==*/
-#labelTotalCredits,
-#labelTotalCreditClients,
-#labelAddVersementMontant,
-#labelTotalCharge {
-	font: 14pt &quot;Lucida Casual&quot;;
-	background: #3b3230;
-	color: #f77861;
-	padding: 7px 10px;
-	border-radius: 5px;
-}
-
-/* == LABEL COUNTS === */
-#labelClientsCount,
-#labelCreditCount,
-#labelEmployesCount,
-#labelAccompteCount,
-#labelVersementCount,
-#labelChargeCount
-{
-	font: 10pt &quot;Lucida Casual&quot;;
-	background-color: #0d4c3f;
-	color: #c4d0cd;
-	padding: 0px 10px;
-	border-radius: 6px;
-}
-
-/* == Accompte SUMS == */
-#frameSum,
-#frameSum_2,
-#frameSum_3
-{
-	background-color: #1d1f1f;
-	border-radius: 15px;
-}
-
-#frameSum QPushButton {
-	min-width: 78px;
-}
-#labelSumAvance,
-#labelSumRetenu,
-#labelSumPrime {
-	color: #21c063;
-	font: italic 15pt &quot;Lucida Casual&quot;;
-}
-
-#labelTitleSumAvance,
-#labelTitleSumRetenu,
-#labelTitleSumPrime {
-	color: #929393;
-	font: 9pt &quot;Lucida Sans&quot;;
-}
-
-/* =============
-	== LINES
-   ============= */
-#line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7, #line_8 {
-	background-color: #4a4a4a;
-}
-
-
-
-/* ==================
-   == ExtraLeftBox
-   ================== */
-#extraLeftBox {
-	background-color: #272727;
-	border: 2px solid #202020;
-	border-left-color: #2C3E50;
-}
-#AddCreditPage,
-#AddCreditVersementPage,
-#AddPersonePage,
-#VersementPage,
-#AddEmpOperationPage,
-#salairePage,
-#addChargePage
-{	
-	background-color: #272727;
-}
-#extraTopBg{	
-	background-color: #202020;
-}
-
-/* == Icon == */
-#extraIcon {
-	background-position: center;
-	background-repeat: no-repeat;
-	background-image: url(:/icons/images/icons/cil-plus.png);
-}
-
-/* Label */
-#extraLabelTitle { color: #00AFF0; }
-
-#widgetSalairePage QLabel {
-	padding: 5px;
-	font: 75 14pt &quot;Lucida Casual&quot;;
-	border: 1px solid rgb(44, 49, 60);
-	border-top: none;
-	border-left: none;
-	border-right: none;
-}
-
-/* == Extra Content == */
-#extraContent{
-	/*border-top: 3px solid #2a2a2a;*/
-		border-top-left-radius: 15px;
-}
-
-/* == Extra Top Menus == */
-#extraTopMenu .QPushButton {
-background-position: left center;
-    background-repeat: no-repeat;
-	border: none;
-	border-left: 22px solid transparent;
-	background-color:transparent;
-	text-align: left;
-	padding-left: 44px;
-}
-#extraTopMenu .QPushButton:hover {
-	background-color: rgb(40, 44, 52);
-}
-#extraTopMenu .QPushButton:pressed {	
-	background-color: rgb(189, 147, 249);
-	color: rgb(255, 255, 255);
-}
-
-/* =================
-   == UPBAR
-   ================= */
-#contentTopBg{	
-	background-color: #202020;
-}
-
-/* ==================
-   == Frame Messages
-   ================== */
-#frameMsgs {
-	/*background: rgba(38, 162, 105, 88);*/
-	background-color: rgba(60, 184, 127, 47);
-	border-radius: 5px;
-}
-
-#labelMsgs {
-	color: #44e37b;
-	/*color: #f77861;*/
-	padding: 5px 7px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
-}
-
-#frameMsgs QPushButton {
-	background: transparent;
-	border: none;
-	border-radius: 0;
-	border-top-right-radius: 5px;	
-	border-bottom-right-radius: 5px;
-}
-#frameMsgs QPushButton:hover {
-	border: none;
-}
-</string>
+    <string notr="true"/>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <property name="spacing">
@@ -1140,13 +358,13 @@ background-position: left center;
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>41</height>
+                    <height>47</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
                     <family>Lucida Casual</family>
-                    <pointsize>11</pointsize>
+                    <pointsize>13</pointsize>
                     <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
@@ -1276,7 +494,7 @@ background-position: left center;
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>45</height>
+                    <height>53</height>
                    </size>
                   </property>
                   <property name="font">
@@ -1357,6 +575,9 @@ background-position: left center;
                 </item>
                 <item>
                  <widget class="QPushButton" name="buttonChargePage">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="toolTip">
                    <string>Les Charges</string>
                   </property>
@@ -2264,14 +1485,14 @@ background-position: left center;
                            </property>
                            <property name="minimumSize">
                             <size>
-                             <width>41</width>
-                             <height>41</height>
+                             <width>52</width>
+                             <height>52</height>
                             </size>
                            </property>
                            <property name="font">
                             <font>
                              <family>Lucida Casual</family>
-                             <pointsize>11</pointsize>
+                             <pointsize>13</pointsize>
                              <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
@@ -2512,7 +1733,7 @@ background-position: left center;
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>41</height>
+                       <height>49</height>
                       </size>
                      </property>
                      <property name="cursor">
@@ -2982,7 +2203,7 @@ background-position: left center;
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
-                          <height>41</height>
+                          <height>49</height>
                          </size>
                         </property>
                         <property name="cursor">
@@ -3156,7 +2377,7 @@ background-position: left center;
                    <font>
                     <family>Lucida Casual</family>
                     <pointsize>17</pointsize>
-                    <weight>9</weight>
+                    <weight>50</weight>
                     <italic>true</italic>
                     <bold>false</bold>
                    </font>
@@ -3324,11 +2545,10 @@ background-position: left center;
                   <property name="font">
                    <font>
                     <family>Lucida Casual</family>
-                    <pointsize>11</pointsize>
+                    <pointsize>13</pointsize>
                     <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
-                    <stylestrategy>PreferDefault</stylestrategy>
                    </font>
                   </property>
                   <property name="cursor">
@@ -3401,6 +2621,12 @@ background-position: left center;
              </property>
              <item>
               <widget class="QWidget" name="widgetMessages" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>70</height>
+                </size>
+               </property>
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
@@ -3425,10 +2651,16 @@ background-position: left center;
                 </property>
                 <item>
                  <widget class="QPushButton" name="plusButtonShurtcut">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="maximumSize">
                    <size>
-                    <width>41</width>
-                    <height>41</height>
+                    <width>50</width>
+                    <height>50</height>
                    </size>
                   </property>
                   <property name="text">
@@ -3522,7 +2754,7 @@ background-position: left center;
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>41</height>
+                       <height>47</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -3584,7 +2816,7 @@ background-position: left center;
                   <widget class="QWidget" name="ClientsWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_24">
                     <property name="spacing">
-                     <number>5</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -3629,8 +2861,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>362</width>
-                           <height>40</height>
+                           <width>364</width>
+                           <height>56</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -3672,8 +2904,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3738,7 +2970,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3779,7 +3011,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>108</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3817,7 +3049,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>108</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3848,7 +3080,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="layoutDirection">
@@ -3885,8 +3117,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4028,7 +3260,7 @@ background-position: left center;
                        <number>6</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </attribute>
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
@@ -4123,7 +3355,7 @@ background-position: left center;
                   <widget class="QWidget" name="CreditWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_23">
                     <property name="spacing">
-                     <number>5</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -4156,8 +3388,8 @@ background-position: left center;
                         <widget class="QLineEdit" name="editSearchCredit">
                          <property name="minimumSize">
                           <size>
-                           <width>362</width>
-                           <height>40</height>
+                           <width>364</width>
+                           <height>56</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -4193,8 +3425,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4301,7 +3533,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4339,7 +3571,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4377,7 +3609,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4415,7 +3647,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4457,7 +3689,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="layoutDirection">
@@ -4487,8 +3719,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4626,14 +3858,17 @@ background-position: left center;
                       <property name="sortingEnabled">
                        <bool>true</bool>
                       </property>
+                      <attribute name="horizontalHeaderVisible">
+                       <bool>false</bool>
+                      </attribute>
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderMinimumSectionSize">
-                       <number>31</number>
-                      </attribute>
                       <attribute name="horizontalHeaderDefaultSectionSize">
                        <number>150</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderMinimumSectionSize">
+                       <number>31</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -4717,7 +3952,7 @@ background-position: left center;
                   <widget class="QWidget" name="employeWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
                     <property name="spacing">
-                     <number>5</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -4762,8 +3997,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>362</width>
-                           <height>40</height>
+                           <width>364</width>
+                           <height>56</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -4805,8 +4040,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4871,7 +4106,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4912,7 +4147,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4953,7 +4188,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4994,7 +4229,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -5032,7 +4267,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -5082,8 +4317,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5289,7 +4524,7 @@ background-position: left center;
                   <widget class="QWidget" name="empOperationWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_31">
                     <property name="spacing">
-                     <number>5</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -5358,14 +4593,14 @@ background-position: left center;
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>102</width>
-                              <height>80</height>
+                              <width>110</width>
+                              <height>88</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>90</width>
-                              <height>80</height>
+                              <width>98</width>
+                              <height>88</height>
                              </size>
                             </property>
                             <property name="text">
@@ -5437,14 +4672,14 @@ background-position: left center;
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>90</width>
-                              <height>80</height>
+                              <width>98</width>
+                              <height>88</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>90</width>
-                              <height>80</height>
+                              <width>98</width>
+                              <height>88</height>
                              </size>
                             </property>
                             <property name="text">
@@ -5510,14 +4745,14 @@ background-position: left center;
                            <widget class="QPushButton" name="buttonIconSumRetenu">
                             <property name="minimumSize">
                              <size>
-                              <width>90</width>
-                              <height>80</height>
+                              <width>98</width>
+                              <height>88</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>90</width>
-                              <height>80</height>
+                              <width>98</width>
+                              <height>88</height>
                              </size>
                             </property>
                             <property name="text">
@@ -5598,7 +4833,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5632,7 +4867,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5749,7 +4984,7 @@ background-position: left center;
                                 <height>44</height>
                                </size>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5803,9 +5038,9 @@ background-position: left center;
                                </size>
                               </property>
                               <property name="currentText">
-                               <string/>
+                               <string>Tous</string>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5980,7 +5215,7 @@ background-position: left center;
                   <widget class="QWidget" name="ChargeWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_36">
                     <property name="spacing">
-                     <number>5</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -6047,7 +5282,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>364</width>
-                           <height>42</height>
+                           <height>56</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -6185,8 +5420,8 @@ background-position: left center;
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
-                           <height>41</height>
+                           <width>52</width>
+                           <height>52</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -6224,7 +5459,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -6265,7 +5500,7 @@ background-position: left center;
                          <property name="minimumSize">
                           <size>
                            <width>41</width>
-                           <height>41</height>
+                           <height>49</height>
                           </size>
                          </property>
                          <property name="cursor">

@@ -1640,6 +1640,9 @@ class Credit(QtWidgets.QMainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
+    # setup the stylesheet
+    with open('./gui/dark_theme.qss', 'r') as f:
+        app.setStyleSheet(f.read())
     dialog = Credit()
     dialog.show()
     sys.exit(app.exec_())

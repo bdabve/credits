@@ -408,7 +408,9 @@ def clear_inputs(inputs: list) -> None:
         inp.clear()
 
 
-# -- Table Widget Functions
+# ==================================
+# == Table Widget Functions
+# ==================================
 def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: list) -> None:
     """
     Populate a QTableWidget with rows and headers.
@@ -421,6 +423,7 @@ def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: li
     table.setColumnCount(len(headers))
     table.setRowCount(len(rows))
     table.setHorizontalHeaderLabels(headers)
+    table.horizontalHeader().setVisible(True)
     table.setSortingEnabled(False)
 
     # These columns will be formatted as money
