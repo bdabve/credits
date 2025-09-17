@@ -14,53 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1219, 790)
-        MainWindow.setStyleSheet("QMenu {\n"
-"    font: 12pt \"Lucida Casual\";\n"
-"     background: #18191c;\n"
-"      border-radius: 4px;\n"
-"      border: 1px solid hsla(0, 0%, 100%, 0.3);\n"
-"      padding: 10px;\n"
-"      color: #b9bbbe;\n"
-"}\n"
-"\n"
-"QMenu::separator {\n"
-"    height: 1px;\n"
-"    background: hsla(0, 0%, 100%, 0.06);\n"
-"    margin: 4px;\n"
-"}\n"
-"QMenu::item {\n"
-"    color: #b9bbbe;\n"
-"    border-radius: 2px;\n"
-"    font-size: 14px;\n"
-"    line-height: 18px;\n"
-"    padding: 6px 8px;\n"
-"    min-width: 120px;\n"
-"    max-width: 240px;\n"
-"}\n"
-"\n"
-"QMenu::item:selected {\n"
-"    background-color: #3d3d3d;\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QMenu::item:disabled {\n"
-"    color: #4f545c;\n"
-"}\n"
-"QMenu::icon {\n"
-"    left: 7px;\n"
-"    right: 7px;\n"
-"}\n"
-"\n"
-"QMenu::icon:checked {\n"
-"   position: absolute;\n"
-"   right: 7px;\n"
-"   top: 1px;\n"
-"   bottom: 1px;\n"
-"   image-position: right;\n"
-"   subcontrol-origin: padding;\n"
-"   subcontrol-position: right center;\n"
-"}")
+        MainWindow.resize(1198, 790)
+        MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("")
         self.centralwidget.setObjectName("centralwidget")
@@ -146,10 +101,10 @@ class Ui_MainWindow(object):
         self.leftMenuFrame.setObjectName("leftMenuFrame")
         self.verticalMenuLayout = QtWidgets.QVBoxLayout(self.leftMenuFrame)
         self.verticalMenuLayout.setContentsMargins(10, 15, 10, 0)
-        self.verticalMenuLayout.setSpacing(0)
+        self.verticalMenuLayout.setSpacing(10)
         self.verticalMenuLayout.setObjectName("verticalMenuLayout")
         self.toggleBox = QtWidgets.QFrame(self.leftMenuFrame)
-        self.toggleBox.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.toggleBox.setMaximumSize(QtCore.QSize(16777215, 50))
         self.toggleBox.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.toggleBox.setFrameShadow(QtWidgets.QFrame.Raised)
         self.toggleBox.setObjectName("toggleBox")
@@ -163,7 +118,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.toggleMenuButton.sizePolicy().hasHeightForWidth())
         self.toggleMenuButton.setSizePolicy(sizePolicy)
-        self.toggleMenuButton.setMinimumSize(QtCore.QSize(0, 47))
+        self.toggleMenuButton.setMinimumSize(QtCore.QSize(0, 50))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
         font.setPointSize(13)
@@ -197,7 +152,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.buttonClientsPage.sizePolicy().hasHeightForWidth())
         self.buttonClientsPage.setSizePolicy(sizePolicy)
         self.buttonClientsPage.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.buttonClientsPage.setIconSize(QtCore.QSize(25, 25))
+        self.buttonClientsPage.setIconSize(QtCore.QSize(35, 35))
         self.buttonClientsPage.setCheckable(True)
         self.buttonClientsPage.setObjectName("buttonClientsPage")
         self.verticalLayout_8.addWidget(self.buttonClientsPage)
@@ -209,7 +164,7 @@ class Ui_MainWindow(object):
         self.buttonCreditPage.setSizePolicy(sizePolicy)
         self.buttonCreditPage.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonCreditPage.setStyleSheet("")
-        self.buttonCreditPage.setIconSize(QtCore.QSize(30, 30))
+        self.buttonCreditPage.setIconSize(QtCore.QSize(35, 35))
         self.buttonCreditPage.setCheckable(True)
         self.buttonCreditPage.setObjectName("buttonCreditPage")
         self.verticalLayout_8.addWidget(self.buttonCreditPage)
@@ -233,7 +188,7 @@ class Ui_MainWindow(object):
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-user-female.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.buttonEmployesPage.setIcon(icon2)
-        self.buttonEmployesPage.setIconSize(QtCore.QSize(25, 25))
+        self.buttonEmployesPage.setIconSize(QtCore.QSize(35, 35))
         self.buttonEmployesPage.setCheckable(True)
         self.buttonEmployesPage.setChecked(True)
         self.buttonEmployesPage.setObjectName("buttonEmployesPage")
@@ -246,13 +201,13 @@ class Ui_MainWindow(object):
         self.buttonAccomptePage.setSizePolicy(sizePolicy)
         self.buttonAccomptePage.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonAccomptePage.setStyleSheet("")
-        self.buttonAccomptePage.setIconSize(QtCore.QSize(25, 25))
+        self.buttonAccomptePage.setIconSize(QtCore.QSize(35, 35))
         self.buttonAccomptePage.setCheckable(True)
         self.buttonAccomptePage.setObjectName("buttonAccomptePage")
         self.verticalLayout_8.addWidget(self.buttonAccomptePage)
         self.buttonChargePage = QtWidgets.QPushButton(self.topMenu)
         self.buttonChargePage.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.buttonChargePage.setIconSize(QtCore.QSize(30, 30))
+        self.buttonChargePage.setIconSize(QtCore.QSize(35, 35))
         self.buttonChargePage.setCheckable(True)
         self.buttonChargePage.setObjectName("buttonChargePage")
         self.verticalLayout_8.addWidget(self.buttonChargePage)
@@ -954,6 +909,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_9.setSpacing(5)
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.toggleThemeBtn = QtWidgets.QPushButton(self.rightButtons)
+        self.toggleThemeBtn.setText("")
+        self.toggleThemeBtn.setObjectName("toggleThemeBtn")
+        self.horizontalLayout_9.addWidget(self.toggleThemeBtn)
         self.buttonSettings = QtWidgets.QPushButton(self.rightButtons)
         self.buttonSettings.setMinimumSize(QtCore.QSize(40, 30))
         self.buttonSettings.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -1019,7 +978,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.setSpacing(0)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.plusButtonShurtcut = QtWidgets.QPushButton(self.widgetMessages)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.plusButtonShurtcut.sizePolicy().hasHeightForWidth())
@@ -1029,7 +988,7 @@ class Ui_MainWindow(object):
         icon8 = QtGui.QIcon()
         icon8.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-plus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.plusButtonShurtcut.setIcon(icon8)
-        self.plusButtonShurtcut.setIconSize(QtCore.QSize(20, 20))
+        self.plusButtonShurtcut.setIconSize(QtCore.QSize(25, 25))
         self.plusButtonShurtcut.setObjectName("plusButtonShurtcut")
         self.horizontalLayout_7.addWidget(self.plusButtonShurtcut)
         spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -1315,7 +1274,7 @@ class Ui_MainWindow(object):
         icon10 = QtGui.QIcon()
         icon10.addPixmap(QtGui.QPixmap(":/icons/icons/cil-reload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.buttonRefreshCreditTable.setIcon(icon10)
-        self.buttonRefreshCreditTable.setIconSize(QtCore.QSize(25, 25))
+        self.buttonRefreshCreditTable.setIconSize(QtCore.QSize(30, 30))
         self.buttonRefreshCreditTable.setObjectName("buttonRefreshCreditTable")
         self.horizontalLayout_12.addWidget(self.buttonRefreshCreditTable)
         spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -1346,7 +1305,7 @@ class Ui_MainWindow(object):
         self.buttonNewCredit.setMinimumSize(QtCore.QSize(0, 49))
         self.buttonNewCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewCredit.setIcon(icon8)
-        self.buttonNewCredit.setIconSize(QtCore.QSize(22, 22))
+        self.buttonNewCredit.setIconSize(QtCore.QSize(30, 30))
         self.buttonNewCredit.setObjectName("buttonNewCredit")
         self.horizontalLayout_6.addWidget(self.buttonNewCredit)
         self.buttonCreditAddVersement = QtWidgets.QPushButton(self.groupBoxToolBar)
@@ -1359,7 +1318,7 @@ class Ui_MainWindow(object):
         self.buttonCreditAddVersement.setMinimumSize(QtCore.QSize(0, 49))
         self.buttonCreditAddVersement.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonCreditAddVersement.setIcon(icon8)
-        self.buttonCreditAddVersement.setIconSize(QtCore.QSize(22, 22))
+        self.buttonCreditAddVersement.setIconSize(QtCore.QSize(30, 30))
         self.buttonCreditAddVersement.setObjectName("buttonCreditAddVersement")
         self.horizontalLayout_6.addWidget(self.buttonCreditAddVersement)
         self.buttonCreditVersement = QtWidgets.QPushButton(self.groupBoxToolBar)
@@ -1374,7 +1333,7 @@ class Ui_MainWindow(object):
         icon11 = QtGui.QIcon()
         icon11.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-align-center.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.buttonCreditVersement.setIcon(icon11)
-        self.buttonCreditVersement.setIconSize(QtCore.QSize(22, 22))
+        self.buttonCreditVersement.setIconSize(QtCore.QSize(30, 30))
         self.buttonCreditVersement.setObjectName("buttonCreditVersement")
         self.horizontalLayout_6.addWidget(self.buttonCreditVersement)
         self.buttonRegleCredit = QtWidgets.QPushButton(self.groupBoxToolBar)
@@ -1389,7 +1348,7 @@ class Ui_MainWindow(object):
         icon12 = QtGui.QIcon()
         icon12.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-check-alt.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.buttonRegleCredit.setIcon(icon12)
-        self.buttonRegleCredit.setIconSize(QtCore.QSize(22, 22))
+        self.buttonRegleCredit.setIconSize(QtCore.QSize(30, 30))
         self.buttonRegleCredit.setObjectName("buttonRegleCredit")
         self.horizontalLayout_6.addWidget(self.buttonRegleCredit)
         self.line = QtWidgets.QFrame(self.groupBoxToolBar)
@@ -1405,12 +1364,12 @@ class Ui_MainWindow(object):
         self.buttonCreditActions.setSizePolicy(sizePolicy)
         self.buttonCreditActions.setMinimumSize(QtCore.QSize(0, 49))
         self.buttonCreditActions.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.buttonCreditActions.setIconSize(QtCore.QSize(18, 18))
+        self.buttonCreditActions.setIconSize(QtCore.QSize(30, 30))
         self.buttonCreditActions.setObjectName("buttonCreditActions")
         self.horizontalLayout_6.addWidget(self.buttonCreditActions)
         self.buttonDeleteCredit = QtWidgets.QPushButton(self.groupBoxToolBar)
         self.buttonDeleteCredit.setEnabled(False)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonDeleteCredit.sizePolicy().hasHeightForWidth())
@@ -1421,7 +1380,7 @@ class Ui_MainWindow(object):
         icon13 = QtGui.QIcon()
         icon13.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-cut.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.buttonDeleteCredit.setIcon(icon13)
-        self.buttonDeleteCredit.setIconSize(QtCore.QSize(25, 25))
+        self.buttonDeleteCredit.setIconSize(QtCore.QSize(30, 30))
         self.buttonDeleteCredit.setObjectName("buttonDeleteCredit")
         self.horizontalLayout_6.addWidget(self.buttonDeleteCredit)
         spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)

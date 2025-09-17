@@ -22,10 +22,11 @@ class Credit(QtWidgets.QMainWindow):
     # - Add more validations
     # ####################################################
 
-    def __init__(self):
+    def __init__(self, theme_manager):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.theme_manager = theme_manager
 
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
@@ -52,13 +53,19 @@ class Credit(QtWidgets.QMainWindow):
             self.menu_expanded_width = 220
             self.left_box_width = 400
 
+        # Track theme
+        self.is_dark = False
+        self.toggle_theme()
+
         # Remove title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
         self.ui.contentTopBg.mouseMoveEvent = self.move_window  # to move window from the upBar
 
         # Callback Functions
-        utils.main_icons_callbacks(self)
+        # utils.main_icons_callbacks(self, self.theme_manager)
+        utils.setup_main_callbacks(self)
+        utils.refresh_main_icons(self, self.theme_manager)
 
         self.PAGES = {
             'client': {
@@ -142,6 +149,18 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelDate.setText(f"{self.CURRENT_DATE.date()}")
         #
         self.showMaximized()
+
+    def refresh_icons(self):
+        """Re-apply themed icons after toggle."""
+        self.ui.toggleThemeBtn.setIcon(self.theme_manager.icon("fa6s.lightbulb", "ICON_COLOR"))
+        # self.credit_btn.setIcon(self.theme_manager.icon("mdi6.cash-plus", "NEW_COLOR"))
+
+    def toggle_theme(self):
+        """Switch between light and dark themes."""
+        new_theme = "dark" if self.theme_manager.current == "light" else "light"
+        self.theme_manager.apply(new_theme)
+        self.refresh_icons()
+        utils.refresh_main_icons(self, self.theme_manager)
 
     # -- Window UPBAR Controls --
     def mousePressEvent(self, event):
@@ -1640,9 +1659,7 @@ class Credit(QtWidgets.QMainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    # setup the stylesheet
-    with open('./gui/dark_theme.qss', 'r') as f:
-        app.setStyleSheet(f.read())
-    dialog = Credit()
+    theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
+    dialog = Credit(theme_manager)
     dialog.show()
     sys.exit(app.exec_())

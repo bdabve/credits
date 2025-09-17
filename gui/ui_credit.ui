@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1219</width>
+    <width>1198</width>
     <height>790</height>
    </rect>
   </property>
@@ -14,52 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMenu {
-	font: 12pt &quot;Lucida Casual&quot;;
- 	background: #18191c;
-  	border-radius: 4px;
-  	border: 1px solid hsla(0, 0%, 100%, 0.3);
-  	padding: 10px;
-  	color: #b9bbbe;
-}
-
-QMenu::separator {
-    height: 1px;
-    background: hsla(0, 0%, 100%, 0.06);
-    margin: 4px;
-}
-QMenu::item {
-    color: #b9bbbe;
-    border-radius: 2px;
-    font-size: 14px;
-    line-height: 18px;
-    padding: 6px 8px;
-    min-width: 120px;
-    max-width: 240px;
-}
-
-QMenu::item:selected {
-    background-color: #3d3d3d;
-    color: white;
-}
-
-QMenu::item:disabled {
-    color: #4f545c;
-}
-QMenu::icon {
-    left: 7px;
-	right: 7px;
-}
-
-QMenu::icon:checked {
-   position: absolute;
-   right: 7px;
-   top: 1px;
-   bottom: 1px;
-   image-position: right;
-   subcontrol-origin: padding;
-   subcontrol-position: right center;
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
@@ -303,7 +258,7 @@ QMenu::icon:checked {
             </property>
             <layout class="QVBoxLayout" name="verticalMenuLayout">
              <property name="spacing">
-              <number>0</number>
+              <number>10</number>
              </property>
              <property name="leftMargin">
               <number>10</number>
@@ -322,7 +277,7 @@ QMenu::icon:checked {
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
-                 <height>45</height>
+                 <height>50</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -358,7 +313,7 @@ QMenu::icon:checked {
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>47</height>
+                    <height>50</height>
                    </size>
                   </property>
                   <property name="font">
@@ -443,8 +398,8 @@ QMenu::icon:checked {
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>25</width>
-                    <height>25</height>
+                    <width>35</width>
+                    <height>35</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -474,8 +429,8 @@ QMenu::icon:checked {
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>30</width>
-                    <height>30</height>
+                    <width>35</width>
+                    <height>35</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -530,8 +485,8 @@ QMenu::icon:checked {
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>25</width>
-                    <height>25</height>
+                    <width>35</width>
+                    <height>35</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -564,8 +519,8 @@ QMenu::icon:checked {
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>25</width>
-                    <height>25</height>
+                    <width>35</width>
+                    <height>35</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -586,8 +541,8 @@ QMenu::icon:checked {
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>30</width>
-                    <height>30</height>
+                    <width>35</width>
+                    <height>35</height>
                    </size>
                   </property>
                   <property name="checkable">
@@ -2459,6 +2414,13 @@ QMenu::icon:checked {
                  <number>0</number>
                 </property>
                 <item>
+                 <widget class="QPushButton" name="toggleThemeBtn">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="buttonSettings">
                   <property name="minimumSize">
                    <size>
@@ -2652,7 +2614,7 @@ QMenu::icon:checked {
                 <item>
                  <widget class="QPushButton" name="plusButtonShurtcut">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -2672,8 +2634,8 @@ QMenu::icon:checked {
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>20</width>
-                    <height>20</height>
+                    <width>25</width>
+                    <height>25</height>
                    </size>
                   </property>
                  </widget>
@@ -3444,8 +3406,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>25</width>
-                           <height>25</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>
@@ -3551,8 +3513,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>22</width>
-                           <height>22</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>
@@ -3589,8 +3551,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>22</width>
-                           <height>22</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>
@@ -3627,8 +3589,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>22</width>
-                           <height>22</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>
@@ -3665,8 +3627,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>22</width>
-                           <height>22</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>
@@ -3700,8 +3662,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>18</width>
-                           <height>18</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>
@@ -3712,7 +3674,7 @@ QMenu::icon:checked {
                           <bool>false</bool>
                          </property>
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
@@ -3738,8 +3700,8 @@ QMenu::icon:checked {
                          </property>
                          <property name="iconSize">
                           <size>
-                           <width>25</width>
-                           <height>25</height>
+                           <width>30</width>
+                           <height>30</height>
                           </size>
                          </property>
                         </widget>

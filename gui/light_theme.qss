@@ -63,7 +63,7 @@ QPushButton {
 	background-color: #FEFEFE;
 	border: 1px solid #D9D9D9;
 	border-radius: 5px;
-	min-height: 41px;	
+	min-height: 50px;	
 	padding: 3px 15px;
 }
 /* == Hover == */
@@ -144,7 +144,7 @@ QPushButton::menu-indicator {
 /* == Hover == */
 #rightButtons QPushButton:hover,
 #extraCloseColumnBtn:hover  { 
-	background-color: #3d3d3d; 
+	background-color: #EFEFEF; 
 	border-style: solid; 
 	border-radius: 4px;
 }
@@ -286,15 +286,15 @@ QDateEdit:!enabled {
 }
 
 /* editSearchCharge inside QGroupBox */
-#editSearchCharge {
+QGroupBox QLineEdit {
 	border: 1px solid #303030;
 }
 
-#editSearchCharge:hover {
+QGroupBox QLineEdit:hover {
 	border: 2px solid #303030;
 }
 
-#editSearchCharge:focus {
+QGroupBox QLineEdit:focus {
 	border: 2px solid #303030;
 }
 
@@ -742,7 +742,7 @@ background-position: left center;
 /* =================
    == UPBAR
    ================= */
-#contentTopBg{	
+#contentTopBg {	
 	background-color: #F3F3F3;
 }
 

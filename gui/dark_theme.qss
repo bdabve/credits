@@ -23,6 +23,55 @@ QWidget{
 	color: rgb(221, 221, 221);
 }
 
+/* ==================
+	== QMenu
+   ================== */
+QMenu {
+	font: 12pt "Lucida Casual";
+ 	background: #18191c;
+  	border-radius: 4px;
+  	border: 1px solid hsla(0, 0%, 100%, 0.3);
+  	padding: 10px;
+  	color: #b9bbbe;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: hsla(0, 0%, 100%, 0.06);
+    margin: 4px;
+}
+QMenu::item {
+    color: #b9bbbe;
+    border-radius: 2px;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 6px 8px;
+    min-width: 120px;
+    max-width: 240px;
+}
+
+QMenu::item:selected {
+    background-color: #3d3d3d;
+    color: white;
+}
+
+QMenu::item:disabled {
+    color: #4f545c;
+}
+QMenu::icon {
+    left: 7px;
+	right: 7px;
+}
+
+QMenu::icon:checked {
+   position: absolute;
+   right: 7px;
+   top: 1px;
+   bottom: 1px;
+   image-position: right;
+   subcontrol-origin: padding;
+   subcontrol-position: right center;
+}
 
 /* ==================
 	== Tooltip
@@ -61,9 +110,9 @@ QGroupBox::title {
 QPushButton {
 	font: 13pt "Lucida Casual";
 	border-radius: 5px;
-	background-color: #343434;	
-	min-height: 41px;
-	font-size: 11pt;
+	background-color: #343434;
+	border: none;
+	min-height: 50px;
 	padding: 3px 15px;
 }
 /* == Hover == */
@@ -101,7 +150,8 @@ QPushButton::menu-indicator {
 
 #buttonDeleteCredit,
 #buttonDeleteVersement {
-	min-width: 41px;
+	min-width: 50;
+	min-height: 50;
 	padding: 0;
 }
 
@@ -261,7 +311,7 @@ QDateEdit
 	padding-left: 10px;
 	selection-color: rgb(255, 255, 255);
 	selection-background-color: #3d3d3d;
-	min-height: 36px;
+	min-height: 50px;
 }
 
 QLineEdit {
@@ -292,15 +342,15 @@ QDateEdit:!enabled {
 	background-color: #202020;
 }
 
-#editSearchCharge {
+QGroupBox QLineEdit {
 	border: 1px solid #303030;
 }
 
-#editSearchCharge:hover {
+QGroupBox QLineEdit:hover {
 	border: 2px solid #303030;
 }
 
-#editSearchCharge:focus {
+QGroupBox QLineEdit:focus {
 	border: 2px solid #303030;
 }
 
@@ -452,7 +502,7 @@ QComboBox {
 	border: 2px solid #303030;
 	padding: 0px 5px;
 	padding-left: 10px;
-	min-height: 40px;
+	min-height: 50px;
 }
 QComboBox:hover{
 	border: 2px solid #3d3d3d;
