@@ -26,13 +26,21 @@ class Credit(QtWidgets.QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.theme_manager = theme_manager
 
-        self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
-
+        # Database handler
         self.db = Database()
         logger.info("Connected to Database.")
         logger.info(f"Creating tables if not exists: {self.db._create_tables()}")
+
+        # Theme manager
+        self.theme_manager = theme_manager
+
+        self.settings = QtCore.QSettings("LifeTipaza", "CreditManager")     # QSettings (organization, application)        
+        self.current_theme = self.settings.value("theme", "light")  # Read theme from saved settings (default = "light")        
+        self.theme_manager.apply(self.current_theme)    # Apply the saved theme
+
+        # Set app icon
+        self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))        
 
         self.server_thread: utils.ServerThread | None = None   # type hint for clarity
         self.server_running = False
@@ -54,8 +62,8 @@ class Credit(QtWidgets.QMainWindow):
             self.left_box_width = 400
 
         # Track theme
-        self.is_dark = False
-        self.toggle_theme()
+        # self.is_dark = False
+        # self.toggle_theme()
 
         # Remove title bar
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -157,8 +165,10 @@ class Credit(QtWidgets.QMainWindow):
 
     def toggle_theme(self):
         """Switch between light and dark themes."""
-        new_theme = "dark" if self.theme_manager.current == "light" else "light"
-        self.theme_manager.apply(new_theme)
+        self.current_theme = "dark" if self.current_theme == "light" else "light"
+        self.theme_manager.apply(self.current_theme)
+        # Save new theme in settings
+        self.settings.setValue("theme", self.current_theme)
         self.refresh_icons()
         utils.refresh_main_icons(self, self.theme_manager)
 
