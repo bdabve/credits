@@ -360,7 +360,8 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))                       # Close the application
     root.ui.minimizeAppBtn.setIcon(theme_manager.icon("mdi.window-minimize", "MENU_COLOR"))     # Minimize the application
     root.ui.maximizeRestoreAppBtn.setIcon(theme_manager.icon("mdi.window-restore", "MENU_COLOR"))  # Maximize/Restore the application
-      
+    root.ui.toggleMenuButton.setIcon(theme_manager.icon("ri.menu-fold-fill", "ICON_COLOR"))
+
     # --- Example: Credit Page
     root.ui.buttonCreditPage.setIcon(theme_manager.icon("ph.currency-circle-dollar", "MENU_COLOR"))
     root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)

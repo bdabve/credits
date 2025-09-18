@@ -178,28 +178,27 @@ QPushButton::menu-indicator {
 /* == Pressed == */
 #topMenu .QPushButton:pressed {	
 	background-color: transparent;
-	color: rgb(255, 255, 255);
+	color: #1B8755;
 }
 
 /* == Checked == */
 #topMenu .QPushButton:checked {
 	/*background-color: rgb(40, 44, 52);*/	
 	background-color: #EBEBEB;
-	/* color: rgb(255, 255, 255); */
+	color: #1B8755;
 }
 
 /* == Toggle Button == */
 #toggleMenuButton {
 	border: none;
 	border-radius: 7px;
-	background-color: rgb(37, 41, 48);
+	background-color: #EAEAEA;
 	color: rgb(113, 126, 149);
+	min-height: 38px;
 }
-#toggleMenuButton:hover {
-	background-color: rgb(40, 44, 52);
-}
+
 #toggleMenuButton:pressed {
-	background-color: rgb(189, 147, 249);
+	background-color: transparent;
 }
 
 /* ==================
@@ -302,7 +301,7 @@ QGroupBox QLineEdit:focus {
    == QPlainText ==
    ============================ */
 QPlainTextEdit {
-	background-color: #F3F3F3;
+	background-color: #FEFEFE;
 	border-radius: 5px;
 	padding: 10px;
 	selection-color: rgb(255, 255, 255);
@@ -678,8 +677,8 @@ QCommandLinkButton:pressed {
    == ExtraLeftBox
    ================== */
 #extraLeftBox {
-	background-color: #272727;
-	border: 2px solid #202020;
+	background-color: #E6F7EA;
+	border: 2px solid #D9E8DA;
 	border-left-color: #2C3E50;
 }
 #AddCreditPage,
@@ -690,10 +689,10 @@ QCommandLinkButton:pressed {
 #salairePage,
 #addChargePage
 {	
-	background-color: #272727;
+	background-color: #E6F7EA;
 }
 #extraTopBg{	
-	background-color: #202020;
+	background-color: #A7DEC3;
 }
 
 /* == Icon == */
@@ -704,17 +703,20 @@ QCommandLinkButton:pressed {
 }
 
 /* Label */
-#extraLabelTitle { color: #00AFF0; }
+#extraLabelTitle { color: #1B8755; }
 
 #widgetSalairePage QLabel {
 	padding: 5px;
 	font: 75 14pt "Lucida Casual";
-	border: 1px solid rgb(44, 49, 60);
+	/*border: 1px solid rgb(44, 49, 60);*/
 	border-top: none;
 	border-left: none;
 	border-right: none;
 }
 
+#line_4, #line_5 {
+	background-color: #8D8D8D;
+}
 /* == Extra Content == */
 #extraContent{
 	/*border-top: 3px solid #2a2a2a;*/

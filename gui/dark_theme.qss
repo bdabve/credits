@@ -253,6 +253,7 @@ QGroupBox .QPushButton:pressed {
 	border-radius: 7px;
 	background-color: rgb(37, 41, 48);
 	color: rgb(113, 126, 149);
+	min-height: 38px;
 }
 #toggleMenuButton:hover {
 	background-color: rgb(40, 44, 52);

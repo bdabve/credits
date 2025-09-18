@@ -38,6 +38,7 @@ class Credit(QtWidgets.QMainWindow):
         self.settings = QtCore.QSettings("LifeTipaza", "CreditManager")     # QSettings (organization, application)        
         self.current_theme = self.settings.value("theme", "light")  # Read theme from saved settings (default = "light")        
         self.theme_manager.apply(self.current_theme)    # Apply the saved theme
+        self.refresh_icons()    # Refresh icons based on the current theme
 
         # Set app icon
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))        
@@ -237,14 +238,14 @@ class Credit(QtWidgets.QMainWindow):
             return
 
         # expanded_width = 280  # Width when expanded
-        collapsed_width = 70
+        collapsed_width = 80
 
         page_buttons = {
             self.ui.toggleMenuButton: 'Menu',
             self.ui.buttonClientsPage: '  Clients',
             self.ui.buttonEmployesPage: '  Employés',
             self.ui.buttonCreditPage: '  Crédits',
-            self.ui.buttonAccomptePage: '  Les Accomptes',
+            self.ui.buttonAccomptePage: '  Accomptes',
             self.ui.buttonChargePage: '  Les Charges'
 
         }
@@ -252,13 +253,13 @@ class Credit(QtWidgets.QMainWindow):
             # Close Menu
             new_width = collapsed_width
             # Remove text from button but keep icons
-            self.ui.toggleMenuButton.setIcon(qta.icon('ri.menu-unfold-fill', color="#ffffff"))
+            self.ui.toggleMenuButton.setIcon(self.theme_manager.icon('ri.menu-unfold-fill', "ICON_COLOR"))
             for button in page_buttons.keys():
                 button.setText('')
         else:
             new_width = self.menu_expanded_width
             # Restore text to button
-            self.ui.toggleMenuButton.setIcon(qta.icon('ri.menu-fold-fill', color="#ffffff"))
+            self.ui.toggleMenuButton.setIcon(self.theme_manager.icon('ri.menu-fold-fill', "ICON_COLOR"))
             for button, text in page_buttons.items():
                 button.setText(text)
 
