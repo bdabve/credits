@@ -35,13 +35,13 @@ class Credit(QtWidgets.QMainWindow):
         # Theme manager
         self.theme_manager = theme_manager
 
-        self.settings = QtCore.QSettings("LifeTipaza", "CreditManager")     # QSettings (organization, application)        
-        self.current_theme = self.settings.value("theme", "light")  # Read theme from saved settings (default = "light")        
+        self.settings = QtCore.QSettings("LifeTipaza", "CreditManager")     # QSettings (organization, application)
+        self.current_theme = self.settings.value("theme", "light")  # Read theme from saved settings (default = "light")
         self.theme_manager.apply(self.current_theme)    # Apply the saved theme
         self.refresh_icons()    # Refresh icons based on the current theme
 
         # Set app icon
-        self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))        
+        self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
         self.server_thread: utils.ServerThread | None = None   # type hint for clarity
         self.server_running = False
@@ -162,7 +162,6 @@ class Credit(QtWidgets.QMainWindow):
     def refresh_icons(self):
         """Re-apply themed icons after toggle."""
         self.ui.toggleThemeBtn.setIcon(self.theme_manager.icon("fa6s.lightbulb", "ICON_COLOR"))
-        # self.credit_btn.setIcon(self.theme_manager.icon("mdi6.cash-plus", "NEW_COLOR"))
 
     def toggle_theme(self):
         """Switch between light and dark themes."""

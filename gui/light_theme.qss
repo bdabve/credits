@@ -78,7 +78,7 @@ QPushButton:pressed {
 /* == !Enabled == */
 QPushButton:!enabled {
 	color: #73797b;
-	background-color: #DADADA;
+	
 }
 
 /* == Remove Menu Indicator from Button with Menu == */
@@ -209,7 +209,7 @@ QTableWidget {
 	padding: 5px 0px;
 	border-radius: 5px;
 	gridline-color: #D9D9D9;
-	border-bottom: 1px solid rgb(44, 49, 60);	
+	border-bottom: 1px solid #E4F2E1;	
 }
 QTableWidget::item{
 	border-color: #303030;
@@ -218,23 +218,19 @@ QTableWidget::item{
 	gridline-color: rgb(44, 49, 60);
 }
 QTableWidget::item:selected{
-	background-color: #F3F3F3;
+	background-color: #E4F2E1;
 	color: #000000;
 }
 QHeaderView::section{
-	background-color: #F3F3F3;
+	background-color:  #E4F2E1;
 	max-width: 30px;
-	border: 1px solid #D9D9D9;
 	border-style: none;
     border-bottom: 1px solid rgb(44, 49, 60);
     border-right: 1px solid #303030;
 }
-QTableWidget::horizontalHeader {	
-	background-color: #F3F3F3;
-}
 QHeaderView::section:horizontal
 {
-    border: 1px solid #303030;
+    border: 1px dashed #1B8755;
 	padding: 3px;
 }
 
@@ -265,7 +261,7 @@ QLineEdit:hover,
 QSpinBox:hover,
 QDoubleSpinBox:hover,
 QDateEdit:hover {
-	border: 2px solid #D9D9D9;
+	border: 2px solid #BAF0C0;
 }
 
 /* == Focus == */
@@ -273,7 +269,8 @@ QLineEdit:focus,
 QSpinbox:focus,
 QDoubleSpinBox:focus,
 QDateEdit:focus {
-	border: 2px solid #D9D9D9;
+	border: 2px solid #BAF0C0;
+	border-bottom-color: #1B8755;
 }
 
 /* == !Enabled == */
@@ -568,7 +565,7 @@ QCommandLinkButton:pressed {
 #EmployeOperationsPage,
 #ChargePage
 {
-	background-color: #FAF7F4;
+	background-color: transparent;
 }
 
 #labelDate,
@@ -677,7 +674,7 @@ QCommandLinkButton:pressed {
    == ExtraLeftBox
    ================== */
 #extraLeftBox {
-	background-color: #E6F7EA;
+	background-color: #E3F0E0;
 	border: 2px solid #D9E8DA;
 	border-left-color: #2C3E50;
 }
@@ -689,10 +686,14 @@ QCommandLinkButton:pressed {
 #salairePage,
 #addChargePage
 {	
-	background-color: #E6F7EA;
+	background-color: transparent;
 }
 #extraTopBg{	
-	background-color: #A7DEC3;
+	background-color: #E9F3ED;
+	border: 1px solid #D7E6DC;
+	border-top: none;
+	border-right: none;
+	border-left: none;
 }
 
 /* == Icon == */
@@ -715,12 +716,12 @@ QCommandLinkButton:pressed {
 }
 
 #line_4, #line_5 {
-	background-color: #8D8D8D;
+	background-color: #D7E6DC;
 }
 /* == Extra Content == */
 #extraContent{
 	/*border-top: 3px solid #2a2a2a;*/
-		border-top-left-radius: 15px;
+	border-top-left-radius: 15px;
 }
 
 /* == Extra Top Menus == */
