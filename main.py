@@ -917,6 +917,15 @@ class Credit(QtWidgets.QMainWindow):
         # refresh table
         self.accompte_by_employee(emp_id, month=month)
 
+    def export_accomptes_details(self):
+        month = self.CURRENT_MONTH
+        rows = self.db.accompte_details(month)
+        if not rows:
+            self.show_error_message("Aucun acompte trouvé.", success=False)
+            return
+        result = utils.export_salary_report_openpyxl(rows)
+        self.show_error_message(result, success=True)
+
     # =========================================
     # NOTE:  Not implemented yet
     def generate_payslip_html(self, nom, mois, base, prime, retenue, avance, net):

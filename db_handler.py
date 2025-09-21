@@ -473,10 +473,10 @@ class Database:
             cursor = conn.cursor()
             query = f"""
             SELECT {", ".join(self.operation_fields)}
-                FROM operations ope
-                LEFT JOIN employes emp ON emp.id = ope.employe_id
-                WHERE emp.id = ? AND strftime('%Y-%m', ope.date) = ?
-                ORDER BY emp.nom
+            FROM operations ope
+            LEFT JOIN employes emp ON emp.id = ope.employe_id
+            WHERE emp.id = ? AND strftime('%Y-%m', ope.date) = ?
+            ORDER BY emp.nom
             """
             cursor.execute(query, (employe_id, date))
             return cursor.fetchall()
@@ -576,13 +576,19 @@ class Database:
             conn.commit()
             return {'success': True, 'message': message}
 
-    def operation_to_excel(self, month):
-        query = "select * from operations where strftime('%Y-%m', date) = ?"
+    def accompte_details(self, month):
+        query = f"""
+        SELECT {", ".join(self.operation_fields)}
+        FROM operations ope
+        LEFT JOIN employes emp ON emp.id = ope.employe_id
+        WHERE STRFTIME('%Y-%m', date) = ?
+        ORDER BY emp.nom
+        """
         with self.connect() as conn:
             cursor = conn.cursor()
             cursor.execute(query, (month,))
             return cursor.fetchall()
-        
+
     # =============
     # == Clients ==
     # =============
@@ -1187,4 +1193,5 @@ if __name__ == '__main__':
 
     # 
     result = db.operation_to_excel('2025-09')
-    print(result)
+    for row in result:
+        print(row)

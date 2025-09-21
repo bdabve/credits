@@ -2620,7 +2620,7 @@
                 <item>
                  <widget class="QPushButton" name="plusButtonShurtcut">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -2761,7 +2761,7 @@
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>2</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3228,7 +3228,7 @@
                        <number>6</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </attribute>
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
@@ -4016,7 +4016,7 @@
                        <item>
                         <widget class="QPushButton" name="buttonRefreshEmpolyeTable">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
@@ -4288,12 +4288,40 @@
                         </widget>
                        </item>
                        <item>
+                        <widget class="QPushButton" name="buttonExportAccomptDetails">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>52</width>
+                           <height>52</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Générer Excel Détaillé</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
                         <widget class="QPushButton" name="buttonDeleteEmploye">
                          <property name="enabled">
                           <bool>false</bool>
                          </property>
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>

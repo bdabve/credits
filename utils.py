@@ -17,7 +17,7 @@ from PyQt5 import QtWidgets, QtCore         # , QtGui
 import qtawesome as qta
 
 from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment
+from openpyxl.styles import Font, Alignment, PatternFill
 from openpyxl.utils import get_column_letter
 
 from gui.h_confirm_dialog import Ui_Dialog
@@ -206,6 +206,7 @@ def setup_main_callbacks(root):
         (root.ui.buttonEmployeNewPrime, lambda: root.ui_employe_opration('prime')),
         (root.ui.buttonEmployeNewRetenu, lambda: root.ui_employe_opration('retenu')),
         (root.ui.buttonCalculateSalaire, lambda: root.calculate_salaire(from_btn=True)),
+        (root.ui.buttonExportAccomptDetails, root.export_accomptes_details),
 
         # Save Operation for Employees
         (root.ui.buttonEmployeSaveOperation, root.save_new_operation),
@@ -400,6 +401,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonEmployeSaveOperation.setIcon(SAVE_ICON)
     root.ui.buttonRefreshAccompteTable.setIcon(REFRESH_ICON)
     root.ui.buttonDeleteAccompte.setIcon(TRASH_ICON)
+    root.ui.buttonExportAccomptDetails.setIcon(theme_manager.icon('mdi6.microsoft-excel', "NEW_COLOR"))
 
     # --- Charges
     root.ui.buttonChargePage.setIcon(theme_manager.icon('mdi6.cash-minus', "EDIT_COLOR"))
@@ -963,6 +965,113 @@ def create_menu(root, menu_button, icon_name, actions, icon_color=NEW_COLOR, wit
 
     # Attach menu to button
     menu_button.setMenu(menu)
+
+
+# == Excel functions
+def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
+    """
+    Create a nicely formatted Excel report from rows using openpyxl.
+    All tables are placed in one sheet.
+
+    Args:
+        rows (list of tuples): Each tuple = (id, date, type, name, somme, motif)
+        file_name (str): Name of the Excel file to save.
+    """
+    # ---- Ensure directory exists ----
+    output_dir = "excel_fichier"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # ---- Build filename with timestamp ----
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    file_name = "accompte_report"
+    filename = os.path.join(output_dir, f"{file_name}_{timestamp}.xlsx")
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Report"
+
+    # Group rows by 'name'
+    grouped = {}
+    for r in rows:
+        _, date, type_, name, somme, motif = r
+        grouped.setdefault(name, []).append((date, type_, somme, motif))
+
+    row_cursor = 1
+    header_font = Font(bold=True)
+    total_fill = PatternFill(start_color="FFD966", end_color="FFD966", fill_type="solid")  # light yellow
+    for name, entries in grouped.items():
+        salaire_base = 0
+
+        # Person's name as a title
+        ws.cell(row=row_cursor, column=1, value=name).font = Font(bold=True, size=14)
+        row_cursor += 1
+
+        # Table header
+        headers = ["Date", "Type", "Somme", "Motif"]
+        for col, h in enumerate(headers, start=1):
+            cell = ws.cell(row=row_cursor, column=col, value=h)
+            cell.font = header_font
+            cell.alignment = Alignment(horizontal="center")
+        row_cursor += 1
+
+        # Counters
+        total_avance = total_retenu = total_prime = 0
+
+        # Rows
+        for date, type_, somme, motif in entries:
+            ws.cell(row=row_cursor, column=1, value=date)
+            ws.cell(row=row_cursor, column=2, value=type_)
+            ws.cell(row=row_cursor, column=3, value=somme)
+            ws.cell(row=row_cursor, column=4, value=motif)
+
+            if type_ == "avance":
+                total_avance += somme
+            elif type_ == "retenu":
+                total_retenu += somme
+            elif type_ == "prime":
+                total_prime += somme
+
+            row_cursor += 1
+
+        # Final salary calculation
+        salaire_final = salaire_base + total_prime - total_retenu - total_avance
+
+        # Summary block
+        ws.append([])
+        ws.cell(row=row_cursor, column=2, value="Salaire de base").font = header_font
+        ws.cell(row=row_cursor, column=3, value=salaire_base)
+        row_cursor += 1
+
+        ws.cell(row=row_cursor, column=2, value="Total Prime").font = header_font
+        ws.cell(row=row_cursor, column=3, value=total_prime)
+        row_cursor += 1
+
+        ws.cell(row=row_cursor, column=2, value="Total Retenu").font = header_font
+        ws.cell(row=row_cursor, column=3, value=total_retenu)
+        row_cursor += 1
+
+        ws.cell(row=row_cursor, column=2, value="Total Avance").font = header_font
+        ws.cell(row=row_cursor, column=3, value=total_avance)
+        row_cursor += 1
+
+        final_cell = ws.cell(row=row_cursor, column=2, value="Salaire Final")
+        final_cell.font = Font(bold=True, color="FFFFFF")
+        final_cell.fill = PatternFill(start_color="4CAF50", end_color="4CAF50", fill_type="solid")  # green
+        ws.cell(row=row_cursor, column=3, value=salaire_final).font = Font(bold=True)
+
+        row_cursor += 2  # space before next table
+
+    # Auto column width
+    for col in ws.columns:
+        max_length = 0
+        col_letter = col[0].column_letter
+        for cell in col:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+        ws.column_dimensions[col_letter].width = max_length + 2
+    
+    wb.save(filename)
+    return f"✅ Accompte Exporté avec succès dans '{filename}'."
 
 
 class ServerThread(Thread):
