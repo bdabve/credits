@@ -507,39 +507,40 @@ class Database:
         """
         base_query = """
             SELECT
-                e.id,
+                e.id AS employe_id,
                 s.montant_base AS salaire_base,
                 COALESCE(SUM(CASE WHEN o.operation = 'prime' THEN o.montant ELSE 0 END), 0) AS total_prime,
                 COALESCE(SUM(CASE WHEN o.operation = 'retenu' THEN o.montant ELSE 0 END), 0) AS total_retenue,
                 COALESCE(SUM(CASE WHEN o.operation = 'avance' THEN o.montant ELSE 0 END), 0) AS total_avance
             FROM employes e
             LEFT JOIN salaires s ON e.id = s.employe_id
-            LEFT JOIN operations o ON e.id = o.employe_id
+            LEFT JOIN operations o
+                ON e.id = o.employe_id
                 AND strftime('%Y-%m', o.date) = ?
         """
+
         params = [month]
 
-        if emp_id:
+        if emp_id is not None:
             base_query += " WHERE e.id = ?"
             params.append(emp_id)
 
-        base_query += " GROUP BY e.id"
+        base_query += " GROUP BY e.id, s.montant_base"
 
         with self.connect() as conn:
             cursor = conn.cursor()
-            cursor.execute(base_query, params)
-            rows = cursor.fetchall()
+            rows = self.fetch_namedtuple(cursor, base_query, params, tuple_name="SalaireRow")
 
             result = []
-            for row in rows:
-                emp_id, salaire_base, prime, retenue, avance = row
-                salaire_base = salaire_base if salaire_base is not None else 0
-                prime = prime if prime is not None else 0
-                retenue = retenue if retenue is not None else 0
-                avance = avance if avance is not None else 0
+            for r in rows:
+                salaire_base = r.salaire_base or 0
+                prime = r.total_prime or 0
+                retenue = r.total_retenue or 0
+                avance = r.total_avance or 0
+
                 salaire_final = salaire_base + prime - retenue - avance
                 result.append({
-                    'employe_id': emp_id,
+                    'employe_id': r.employe_id,
                     'salaire_base': salaire_base,
                     'total_prime': prime,
                     'total_retenue': retenue,
@@ -547,7 +548,7 @@ class Database:
                     'salaire_final': salaire_final
                 })
 
-            return result if not emp_id else (result[0] if result else None)
+            return result if emp_id is None else (result[0] if result else None)
 
     def update_accompte(self, emp_id, column, new_text):
         with self.connect() as conn:
@@ -575,6 +576,13 @@ class Database:
             conn.commit()
             return {'success': True, 'message': message}
 
+    def operation_to_excel(self, month):
+        query = "select * from operations where strftime('%Y-%m', date) = ?"
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (month,))
+            return cursor.fetchall()
+        
     # =============
     # == Clients ==
     # =============
@@ -1136,8 +1144,8 @@ class Database:
 if __name__ == '__main__':
     db = Database()
 
-    result = db.get_sums_operations('2024-08')
-    print(result)
+    # result = db.get_sums_operations('2024-08')
+    # print(result)
     # CREATE DATABASE
     # result = db_handler.create_tables()
 
@@ -1172,5 +1180,11 @@ if __name__ == '__main__':
     # print(f"Versement: {result}")
 
     # Calculate salarie
-    # result = db.calculate_salaire_mensuel('2024-08', 1)
+    # result = db.calculate_salaire_mensuel('2025-09')
+    # for row in result:
+    #     print(row)
     # print(result)
+
+    # 
+    result = db.operation_to_excel('2025-09')
+    print(result)

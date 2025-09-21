@@ -396,7 +396,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonEmployeNewAvance.setIcon(CASH_PLUS_ICON)
     root.ui.buttonEmployeNewPrime.setIcon(CASH_PLUS_ICON)
     root.ui.buttonEmployeNewRetenu.setIcon(qta.icon('mdi6.cash-minus', color=TRASH_COLOR))
-    root.ui.buttonCalculateSalaire.setIcon(qta.icon('mdi.calculator-variant', color=ICON_COLOR))
+    root.ui.buttonCalculateSalaire.setIcon(theme_manager.icon('mdi.calculator-variant', "ICON_COLOR"))
     root.ui.buttonEmployeSaveOperation.setIcon(SAVE_ICON)
     root.ui.buttonRefreshAccompteTable.setIcon(REFRESH_ICON)
     root.ui.buttonDeleteAccompte.setIcon(TRASH_ICON)
