@@ -95,12 +95,16 @@ QPushButton::menu-indicator {
 
 #buttonRefreshEmpolyeOperationTable,
 #buttonDeleteEmployeOperation,
+#buttonExportAccomptDetails,
 
 #buttonRefreshCreditTable,
 #buttonRefreshChargeTable,
 
 #buttonDeleteCredit,
-#buttonDeleteVersement {
+#buttonDeleteVersement,
+#buttonDeleteCharge,
+#buttonRefreshChargeTable
+{
 	min-width: 50;
 	min-height: 50;
 	padding: 0;

@@ -1069,7 +1069,7 @@ def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
             if cell.value:
                 max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[col_letter].width = max_length + 2
-    
+
     wb.save(filename)
     return f"✅ Accompte Exporté avec succès dans '{filename}'."
 

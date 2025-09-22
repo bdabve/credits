@@ -2627,8 +2627,8 @@
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>50</width>
-                    <height>50</height>
+                    <width>52</width>
+                    <height>52</height>
                    </size>
                   </property>
                   <property name="text">
@@ -2640,8 +2640,8 @@
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>25</width>
-                    <height>25</height>
+                    <width>30</width>
+                    <height>30</height>
                    </size>
                   </property>
                  </widget>
@@ -4843,8 +4843,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>0</width>
-                           <height>58</height>
+                           <width>50</width>
+                           <height>50</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4877,8 +4877,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>0</width>
-                           <height>58</height>
+                           <width>50</width>
+                           <height>50</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5431,8 +5431,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>52</width>
-                           <height>52</height>
+                           <width>58</width>
+                           <height>58</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5503,14 +5503,14 @@
                           <bool>false</bool>
                          </property>
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>41</width>
+                           <width>58</width>
                            <height>58</height>
                           </size>
                          </property>
