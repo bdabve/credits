@@ -645,11 +645,12 @@ class Database:
                 SELECT {", ".join(self.clients_fields)}
                 FROM clients AS c
                 LEFT JOIN credit cr ON c.id = cr.client_id
-                WHERE c.nom LIKE ? OR c.telephone LIKE ?
+                WHERE c.nom LIKE ? OR c.telephone LIKE ? OR c.commune LIKE ?
                 GROUP BY c.nom
             """
             search_pattern = f'%{search_word}%'
-            cursor.execute(query, (search_pattern, search_pattern))
+            params = [search_pattern] * 3  # For nom, telephone, commune
+            cursor.execute(query, params)
             return cursor.fetchall()
 
     def update_client(self, client_id, column, new_text):
@@ -1191,7 +1192,7 @@ if __name__ == '__main__':
     #     print(row)
     # print(result)
 
-    # 
+    #
     result = db.operation_to_excel('2025-09')
     for row in result:
         print(row)
