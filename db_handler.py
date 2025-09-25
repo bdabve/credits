@@ -1131,7 +1131,7 @@ class Database:
                 return {'success': False, 'error': 'Modification de l\'employé non autorisée.'}
             # Montant
             elif column == 3:
-                cursor.execute("UPDATE charges SET montant = ? WHERE id = ?", (new_text, charge_id))
+                cursor.execute("UPDATE charges SET montant = ? WHERE id = ?", (str(new_text), charge_id))
                 message = 'Montant mis à jour avec succès.'
             # Motif
             elif column == 4:
@@ -1150,6 +1150,12 @@ class Database:
 
 if __name__ == '__main__':
     db = Database()
+
+    # query = "update charges set montant = 400 where id = 42"
+    # with db.connect() as conn:
+    #     cursor = conn.cursor()
+    #     cursor.execute(query)
+    #     conn.commit()
 
     # result = db.get_sums_operations('2024-08')
     # print(result)
@@ -1193,6 +1199,6 @@ if __name__ == '__main__':
     # print(result)
 
     #
-    result = db.operation_to_excel('2025-09')
-    for row in result:
-        print(row)
+    # result = db.operation_to_excel('2025-09')
+    # for row in result:
+        # print(row)

@@ -1525,6 +1525,8 @@ class Credit(QtWidgets.QMainWindow):
         logger.debug(f"Display Charge Records for {month_text}")
 
         # Calculate and display totals
+        for r in rows:
+            print(type(r[3]), r)
         total_charges = sum(r[3] for r in rows)  # Assuming 'montant' is at index 3
         message = f"Total Charges {month_name.title()}: {utils.format_money(total_charges)}"
         self.ui.labelTotalCharge.setText(message)
@@ -1652,6 +1654,16 @@ class Credit(QtWidgets.QMainWindow):
                 self.show_error_message("Vérifier la date.")
                 self.display_charge()
                 return
+        if col == 3:
+            # montant
+            text = utils.format_to_decimal(text)
+            if not text['success']:
+                self.show_error_message(f"Erreur: {text['error']}", success=False)
+                self.display_charge()      # refresh tablhu
+                return
+            else:
+                text = text['value']
+
         result = self.db.update_charge(charge_id, col, text)
         if result['success']:
             self.show_error_message(result['message'], success=True)
