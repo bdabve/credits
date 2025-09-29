@@ -195,7 +195,8 @@ QGroupBox .QPushButton:pressed {
 }
 
 #rightButtons QPushButton,
-#extraCloseColumnBtn
+#extraCloseColumnBtn,
+#buttonCloseMsgsFrame
  { 
 	background-color: transparent; 
 	border: none;  
