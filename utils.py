@@ -1074,6 +1074,61 @@ def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
     return f"✅ Accompte Exporté avec succès dans '{filename}'."
 
 
+def export_situation_to_excel(data, file_path):
+    # TODO: fix this function
+    """
+    Export the client's situation (credits + versements) in a structured Excel table.
+    Each credit and its versements are grouped with clear separation lines.
+    """
+    # data = self.get_situation(client_id)
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Situation Client"
+
+    # Title style
+    bold = Font(bold=True)
+    center = Alignment(horizontal="center")
+
+    # Headers
+    headers = ["Date Credit", "Montant", "Reste", "Statut",
+               "Date Versement", "Montant Versement", "Observation"]
+    ws.append(headers)
+
+    for col in range(1, len(headers) + 1):
+        ws.cell(row=1, column=col).font = bold
+        ws.cell(row=1, column=col).alignment = center
+        ws.column_dimensions[chr(64 + col)].width = 22
+
+    row = 2
+    for credit in data:
+        # Write credit info
+        base_row = row
+        ws.cell(row=row, column=1, value=credit['date_credit'])
+        ws.cell(row=row, column=2, value=credit['montant'])
+        ws.cell(row=row, column=3, value=credit['reste'])
+        ws.cell(row=row, column=4, value=credit['statut'])
+
+        # If there are versements, list them
+        if credit['versements']:
+            for v in credit['versements']:
+                ws.cell(row=row, column=5, value=v['date_versement'])
+                ws.cell(row=row, column=6, value=v['montant'])
+                ws.cell(row=row, column=7, value=v['observation'])
+                row += 1
+        else:
+            # If no versements, just one empty row
+            row += 1
+
+        # Add separator line (like “------------------------------”)
+        for col in range(1, len(headers) + 1):
+            ws.cell(row=row, column=col, value="------------------------------")
+        row += 1  # leave a blank line after each block
+
+    wb.save(file_path)
+    print(f"✅ Situation exported successfully to {file_path}")
+
+
 class ServerThread(Thread):
     def __init__(self):
         super().__init__(daemon=True)

@@ -45,6 +45,7 @@ class Database:
             'cr.reste', 'cr.statut'
         ]
 
+        self.situation_credit = ['c.nom', 'IFNULL(SUM(cr.montant), 0) AS Total_Credit',]
         # Charge
         self.charge_fields = [
             'ch.id', 'strftime("%d-%m-%Y", ch.date_charge)',
@@ -911,6 +912,50 @@ class Database:
                 conn.rollback()
                 return {'success': False, 'error': f"Erreur lors de la mise à jour: {e}"}
 
+    def get_situation(self, client_id):
+        """
+        Retrieve all credits and their associated versements for a specific client.
+        Args:
+            client_id (int): The unique identifier of the client.
+        Returns:
+            list of dict: Each dict contains credit info and a list of versements.
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            # Get all credits for the client
+            cursor.execute("""
+                SELECT id, date_credit, montant, reste, statut
+                FROM credit
+                WHERE client_id = ?
+                ORDER BY date_credit DESC
+            """, (client_id,))
+            credits = cursor.fetchall()
+            result = []
+            for credit in credits:
+                credit_id, date_credit, montant, reste, statut = credit
+                # Get all versements for this credit
+                cursor.execute("""
+                    SELECT id, date_versement, montant, observation
+                    FROM paiement
+                    WHERE credit_id = ?
+                    ORDER BY date_versement ASC
+                """, (credit_id,))
+                versements = cursor.fetchall()
+                result.append({
+                    'date_credit': date_credit,
+                    'montant': montant,
+                    'reste': reste,
+                    'statut': statut,
+                    'versements': [
+                        {
+                            'date_versement': v[1],
+                            'montant': v[2],
+                            'observation': v[3]
+                        } for v in versements
+                    ]
+                })
+            return result
+
     # ====================================
     # === PAYMENTS(VERSEMENT) METHODES ===
     # ====================================
@@ -1199,6 +1244,22 @@ if __name__ == '__main__':
     # print(result)
 
     #
-    # result = db.operation_to_excel('2025-09')
+    result = db.get_situation(8)
     # for row in result:
-        # print(row)
+    #     for key, value in row.items():
+    #         if key == 'versements':
+    #             print("Versements:")
+    #             if len(value) > 0:
+    #                 for val in value:
+    #                     for k, v in val.items():
+    #                         print(f"    {k} == {v}")
+    #         else:
+    #             print(f"{key} === {value}")
+    #     print('-' * 30)
+    import utils
+    result = utils.export_situation_to_excel(data=result, file_path='situation_client_gm1.xlsx')
+    # result = db.accompte_details('2025-09')
+    # result = utils.export_salary_report_openpyxl(result)
+    print(result)
+    # for row in result:
+    #     print(row)
