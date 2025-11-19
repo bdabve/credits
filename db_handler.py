@@ -699,7 +699,7 @@ class Database:
                 JOIN clients c ON cr.client_id = c.id
                 LEFT JOIN paiement v on v.credit_id = cr.id
                 GROUP BY cr.id
-                ORDER BY c.nom DESC
+                ORDER BY cr.date_credit DESC, c.nom DESC
             """
             # WHERE cr.status = 'en cours'
             cursor.execute(query)
@@ -959,6 +959,31 @@ class Database:
     # ====================================
     # === PAYMENTS(VERSEMENT) METHODES ===
     # ====================================
+    def get_client_versement(self, client_id):
+        """
+        Retrieve all versements (payments) associated with a specific client.
+
+        Args:
+            client_id (int): The unique identifier of the client.
+
+        Returns:
+            list of tuple: A list of tuples, each containing the payment's id, date_versement,
+            montant (amount), and observation.
+
+        Raises:
+            sqlite3.DatabaseError: If a database error occurs during the query.
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                    SELECT id, date_versement, montant, observation
+                    FROM paiement WHERE client_id = ?
+                """,
+                (client_id,)
+            )
+            return cursor.fetchall()
+
     def get_credit_versements(self, credit_id):
         """
         Retrieve all versements (payments) associated with a specific credit.
@@ -1244,7 +1269,9 @@ if __name__ == '__main__':
     # print(result)
 
     #
-    result = db.get_situation(8)
+    # result = db.get_client_versement(8)
+    # print(result)
+    # result = db.get_situation(8)
     # for row in result:
     #     for key, value in row.items():
     #         if key == 'versements':
@@ -1257,9 +1284,9 @@ if __name__ == '__main__':
     #             print(f"{key} === {value}")
     #     print('-' * 30)
     import utils
-    result = utils.export_situation_to_excel(data=result, file_path='situation_client_gm1.xlsx')
-    # result = db.accompte_details('2025-09')
-    # result = utils.export_salary_report_openpyxl(result)
+    # result = utils.export_situation_to_excel(data=result, file_path='situation_client_gm1.xlsx')
+    result = db.accompte_details('2025-10')
+    result = utils.export_salary_report_openpyxl(result)
     print(result)
     # for row in result:
     #     print(row)

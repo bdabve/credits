@@ -496,7 +496,19 @@ class Credit(QtWidgets.QMainWindow):
         logger.info(f"Creating a new {persone_type}...")
         self.ui.labelNewPersonType.setText(persone_type)
         self.ui.labelNewPersonType.hide()
-
+        # TODO:
+        # ---- Add combobox for commune
+        # ---- add search with commune list
+        # ---- Add A versement Page
+        # ---- Handle the Employées Accompte with Month
+        # ---- Handle the Situation with versement
+        COMMUNE = [
+            "CHIFALO", "KHMISTI", "BOUHAROUN", "BIRARD", "DAMOUS", "LARHAT", 
+            "BOUISMAIL", "SIDI-MOUSSA", "HAMDANIA", "BELDJ", "CHAIBA",
+            "FOUKA", "BENHENNI", "AIN-LAHDJER", "SIDI-GHILES", "HADJRET-ENNOS", "DOUAOUDA",
+            "DOUAOUDA-MARINE", "FOUKA-MARINE", "KOLEA", "TIPAZA", "NADOR", "CHERCHEL",
+            "COMMUNEL", "CHAIG", "MESSELMOUN", "GHOURAYA", "HADJOUT",
+        ]
         # Remove and show lineEdits based on type( client | employe )
         employe_edits = [
             # self.ui.labelNewPersonJobText, # self.ui.editNewPersonJob,
@@ -1023,6 +1035,19 @@ class Credit(QtWidgets.QMainWindow):
         client = utils.get_column_value(self.ui.clientsTableWidget, self.ui.clientsTableWidget.currentRow(), 1)
         self.goto_page('credit', title=f"Crédits ({client})", from_btn=False)
 
+    def client_versement_list(self):
+        """
+        Display all versements for the selected persone.
+        """
+        client_id = self.get_item_id(self.ui.clientsTableWidget)
+        # logger.info(f"Displaying versements for the selected client({client_id})...")
+        rows = self.db.get_client_versement(client_id)
+        if not rows:
+            self.show_error_message("Aucun versement trouvé pour ce client.", success=False)
+            return
+
+        self.display_versement(rows)
+
     def refresh_clients_table(self):
         """
         Refresh the persone table widget.
@@ -1316,10 +1341,10 @@ class Credit(QtWidgets.QMainWindow):
 
         Display all versements in the table widget.
         """
-        headers = ['ID', 'Date', 'Montant', 'Observation']
-        utils.populate_table_widget(self.ui.versementTableWidget, rows, headers)
+        utils.populate_table_widget(self.ui.versementTableWidget, rows, utils.VERSEMENT_HEADERS)
         utils.set_table_column_sizes(self.ui.versementTableWidget, 80, 150, 150)
         self.ui.labelVersementCount.setText(f"Total: {len(rows)}")
+        self.setup_extraCenter_ui("List des Versements", self.ui.VersementPage)
 
     def ui_add_versement(self):
         """
@@ -1446,7 +1471,6 @@ class Credit(QtWidgets.QMainWindow):
             self.toggle_left_box(close=True)
             return
         self.display_versement(rows)
-        self.setup_extraCenter_ui("List des Versements", self.ui.VersementPage)
 
     def regle_credit(self):
         """

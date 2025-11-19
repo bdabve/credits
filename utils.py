@@ -77,6 +77,7 @@ CLIENTS_HEADERS = ["ID", "Nom", "Crédit", "Telephone", "Commune", "Observation"
 CREDITS_HEADERS = ['ID', 'Date', 'Client', 'Motif', 'Montant Total', 'Versement', 'Reste', 'Statut']
 
 CHARGE_HEADERS = ["ID", "Date", "Effectué par", "Montant", "Motif"]
+VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Observation']
 
 
 class ThemeManager:
@@ -327,6 +328,7 @@ def setup_main_callbacks(root):
     client_table_actions = [
         ('N. Crédit', qta.icon('mdi6.cash-plus', color=NEW_COLOR), lambda: root.ui_create_credit(client=True)),
         ('L. Crédits', qta.icon('ph.list', color=ICON_COLOR), root.client_credit_list),
+        ('L. Versement', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.client_versement_list),
         ('separator', None, None),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_client),
     ]
