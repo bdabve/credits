@@ -924,36 +924,53 @@ class Database:
             cursor = conn.cursor()
             # Get all credits for the client
             cursor.execute("""
-                SELECT id, date_credit, montant, reste, statut
+                SELECT SUM(montant), SUM(reste)
                 FROM credit
                 WHERE client_id = ?
-                ORDER BY date_credit DESC
             """, (client_id,))
             credits = cursor.fetchall()
-            result = []
-            for credit in credits:
-                credit_id, date_credit, montant, reste, statut = credit
-                # Get all versements for this credit
-                cursor.execute("""
-                    SELECT id, date_versement, montant, observation
+            cursor.execute("""
+                    SELECT date_versement, SUM(montant), observation
                     FROM paiement
-                    WHERE credit_id = ?
+                    WHERE client_id = ?
+                    GROUP BY date_versement
                     ORDER BY date_versement ASC
-                """, (credit_id,))
-                versements = cursor.fetchall()
+                """, (client_id,))
+            versements = cursor.fetchall()
+            result = []
+            for row in credits:
                 result.append({
-                    'date_credit': date_credit,
-                    'montant': montant,
-                    'reste': reste,
-                    'statut': statut,
-                    'versements': [
-                        {
-                            'date_versement': v[1],
-                            'montant': v[2],
-                            'observation': v[3]
-                        } for v in versements
-                    ]
+                    'total_montant': row[0], 'reste': row[1]})
+            for vers in versements:
+                result.append({
+                    'date_versement': vers[0],
+                    'montant': vers[1],
+                    'observation': vers[2]
                 })
+            # TODO: Situation détaillée
+            # for credit in credits:
+            #     credit_id, date_credit, montant, reste, statut = credit
+            #     # Get all versements for this credit
+            #     cursor.execute("""
+            #         SELECT id, date_versement, montant, observation
+            #         FROM paiement
+            #         WHERE credit_id = ?
+            #         ORDER BY date_versement ASC
+            #     """, (credit_id,))
+            #     versements = cursor.fetchall()
+            #     result.append({
+            #         'date_credit': date_credit,
+            #         'montant': montant,
+            #         'reste': reste,
+            #         'statut': statut,
+            #         'versements': [
+            #             {
+            #                 'date_versement': v[1],
+            #                 'montant': v[2],
+            #                 'observation': v[3]
+            #             } for v in versements
+            #         ]
+            #     })
             return result
 
     # ====================================
@@ -979,6 +996,7 @@ class Database:
                 """
                     SELECT id, date_versement, montant, observation
                     FROM paiement WHERE client_id = ?
+                    ORDER BY date_versement DESC
                 """,
                 (client_id,)
             )
@@ -1221,11 +1239,11 @@ class Database:
 if __name__ == '__main__':
     db = Database()
 
-    # query = "update charges set montant = 400 where id = 42"
-    # with db.connect() as conn:
-    #     cursor = conn.cursor()
-    #     cursor.execute(query)
-    #     conn.commit()
+    query = "update paiement set date_versement = '2025-09-07' where id = 9"
+    with db.connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute(query)
+        conn.commit()
 
     # result = db.get_sums_operations('2024-08')
     # print(result)
@@ -1271,7 +1289,9 @@ if __name__ == '__main__':
     #
     # result = db.get_client_versement(8)
     # print(result)
-    # result = db.get_situation(8)
+    result = db.get_situation(3)        # 8: GM1, 3: boughrassa
+    for row in result:
+        print(row)
     # for row in result:
     #     for key, value in row.items():
     #         if key == 'versements':
@@ -1283,10 +1303,10 @@ if __name__ == '__main__':
     #         else:
     #             print(f"{key} === {value}")
     #     print('-' * 30)
-    import utils
-    # result = utils.export_situation_to_excel(data=result, file_path='situation_client_gm1.xlsx')
-    result = db.accompte_details('2025-10')
-    result = utils.export_salary_report_openpyxl(result)
-    print(result)
+    # import utils
+    # # result = utils.export_situation_to_excel(data=result, file_path='situation_client_gm1.xlsx')
+    # result = db.accompte_details('2025-10')
+    # result = utils.export_salary_report_openpyxl(result)
+    # print(result)
     # for row in result:
     #     print(row)
