@@ -984,8 +984,7 @@ def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
     os.makedirs(output_dir, exist_ok=True)
 
     # ---- Build filename with timestamp ----
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    file_name = "accompte_report"
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = os.path.join(output_dir, f"{file_name}_{timestamp}.xlsx")
 
     wb = Workbook()

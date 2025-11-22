@@ -15,7 +15,844 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1198, 790)
-        MainWindow.setStyleSheet("")
+        MainWindow.setStyleSheet("/* /////////////////////////////////////////////////////////////////////////////////////////////////\n"
+"\n"
+"SET APP STYLESHEET - FULL STYLES HERE\n"
+"DARK THEME -\n"
+"///////////////////////////////////////////////////////////////////////////////////////////////// */\n"
+"\n"
+"/*------------------------------------------------------*/\n"
+"/*\n"
+"\n"
+"TopMenu: #202020;\n"
+"GreenColor: #114b35;\n"
+"ContentColor: #252525;\n"
+"HoverColor: ##383838;\n"
+"checkedbutton: #454545\n"
+"BorderColor:#303030;\n"
+"*/\n"
+"\n"
+"* {    \n"
+"    font: 13pt \"Lucida Casual\";\n"
+"}\n"
+"\n"
+"QWidget{\n"
+"    color: rgb(221, 221, 221);\n"
+"}\n"
+"\n"
+"/* ==================\n"
+"    == QMenu\n"
+"   ================== */\n"
+"QMenu {\n"
+"    font: 12pt \"Lucida Casual\";\n"
+"     background: #18191c;\n"
+"      border-radius: 4px;\n"
+"      border: 1px solid hsla(0, 0%, 100%, 0.3);\n"
+"      padding: 10px;\n"
+"      color: #b9bbbe;\n"
+"}\n"
+"\n"
+"QMenu::separator {\n"
+"    height: 1px;\n"
+"    background: hsla(0, 0%, 100%, 0.06);\n"
+"    margin: 4px;\n"
+"}\n"
+"QMenu::item {\n"
+"    color: #b9bbbe;\n"
+"    border-radius: 2px;\n"
+"    font-size: 14px;\n"
+"    line-height: 18px;\n"
+"    padding: 6px 8px;\n"
+"    min-width: 120px;\n"
+"    max-width: 240px;\n"
+"}\n"
+"\n"
+"QMenu::item:selected {\n"
+"    background-color: #3d3d3d;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QMenu::item:disabled {\n"
+"    color: #4f545c;\n"
+"}\n"
+"QMenu::icon {\n"
+"    left: 7px;\n"
+"    right: 7px;\n"
+"}\n"
+"\n"
+"QMenu::icon:checked {\n"
+"   position: absolute;\n"
+"   right: 7px;\n"
+"   top: 1px;\n"
+"   bottom: 1px;\n"
+"   image-position: right;\n"
+"   subcontrol-origin: padding;\n"
+"   subcontrol-position: right center;\n"
+"}\n"
+"\n"
+"/* ==================\n"
+"    == Tooltip\n"
+"   ================== */\n"
+"QToolTip {\n"
+"    color: #ffffff;\n"
+"    background-color: #202020;\n"
+"    border: 1px solid #696969;\n"
+"    text-align: left;\n"
+"    margin: 0px;\n"
+"    padding: 3px;    \n"
+"    font: 9pt \"Lucida Casual\";\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"/* ==================\n"
+"    == QGroupBox\n"
+"   ================== */\n"
+"QGroupBox {\n"
+"    background-color: #202020;\n"
+"    border: 2px solid #303030;\n"
+"    border-radius: 5px;\n"
+"    margin-top: 1ex; /* leave space at the top for the title */\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top left; /* position at the top center */\n"
+"    padding: 0 3px;\n"
+"    margin-left: 10px;\n"
+"    background-color: transparent;\n"
+"}\n"
+"/* ==================\n"
+"    == QPushButtons\n"
+"   ================== */\n"
+"QPushButton {\n"
+"    font: 13pt \"Lucida Casual\";\n"
+"    border-radius: 5px;\n"
+"    background-color: #343434;\n"
+"    border: none;\n"
+"    min-height: 50px;\n"
+"    padding: 3px 15px;\n"
+"}\n"
+"/* == Hover == */\n"
+"QPushButton:hover {\n"
+"    background-color: #383838;\n"
+"}\n"
+"/* == Pressed == */\n"
+"QPushButton:pressed {    \n"
+"    background-color: transparent;\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"/* == !Enabled == */\n"
+"QPushButton:!enabled {\n"
+"    color: #73797b;\n"
+"    background-color: #202020;\n"
+"}\n"
+"\n"
+"/* == Remove Menu Indicator from Button with Menu == */\n"
+"QPushButton::menu-indicator {\n"
+"    image: none;\n"
+"}\n"
+"\n"
+"/* === Buttons Just Icons == */\n"
+"#buttonRefreshClientsTable,\n"
+"#buttonDeleteClient,\n"
+"\n"
+"#buttonRefreshEmpolyeTable,\n"
+"#buttonDeleteEmploye,\n"
+"\n"
+"#buttonRefreshEmpolyeOperationTable,\n"
+"#buttonDeleteEmployeOperation,\n"
+"#buttonExportAccomptDetails,\n"
+"\n"
+"#buttonRefreshCreditTable,\n"
+"#buttonRefreshChargeTable,\n"
+"\n"
+"#buttonDeleteCredit,\n"
+"#buttonDeleteVersement,\n"
+"\n"
+"#buttonDeleteCharge,\n"
+"#buttonRefreshChargeTable\n"
+"{\n"
+"    min-width: 58;\n"
+"    min-height: 58;\n"
+"    padding: 0;\n"
+"}\n"
+"\n"
+"#frameSum QPushButton, \n"
+"#frameSum_2 QPushButton, \n"
+"#frameSum_3 QPushButton {\n"
+"    min-height: 80px;\n"
+"    min-width: 66px;\n"
+"    max-height: 80px;\n"
+"    max-width: 66px;\n"
+"    border-radius: 40px;\n"
+"    background-color: #25d366;\n"
+"}\n"
+"\n"
+"QGroupBox .QPushButton {\n"
+"    background: rgba(56, 56, 56, 109);\n"
+"}\n"
+"QGroupBox .QPushButton:hover {        \n"
+"    background-color: rgba(56, 56, 56, 167);\n"
+"}\n"
+"QGroupBox .QPushButton:pressed {    \n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"/*\n"
+"  == Close/Maximaze/Minimize QPushButtons ==\n"
+"  == Btn Close ExtraLeftContent ==\n"
+"*/\n"
+"#extraIconPlus {\n"
+"    background-color: transparent; \n"
+"    border: none;  \n"
+"    border-radius: 5px; \n"
+"    min-height: 30px;\n"
+"    min-width: 30px;\n"
+"    padding: 0;\n"
+"}\n"
+"\n"
+"#rightButtons QPushButton,\n"
+"#extraCloseColumnBtn,\n"
+"#buttonCloseMsgsFrame\n"
+" { \n"
+"    background-color: transparent; \n"
+"    border: none;  \n"
+"    border-radius: 5px; \n"
+"    min-height: 30px;\n"
+"    min-width: 40px;\n"
+"    padding: 0;\n"
+"}\n"
+"\n"
+"/* == Hover == */\n"
+"#rightButtons QPushButton:hover,\n"
+"#extraCloseColumnBtn:hover  { \n"
+"    background-color: #3d3d3d; \n"
+"    border-style: solid; \n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"/* == Pressed == */\n"
+"#rightButtons QPushButton:pressed,\n"
+"#extraCloseColumnBtn:pressed { \n"
+"    background-color: rgb(23, 26, 30); \n"
+"    border-style: solid; \n"
+"    border-radius: 4px; \n"
+"}\n"
+"\n"
+"#rightButtons #closeAppBtn:hover,\n"
+"#extraCloseColumnBtn:hover {\n"
+"    background-color: rgb(237, 51, 59);\n"
+"}\n"
+"\n"
+"/* == LEFT MENU Buttons == */\n"
+"#topMenu .QPushButton {    \n"
+"    font: 13pt \"Lucida Casual\";\n"
+"    border-radius: 7px;\n"
+"    background-color: transparent;\n"
+"    min-height: 45px;\n"
+"}\n"
+"\n"
+"/* == Hover == */\n"
+"#topMenu .QPushButton:hover {\n"
+"    background-color: #383838;\n"
+"}\n"
+"\n"
+"/* == Pressed == */\n"
+"#topMenu .QPushButton:pressed {    \n"
+"    background-color: transparent;\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"/* == Checked == */\n"
+"#topMenu .QPushButton:checked {\n"
+"    /*background-color: rgb(40, 44, 52);*/    \n"
+"    background-color: #454545;\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"/* == Toggle Button == */\n"
+"#toggleMenuButton {\n"
+"    border: none;\n"
+"    border-radius: 7px;\n"
+"    background-color: rgb(37, 41, 48);\n"
+"    color: rgb(113, 126, 149);\n"
+"    min-height: 38px;\n"
+"}\n"
+"#toggleMenuButton:hover {\n"
+"    background-color: rgb(40, 44, 52);\n"
+"}\n"
+"#toggleMenuButton:pressed {\n"
+"    background-color: rgb(189, 147, 249);\n"
+"}\n"
+"\n"
+"/* ==================\n"
+"    == QTableWidget\n"
+"   ================== */\n"
+"QTableWidget {    \n"
+"    background-color: transparent;\n"
+"    padding: 5px 0px;\n"
+"    border-radius: 5px;\n"
+"    gridline-color: rgb(52, 59, 72);\n"
+"    border-bottom: 1px solid rgb(44, 49, 60);    \n"
+"}\n"
+"QTableWidget::item{\n"
+"    border-color: #303030;\n"
+"    padding-left: 5px;\n"
+"    padding-right: 5px;\n"
+"    gridline-color: rgb(44, 49, 60);\n"
+"}\n"
+"QTableWidget::item:selected{\n"
+"    background-color: #3d3d3d;\n"
+"}\n"
+"QHeaderView::section{\n"
+"    background-color: #202020;\n"
+"    max-width: 30px;\n"
+"    border: 1px solid #303030;\n"
+"    border-style: none;\n"
+"    border-bottom: 1px solid rgb(44, 49, 60);\n"
+"    border-right: 1px solid #303030;\n"
+"}\n"
+"QTableWidget::horizontalHeader {    \n"
+"    background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QHeaderView::section:horizontal\n"
+"{\n"
+"    border: 1px solid #303030;\n"
+"    padding: 3px;\n"
+"}\n"
+"\n"
+"/* ==================================================\n"
+"    == QLineEdit, QSpinBox, QDoubleSpinbox, QDateEdit\n"
+"   ================================================== */\n"
+"QLineEdit, \n"
+"QSpinBox, \n"
+"QDoubleSpinBox, \n"
+"QDateEdit\n"
+"{\n"
+"    background-color: #202020;\n"
+"    border-radius: 5px;\n"
+"    padding: 2px;\n"
+"    padding-left: 10px;\n"
+"    selection-color: rgb(255, 255, 255);\n"
+"    selection-background-color: #3d3d3d;\n"
+"    min-height: 50px;\n"
+"}\n"
+"\n"
+"QLineEdit {\n"
+"    min-width: 350px;\n"
+"}\n"
+"\n"
+"/* == Hover == */\n"
+"QLineEdit:hover,\n"
+"QSpinBox:hover,\n"
+"QDoubleSpinBox:hover,\n"
+"QDateEdit:hover {\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"\n"
+"/* == Focus == */\n"
+"QLineEdit:focus,\n"
+"QSpinbox:focus,\n"
+"QDoubleSpinBox:focus,\n"
+"QDateEdit:focus {\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"\n"
+"/* == !Enabled == */\n"
+"QLineEdit:!enabled,\n"
+"QSpinBox:!enabled,\n"
+"QDoubleSpinBox:!enabled,\n"
+"QDateEdit:!enabled {\n"
+"    background-color: #202020;\n"
+"}\n"
+"\n"
+"QGroupBox QLineEdit {\n"
+"    border: 1px solid #303030;\n"
+"}\n"
+"\n"
+"QGroupBox QLineEdit:hover {\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"\n"
+"QGroupBox QLineEdit:focus {\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"\n"
+"/* ============================\n"
+"   == QPlainText ==\n"
+"   ============================ */\n"
+"QPlainTextEdit {\n"
+"    background-color: #202020;\n"
+"    border-radius: 5px;\n"
+"    padding: 10px;\n"
+"    selection-color: rgb(255, 255, 255);\n"
+"    selection-background-color: rgb(255, 121, 198);\n"
+"}\n"
+"QPlainTextEdit  QScrollBar:vertical {\n"
+"    width: 8px;\n"
+" }\n"
+"QPlainTextEdit  QScrollBar:horizontal {\n"
+"    height: 8px;\n"
+" }\n"
+"QPlainTextEdit:hover {\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"QPlainTextEdit:focus {\n"
+"    border: 2px solid #303030;\n"
+"}\n"
+"\n"
+"/* ============================\n"
+"   == QScrollBar ==\n"
+"   ============================ */\n"
+"QScrollBar:horizontal {\n"
+"    border: none;\n"
+"    background: rgb(52, 59, 72);\n"
+"    height: 8px;\n"
+"    margin: 0px 21px 0 21px;\n"
+"    border-radius: 0px;\n"
+"}\n"
+"QScrollBar::handle:horizontal {\n"
+"    background: #1dd1a1;\n"
+"    min-width: 25px;\n"
+"    border-radius: 4px\n"
+"}\n"
+"QScrollBar::add-line:horizontal {\n"
+"    border: none;\n"
+"    background: rgb(55, 63, 77);\n"
+"    width: 20px;\n"
+"    border-top-right-radius: 4px;\n"
+"    border-bottom-right-radius: 4px;\n"
+"    subcontrol-position: right;\n"
+"    subcontrol-origin: margin;\n"
+"}\n"
+"QScrollBar::sub-line:horizontal {\n"
+"    border: none;\n"
+"    background: rgb(55, 63, 77);\n"
+"    width: 20px;\n"
+"    border-top-left-radius: 4px;\n"
+"    border-bottom-left-radius: 4px;\n"
+"    subcontrol-position: left;\n"
+"    subcontrol-origin: margin;\n"
+"}\n"
+"QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal\n"
+"{\n"
+"     background: none;\n"
+"}\n"
+"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal\n"
+"{\n"
+"     background: none;\n"
+"}\n"
+" QScrollBar:vertical {\n"
+"    border: none;\n"
+"    background: rgb(52, 59, 72);\n"
+"    width: 8px;\n"
+"    margin: 21px 0 21px 0;\n"
+"    border-radius: 0px;\n"
+" }\n"
+" QScrollBar::handle:vertical {    \n"
+"    background: #1dd1a1;\n"
+"    min-height: 25px;\n"
+"    border-radius: 4px\n"
+" }\n"
+" QScrollBar::add-line:vertical {\n"
+"     border: none;\n"
+"    background: rgb(55, 63, 77);\n"
+"     height: 20px;\n"
+"    border-bottom-left-radius: 4px;\n"
+"    border-bottom-right-radius: 4px;\n"
+"     subcontrol-position: bottom;\n"
+"     subcontrol-origin: margin;\n"
+" }\n"
+" QScrollBar::sub-line:vertical {\n"
+"    border: none;\n"
+"    background: rgb(55, 63, 77);\n"
+"     height: 20px;\n"
+"    border-top-left-radius: 4px;\n"
+"    border-top-right-radius: 4px;\n"
+"     subcontrol-position: top;\n"
+"     subcontrol-origin: margin;\n"
+" }\n"
+" QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {\n"
+"     background: none;\n"
+" }\n"
+"\n"
+" QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
+"     background: none;\n"
+" }\n"
+"\n"
+"/* ============================\n"
+"   == QCheckBox ==\n"
+"   ============================ */\n"
+"QCheckBox::indicator {\n"
+"    border: 3px solid rgb(52, 59, 72);\n"
+"    width: 15px;\n"
+"    height: 15px;\n"
+"    border-radius: 10px;\n"
+"    background: rgb(44, 49, 60);\n"
+"}\n"
+"QCheckBox::indicator:hover {\n"
+"    border: 3px solid rgb(58, 66, 81);\n"
+"}\n"
+"QCheckBox::indicator:checked {\n"
+"    background: 3px solid rgb(52, 59, 72);\n"
+"    border: 3px solid rgb(52, 59, 72);    \n"
+"    background-image: url(:/icons/images/icons/cil-check-alt.png);\n"
+"}\n"
+"\n"
+"/* ============================\n"
+"   == QRadioButtons ==\n"
+"   ============================ */\n"
+"QRadioButton::indicator {\n"
+"    border: 3px solid rgb(52, 59, 72);\n"
+"    width: 15px;\n"
+"    height: 15px;\n"
+"    border-radius: 10px;\n"
+"    background: rgb(44, 49, 60);\n"
+"}\n"
+"QRadioButton::indicator:hover {\n"
+"    border: 3px solid rgb(58, 66, 81);\n"
+"}\n"
+"QRadioButton::indicator:checked {\n"
+"    background: 3px solid rgb(94, 106, 130);\n"
+"    border: 3px solid rgb(52, 59, 72);    \n"
+"}\n"
+"\n"
+"/* ============================\n"
+"   == QComboBox ==\n"
+"   ============================ */\n"
+"QComboBox {\n"
+"    background-color: #202020;\n"
+"    border-radius: 5px;\n"
+"    border: 2px solid #303030;\n"
+"    padding: 0px 5px;\n"
+"    padding-left: 10px;\n"
+"    min-height: 50px;\n"
+"}\n"
+"QComboBox:hover{\n"
+"    border: 2px solid #3d3d3d;\n"
+"}\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 25px; \n"
+"    border-left-width: 3px;\n"
+"    border-left-color: #303030;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;    \n"
+"    background-image: url(:/icons/images/icons/cil-arrow-bottom.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-reperat;    \n"
+" }\n"
+"QComboBox QAbstractItemView {\n"
+"    color: #1dd1a1;    \n"
+"    background-color: #18191c;\n"
+"    border: 1px solid hsla(0, 0%, 100%, 0.3);\n"
+"    padding: 8px 10px;\n"
+"    selection-background-color: #3d3d3d;\n"
+"\n"
+"}\n"
+"QComboBox QAbstractItemView::item {\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"/* ============================\n"
+"   == QSlider ==\n"
+"   ============================ */\n"
+"QSlider::groove:horizontal {\n"
+"    border-radius: 5px;\n"
+"    height: 10px;\n"
+"    margin: 0px;\n"
+"    background-color: rgb(52, 59, 72);\n"
+"}\n"
+"QSlider::groove:horizontal:hover {\n"
+"    background-color: rgb(55, 62, 76);\n"
+"}\n"
+"QSlider::handle:horizontal {\n"
+"    background-color: rgb(189, 147, 249);\n"
+"    border: none;\n"
+"    height: 10px;\n"
+"    width: 10px;\n"
+"    margin: 0px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"QSlider::handle:horizontal:hover {\n"
+"    background-color: rgb(195, 155, 255);\n"
+"}\n"
+"QSlider::handle:horizontal:pressed {\n"
+"    background-color: rgb(255, 121, 198);\n"
+"}\n"
+"\n"
+"QSlider::groove:vertical {\n"
+"    border-radius: 5px;\n"
+"    width: 10px;\n"
+"    margin: 0px;\n"
+"    background-color: rgb(52, 59, 72);\n"
+"}\n"
+"QSlider::groove:vertical:hover {\n"
+"    background-color: rgb(55, 62, 76);\n"
+"}\n"
+"QSlider::handle:vertical {\n"
+"    background-color: rgb(189, 147, 249);\n"
+"    border: none;\n"
+"    height: 10px;\n"
+"    width: 10px;\n"
+"    margin: 0px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"QSlider::handle:vertical:hover {\n"
+"    background-color: rgb(195, 155, 255);\n"
+"}\n"
+"QSlider::handle:vertical:pressed {\n"
+"    background-color: rgb(255, 121, 198);\n"
+"}\n"
+"\n"
+"/* ============================\n"
+"   == QCommandLinkButton ==\n"
+"   ============================ */\n"
+"QCommandLinkButton {    \n"
+"    color: rgb(255, 121, 198);\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"    color: rgb(255, 170, 255);\n"
+"}\n"
+"QCommandLinkButton:hover {    \n"
+"    color: rgb(255, 170, 255);\n"
+"    background-color: rgb(44, 49, 60);\n"
+"}\n"
+"QCommandLinkButton:pressed {    \n"
+"    color: rgb(189, 147, 249);\n"
+"    background-color: rgb(52, 58, 71);\n"
+"}\n"
+"\n"
+"/* ================================\n"
+"   == Background Colors\n"
+"   ================================ */\n"
+"#centralWidget {\n"
+"    background-color: rgb(33, 37, 43);\n"
+"    border: 1px solid rgb(44, 49, 58);\n"
+"}\n"
+"\n"
+"#contentWidget {\n"
+"    background-color: #202020;\n"
+"    border: 1px solid rgb(44, 49, 58);\n"
+"}\n"
+"\n"
+"#widgetMainContent {\n"
+"    background-color: #252525;\n"
+"    border-top-left-radius:  15px;\n"
+"}\n"
+"\n"
+"#EmployesPage,\n"
+"#ClientsPage,\n"
+"#CreditPage,\n"
+"#VersementPage,\n"
+"#EmployeOperationsPage,\n"
+"#ChargePage\n"
+"{\n"
+"    background-color: #252525;\n"
+"}\n"
+"\n"
+"#labelDate,\n"
+"#labelHijri {\n"
+"    /* font: 14pt \"Noto Sans Arabic\";*/\n"
+"    padding-right: 10px;\n"
+"}\n"
+"\n"
+"/* ============================\n"
+"   == Left Menu ==\n"
+"   ============================ */\n"
+"#leftMenuBg {\n"
+"    background-color: #202020;\n"
+"}\n"
+"#buttonIcon {\n"
+"    /*background-color: rgb(33, 37, 43);\n"
+"    /*background-image: url(:/images/images/images/app_icon.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;*/\n"
+"    padding: 0;\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"#labelUsername {\n"
+"    font: 11pt \"Lucida Casual\";\n"
+"}\n"
+"\n"
+"#labelUserGroupe {\n"
+"    font: 8pt \"Lucida Casual\";\n"
+"    color: rgb(189, 147, 249);\n"
+"}\n"
+"\n"
+"/* Title Menu */\n"
+"#titleRightInfo\n"
+"{\n"
+"    font: 75 italic 17pt \"Lucida Casual\";\n"
+"    padding-left: 10px;\n"
+"}\n"
+"\n"
+"/* ============================\n"
+"    == QLabels\n"
+"===============================*/\n"
+"\n"
+"/* == SUM Labels ==*/\n"
+"#labelTotalCredits,\n"
+"#labelTotalCreditClients,\n"
+"#labelAddVersementMontant,\n"
+"#labelTotalCharge {\n"
+"    font: 14pt \"Lucida Casual\";\n"
+"    background: #3b3230;\n"
+"    color: #f77861;\n"
+"    padding: 12px 10px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"/* == LABEL COUNTS === */\n"
+"#labelClientsCount,\n"
+"#labelCreditCount,\n"
+"#labelEmployesCount,\n"
+"#labelAccompteCount,\n"
+"#labelVersementCount,\n"
+"#labelChargeCount\n"
+"{\n"
+"    font: 10pt \"Lucida Casual\";\n"
+"    background-color: #0d4c3f;\n"
+"    color: #c4d0cd;\n"
+"    padding: 0px 10px;\n"
+"    border-radius: 6px;\n"
+"}\n"
+"\n"
+"/* == Accompte SUMS == */\n"
+"#frameSum,\n"
+"#frameSum_2,\n"
+"#frameSum_3\n"
+"{\n"
+"    background-color: #1d1f1f;\n"
+"    border-radius: 15px;\n"
+"}\n"
+"\n"
+"#frameSum QPushButton {\n"
+"    min-width: 78px;\n"
+"}\n"
+"#labelSumAvance,\n"
+"#labelSumRetenu,\n"
+"#labelSumPrime {\n"
+"    color: #21c063;\n"
+"    font: italic 15pt \"Lucida Casual\";\n"
+"}\n"
+"\n"
+"#labelTitleSumAvance,\n"
+"#labelTitleSumRetenu,\n"
+"#labelTitleSumPrime {\n"
+"    color: #929393;\n"
+"    font: 9pt \"Lucida Sans\";\n"
+"}\n"
+"\n"
+"/* =============\n"
+"    == LINES\n"
+"   ============= */\n"
+"#line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7, #line_8 {\n"
+"    background-color: #4a4a4a;\n"
+"}\n"
+"\n"
+"/* ==================\n"
+"   == ExtraLeftBox\n"
+"   ================== */\n"
+"#extraLeftBox {\n"
+"    background-color: #272727;\n"
+"    border: 2px solid #202020;\n"
+"    border-left-color: #2C3E50;\n"
+"}\n"
+"#AddCreditPage,\n"
+"#AddCreditVersementPage,\n"
+"#AddPersonePage,\n"
+"#VersementPage,\n"
+"#AddEmpOperationPage,\n"
+"#salairePage,\n"
+"#addChargePage\n"
+"{    \n"
+"    background-color: #272727;\n"
+"}\n"
+"#extraTopBg{    \n"
+"    background-color: #202020;\n"
+"}\n"
+"\n"
+"/* == Icon == */\n"
+"#extraIcon {\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat;\n"
+"    background-image: url(:/icons/images/icons/cil-plus.png);\n"
+"}\n"
+"\n"
+"/* Label */\n"
+"#extraLabelTitle { color: #00AFF0; }\n"
+"\n"
+"#widgetSalairePage QLabel {\n"
+"    padding: 5px;\n"
+"    font: 75 14pt \"Lucida Casual\";\n"
+"    border: 1px solid rgb(44, 49, 60);\n"
+"    border-top: none;\n"
+"    border-left: none;\n"
+"    border-right: none;\n"
+"}\n"
+"\n"
+"/* == Extra Content == */\n"
+"#extraContent{\n"
+"    /*border-top: 3px solid #2a2a2a;*/\n"
+"        border-top-left-radius: 15px;\n"
+"}\n"
+"\n"
+"/* == Extra Top Menus == */\n"
+"#extraTopMenu .QPushButton {\n"
+"background-position: left center;\n"
+"    background-repeat: no-repeat;\n"
+"    border: none;\n"
+"    border-left: 22px solid transparent;\n"
+"    background-color:transparent;\n"
+"    text-align: left;\n"
+"    padding-left: 44px;\n"
+"}\n"
+"#extraTopMenu .QPushButton:hover {\n"
+"    background-color: rgb(40, 44, 52);\n"
+"}\n"
+"#extraTopMenu .QPushButton:pressed {    \n"
+"    background-color: rgb(189, 147, 249);\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"/* =================\n"
+"   == UPBAR\n"
+"   ================= */\n"
+"#contentTopBg{    \n"
+"    background-color: #202020;\n"
+"}\n"
+"\n"
+"/* ==================\n"
+"   == Frame Messages\n"
+"   ================== */\n"
+"#frameMsgs {\n"
+"    /*background: rgba(38, 162, 105, 88);*/\n"
+"    background-color: rgba(60, 184, 127, 47);\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"#labelMsgs {\n"
+"    color: #44e37b;\n"
+"    /*color: #f77861;*/\n"
+"    padding: 5px 7px;\n"
+"    border-top-left-radius: 5px;\n"
+"    border-bottom-left-radius: 5px;\n"
+"}\n"
+"\n"
+"#frameMsgs QPushButton {\n"
+"    background: transparent;\n"
+"    border: none;\n"
+"    border-radius: 0;\n"
+"    border-top-right-radius: 5px;    \n"
+"    border-bottom-right-radius: 5px;\n"
+"}\n"
+"#frameMsgs QPushButton:hover {\n"
+"    border: none;\n"
+"}\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("")
         self.centralwidget.setObjectName("centralwidget")
@@ -174,7 +1011,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonEmployesPage.sizePolicy().hasHeightForWidth())
         self.buttonEmployesPage.setSizePolicy(sizePolicy)
-        self.buttonEmployesPage.setMinimumSize(QtCore.QSize(0, 53))
+        self.buttonEmployesPage.setMinimumSize(QtCore.QSize(0, 51))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
         font.setPointSize(13)
@@ -521,7 +1358,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_16.setObjectName("horizontalLayout_16")
         self.buttonDeleteVersement = QtWidgets.QPushButton(self.versementToolBar)
         self.buttonDeleteVersement.setEnabled(False)
-        self.buttonDeleteVersement.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonDeleteVersement.setMinimumSize(QtCore.QSize(58, 58))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
         font.setPointSize(13)
@@ -630,7 +1467,7 @@ class Ui_MainWindow(object):
         self.editEmployeOperationMotif.setObjectName("editEmployeOperationMotif")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.editEmployeOperationMotif)
         self.buttonEmployeSaveOperation = QtWidgets.QPushButton(self.AddEmpOperationPage)
-        self.buttonEmployeSaveOperation.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonEmployeSaveOperation.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonEmployeSaveOperation.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonEmployeSaveOperation.setIconSize(QtCore.QSize(20, 20))
         self.buttonEmployeSaveOperation.setObjectName("buttonEmployeSaveOperation")
@@ -669,7 +1506,7 @@ class Ui_MainWindow(object):
         self.label_21.setObjectName("label_21")
         self.horizontalLayout_24.addWidget(self.label_21)
         self.cbBoxSalaireEmpMonth = QtWidgets.QComboBox(self.widgetSalairePage)
-        self.cbBoxSalaireEmpMonth.setMinimumSize(QtCore.QSize(98, 44))
+        self.cbBoxSalaireEmpMonth.setMinimumSize(QtCore.QSize(98, 54))
         self.cbBoxSalaireEmpMonth.setObjectName("cbBoxSalaireEmpMonth")
         self.cbBoxSalaireEmpMonth.addItem("")
         self.cbBoxSalaireEmpMonth.addItem("")
@@ -807,7 +1644,7 @@ class Ui_MainWindow(object):
         self.editChargeMotif.setObjectName("editChargeMotif")
         self.formLayout_6.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.editChargeMotif)
         self.buttonSaveCharge = QtWidgets.QPushButton(self.widget)
-        self.buttonSaveCharge.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonSaveCharge.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonSaveCharge.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonSaveCharge.setIconSize(QtCore.QSize(20, 20))
         self.buttonSaveCharge.setObjectName("buttonSaveCharge")
@@ -876,7 +1713,7 @@ class Ui_MainWindow(object):
         font.setPointSize(17)
         font.setBold(False)
         font.setItalic(True)
-        font.setWeight(50)
+        font.setWeight(9)
         self.titleRightInfo.setFont(font)
         self.titleRightInfo.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.titleRightInfo.setObjectName("titleRightInfo")
@@ -1020,7 +1857,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonCloseMsgsFrame.sizePolicy().hasHeightForWidth())
         self.buttonCloseMsgsFrame.setSizePolicy(sizePolicy)
-        self.buttonCloseMsgsFrame.setMinimumSize(QtCore.QSize(0, 56))
+        self.buttonCloseMsgsFrame.setMinimumSize(QtCore.QSize(40, 30))
         self.buttonCloseMsgsFrame.setMaximumSize(QtCore.QSize(40, 40))
         self.buttonCloseMsgsFrame.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonCloseMsgsFrame.setText("")
@@ -1058,7 +1895,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.editSearchClients.sizePolicy().hasHeightForWidth())
         self.editSearchClients.setSizePolicy(sizePolicy)
-        self.editSearchClients.setMinimumSize(QtCore.QSize(364, 56))
+        self.editSearchClients.setMinimumSize(QtCore.QSize(362, 54))
         self.editSearchClients.setMaximumSize(QtCore.QSize(260, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -1078,7 +1915,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonRefreshClientsTable.sizePolicy().hasHeightForWidth())
         self.buttonRefreshClientsTable.setSizePolicy(sizePolicy)
-        self.buttonRefreshClientsTable.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonRefreshClientsTable.setMinimumSize(QtCore.QSize(58, 58))
         self.buttonRefreshClientsTable.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonRefreshClientsTable.setText("")
         self.buttonRefreshClientsTable.setIconSize(QtCore.QSize(25, 25))
@@ -1098,7 +1935,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonNewClient.sizePolicy().hasHeightForWidth())
         self.buttonNewClient.setSizePolicy(sizePolicy)
-        self.buttonNewClient.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonNewClient.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonNewClient.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewClient.setStyleSheet("")
         self.buttonNewClient.setIcon(icon8)
@@ -1112,7 +1949,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonClientNewCredit.sizePolicy().hasHeightForWidth())
         self.buttonClientNewCredit.setSizePolicy(sizePolicy)
-        self.buttonClientNewCredit.setMinimumSize(QtCore.QSize(108, 58))
+        self.buttonClientNewCredit.setMinimumSize(QtCore.QSize(108, 56))
         self.buttonClientNewCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonClientNewCredit.setIcon(icon8)
         self.buttonClientNewCredit.setIconSize(QtCore.QSize(28, 28))
@@ -1125,7 +1962,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonClientCreditList.sizePolicy().hasHeightForWidth())
         self.buttonClientCreditList.setSizePolicy(sizePolicy)
-        self.buttonClientCreditList.setMinimumSize(QtCore.QSize(108, 58))
+        self.buttonClientCreditList.setMinimumSize(QtCore.QSize(108, 56))
         self.buttonClientCreditList.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonClientCreditList.setIconSize(QtCore.QSize(28, 28))
         self.buttonClientCreditList.setObjectName("buttonClientCreditList")
@@ -1136,7 +1973,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonClientActions.sizePolicy().hasHeightForWidth())
         self.buttonClientActions.setSizePolicy(sizePolicy)
-        self.buttonClientActions.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonClientActions.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonClientActions.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.buttonClientActions.setIconSize(QtCore.QSize(28, 28))
         self.buttonClientActions.setObjectName("buttonClientActions")
@@ -1153,7 +1990,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonDeleteClient.sizePolicy().hasHeightForWidth())
         self.buttonDeleteClient.setSizePolicy(sizePolicy)
-        self.buttonDeleteClient.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonDeleteClient.setMinimumSize(QtCore.QSize(58, 58))
         self.buttonDeleteClient.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonDeleteClient.setText("")
         icon9 = QtGui.QIcon()
@@ -1258,7 +2095,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.editSearchCredit = QtWidgets.QLineEdit(self.partiesToolBarFrame)
-        self.editSearchCredit.setMinimumSize(QtCore.QSize(364, 56))
+        self.editSearchCredit.setMinimumSize(QtCore.QSize(362, 54))
         self.editSearchCredit.setMaximumSize(QtCore.QSize(350, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -1276,7 +2113,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonRefreshCreditTable.sizePolicy().hasHeightForWidth())
         self.buttonRefreshCreditTable.setSizePolicy(sizePolicy)
-        self.buttonRefreshCreditTable.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonRefreshCreditTable.setMinimumSize(QtCore.QSize(58, 58))
         self.buttonRefreshCreditTable.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonRefreshCreditTable.setText("")
         icon10 = QtGui.QIcon()
@@ -1291,7 +2128,7 @@ class Ui_MainWindow(object):
         self.label_12.setObjectName("label_12")
         self.horizontalLayout_12.addWidget(self.label_12)
         self.cbBoxCreditByStatus = QtWidgets.QComboBox(self.partiesToolBarFrame)
-        self.cbBoxCreditByStatus.setMinimumSize(QtCore.QSize(200, 44))
+        self.cbBoxCreditByStatus.setMinimumSize(QtCore.QSize(200, 54))
         self.cbBoxCreditByStatus.setObjectName("cbBoxCreditByStatus")
         self.cbBoxCreditByStatus.addItem("")
         self.cbBoxCreditByStatus.addItem("")
@@ -1310,7 +2147,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonNewCredit.sizePolicy().hasHeightForWidth())
         self.buttonNewCredit.setSizePolicy(sizePolicy)
-        self.buttonNewCredit.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonNewCredit.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonNewCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewCredit.setIcon(icon8)
         self.buttonNewCredit.setIconSize(QtCore.QSize(28, 28))
@@ -1323,7 +2160,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonCreditAddVersement.sizePolicy().hasHeightForWidth())
         self.buttonCreditAddVersement.setSizePolicy(sizePolicy)
-        self.buttonCreditAddVersement.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonCreditAddVersement.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonCreditAddVersement.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonCreditAddVersement.setIcon(icon8)
         self.buttonCreditAddVersement.setIconSize(QtCore.QSize(28, 28))
@@ -1336,7 +2173,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonCreditVersement.sizePolicy().hasHeightForWidth())
         self.buttonCreditVersement.setSizePolicy(sizePolicy)
-        self.buttonCreditVersement.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonCreditVersement.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonCreditVersement.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         icon11 = QtGui.QIcon()
         icon11.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-align-center.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -1351,7 +2188,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonRegleCredit.sizePolicy().hasHeightForWidth())
         self.buttonRegleCredit.setSizePolicy(sizePolicy)
-        self.buttonRegleCredit.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonRegleCredit.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonRegleCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         icon12 = QtGui.QIcon()
         icon12.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-check-alt.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -1370,7 +2207,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonCreditActions.sizePolicy().hasHeightForWidth())
         self.buttonCreditActions.setSizePolicy(sizePolicy)
-        self.buttonCreditActions.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonCreditActions.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonCreditActions.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.buttonCreditActions.setIconSize(QtCore.QSize(28, 28))
         self.buttonCreditActions.setObjectName("buttonCreditActions")
@@ -1382,7 +2219,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonDeleteCredit.sizePolicy().hasHeightForWidth())
         self.buttonDeleteCredit.setSizePolicy(sizePolicy)
-        self.buttonDeleteCredit.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonDeleteCredit.setMinimumSize(QtCore.QSize(58, 58))
         self.buttonDeleteCredit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonDeleteCredit.setText("")
         icon13 = QtGui.QIcon()
@@ -1492,7 +2329,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.editSearchEmploye.sizePolicy().hasHeightForWidth())
         self.editSearchEmploye.setSizePolicy(sizePolicy)
-        self.editSearchEmploye.setMinimumSize(QtCore.QSize(364, 56))
+        self.editSearchEmploye.setMinimumSize(QtCore.QSize(362, 54))
         self.editSearchEmploye.setMaximumSize(QtCore.QSize(260, 16777215))
         font = QtGui.QFont()
         font.setFamily("Lucida Casual")
@@ -1512,7 +2349,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonRefreshEmpolyeTable.sizePolicy().hasHeightForWidth())
         self.buttonRefreshEmpolyeTable.setSizePolicy(sizePolicy)
-        self.buttonRefreshEmpolyeTable.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonRefreshEmpolyeTable.setMinimumSize(QtCore.QSize(58, 58))
         self.buttonRefreshEmpolyeTable.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonRefreshEmpolyeTable.setText("")
         self.buttonRefreshEmpolyeTable.setIconSize(QtCore.QSize(25, 25))
@@ -1520,6 +2357,27 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.buttonRefreshEmpolyeTable)
         spacerItem15 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem15)
+        self.label_15 = QtWidgets.QLabel(self.searchFrame)
+        self.label_15.setObjectName("label_15")
+        self.horizontalLayout_4.addWidget(self.label_15)
+        self.spinBoxExportAccpmptMonth = QtWidgets.QSpinBox(self.searchFrame)
+        self.spinBoxExportAccpmptMonth.setMinimumSize(QtCore.QSize(96, 54))
+        self.spinBoxExportAccpmptMonth.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
+        self.spinBoxExportAccpmptMonth.setMinimum(1)
+        self.spinBoxExportAccpmptMonth.setMaximum(12)
+        self.spinBoxExportAccpmptMonth.setObjectName("spinBoxExportAccpmptMonth")
+        self.horizontalLayout_4.addWidget(self.spinBoxExportAccpmptMonth)
+        self.buttonExportAccomptDetails = QtWidgets.QPushButton(self.searchFrame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.buttonExportAccomptDetails.sizePolicy().hasHeightForWidth())
+        self.buttonExportAccomptDetails.setSizePolicy(sizePolicy)
+        self.buttonExportAccomptDetails.setMinimumSize(QtCore.QSize(58, 58))
+        self.buttonExportAccomptDetails.setText("")
+        self.buttonExportAccomptDetails.setIconSize(QtCore.QSize(30, 30))
+        self.buttonExportAccomptDetails.setObjectName("buttonExportAccomptDetails")
+        self.horizontalLayout_4.addWidget(self.buttonExportAccomptDetails)
         self.verticalLayout_22.addWidget(self.searchFrame)
         self.groupBoxToolBar_2 = QtWidgets.QGroupBox(self.employeWidgetContainer)
         self.groupBoxToolBar_2.setObjectName("groupBoxToolBar_2")
@@ -1532,7 +2390,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonNewEmploye.sizePolicy().hasHeightForWidth())
         self.buttonNewEmploye.setSizePolicy(sizePolicy)
-        self.buttonNewEmploye.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonNewEmploye.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonNewEmploye.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewEmploye.setStyleSheet("")
         self.buttonNewEmploye.setIcon(icon8)
@@ -1546,7 +2404,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonEmployeNewPrime.sizePolicy().hasHeightForWidth())
         self.buttonEmployeNewPrime.setSizePolicy(sizePolicy)
-        self.buttonEmployeNewPrime.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonEmployeNewPrime.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonEmployeNewPrime.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonEmployeNewPrime.setStyleSheet("")
         self.buttonEmployeNewPrime.setIcon(icon8)
@@ -1560,7 +2418,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonEmployeNewAvance.sizePolicy().hasHeightForWidth())
         self.buttonEmployeNewAvance.setSizePolicy(sizePolicy)
-        self.buttonEmployeNewAvance.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonEmployeNewAvance.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonEmployeNewAvance.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonEmployeNewAvance.setStyleSheet("")
         self.buttonEmployeNewAvance.setIcon(icon8)
@@ -1574,7 +2432,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonEmployeNewRetenu.sizePolicy().hasHeightForWidth())
         self.buttonEmployeNewRetenu.setSizePolicy(sizePolicy)
-        self.buttonEmployeNewRetenu.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonEmployeNewRetenu.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonEmployeNewRetenu.setStyleSheet("")
         icon14 = QtGui.QIcon()
         icon14.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-minus.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -1589,7 +2447,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonCalculateSalaire.sizePolicy().hasHeightForWidth())
         self.buttonCalculateSalaire.setSizePolicy(sizePolicy)
-        self.buttonCalculateSalaire.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonCalculateSalaire.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonCalculateSalaire.setStyleSheet("")
         icon15 = QtGui.QIcon()
         icon15.addPixmap(QtGui.QPixmap(":/icons/images/icons/cil-exposure.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -1603,17 +2461,6 @@ class Ui_MainWindow(object):
         self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_3.setObjectName("line_3")
         self.horizontalLayout.addWidget(self.line_3)
-        self.buttonExportAccomptDetails = QtWidgets.QPushButton(self.groupBoxToolBar_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.buttonExportAccomptDetails.sizePolicy().hasHeightForWidth())
-        self.buttonExportAccomptDetails.setSizePolicy(sizePolicy)
-        self.buttonExportAccomptDetails.setMinimumSize(QtCore.QSize(52, 52))
-        self.buttonExportAccomptDetails.setText("")
-        self.buttonExportAccomptDetails.setIconSize(QtCore.QSize(30, 30))
-        self.buttonExportAccomptDetails.setObjectName("buttonExportAccomptDetails")
-        self.horizontalLayout.addWidget(self.buttonExportAccomptDetails)
         self.buttonDeleteEmploye = QtWidgets.QPushButton(self.groupBoxToolBar_2)
         self.buttonDeleteEmploye.setEnabled(False)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -1621,7 +2468,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonDeleteEmploye.sizePolicy().hasHeightForWidth())
         self.buttonDeleteEmploye.setSizePolicy(sizePolicy)
-        self.buttonDeleteEmploye.setMinimumSize(QtCore.QSize(52, 52))
+        self.buttonDeleteEmploye.setMinimumSize(QtCore.QSize(58, 58))
         self.buttonDeleteEmploye.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonDeleteEmploye.setText("")
         self.buttonDeleteEmploye.setIcon(icon9)
@@ -1728,8 +2575,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonIconSumPrime.sizePolicy().hasHeightForWidth())
         self.buttonIconSumPrime.setSizePolicy(sizePolicy)
-        self.buttonIconSumPrime.setMinimumSize(QtCore.QSize(110, 88))
-        self.buttonIconSumPrime.setMaximumSize(QtCore.QSize(98, 88))
+        self.buttonIconSumPrime.setMinimumSize(QtCore.QSize(108, 86))
+        self.buttonIconSumPrime.setMaximumSize(QtCore.QSize(96, 86))
         self.buttonIconSumPrime.setText("")
         self.buttonIconSumPrime.setIconSize(QtCore.QSize(40, 35))
         self.buttonIconSumPrime.setObjectName("buttonIconSumPrime")
@@ -1760,8 +2607,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonIconSumAvance.sizePolicy().hasHeightForWidth())
         self.buttonIconSumAvance.setSizePolicy(sizePolicy)
-        self.buttonIconSumAvance.setMinimumSize(QtCore.QSize(98, 88))
-        self.buttonIconSumAvance.setMaximumSize(QtCore.QSize(98, 88))
+        self.buttonIconSumAvance.setMinimumSize(QtCore.QSize(96, 86))
+        self.buttonIconSumAvance.setMaximumSize(QtCore.QSize(96, 86))
         self.buttonIconSumAvance.setText("")
         self.buttonIconSumAvance.setIconSize(QtCore.QSize(40, 35))
         self.buttonIconSumAvance.setObjectName("buttonIconSumAvance")
@@ -1787,8 +2634,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_26.setContentsMargins(-1, 15, -1, 15)
         self.horizontalLayout_26.setObjectName("horizontalLayout_26")
         self.buttonIconSumRetenu = QtWidgets.QPushButton(self.frameSum_3)
-        self.buttonIconSumRetenu.setMinimumSize(QtCore.QSize(98, 88))
-        self.buttonIconSumRetenu.setMaximumSize(QtCore.QSize(98, 88))
+        self.buttonIconSumRetenu.setMinimumSize(QtCore.QSize(96, 86))
+        self.buttonIconSumRetenu.setMaximumSize(QtCore.QSize(96, 86))
         self.buttonIconSumRetenu.setText("")
         self.buttonIconSumRetenu.setIconSize(QtCore.QSize(40, 35))
         self.buttonIconSumRetenu.setObjectName("buttonIconSumRetenu")
@@ -1826,7 +2673,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonRefreshAccompteTable.sizePolicy().hasHeightForWidth())
         self.buttonRefreshAccompteTable.setSizePolicy(sizePolicy)
-        self.buttonRefreshAccompteTable.setMinimumSize(QtCore.QSize(50, 50))
+        self.buttonRefreshAccompteTable.setMinimumSize(QtCore.QSize(50, 56))
         self.buttonRefreshAccompteTable.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonRefreshAccompteTable.setText("")
         self.buttonRefreshAccompteTable.setIconSize(QtCore.QSize(30, 30))
@@ -1839,7 +2686,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonDeleteAccompte.sizePolicy().hasHeightForWidth())
         self.buttonDeleteAccompte.setSizePolicy(sizePolicy)
-        self.buttonDeleteAccompte.setMinimumSize(QtCore.QSize(50, 50))
+        self.buttonDeleteAccompte.setMinimumSize(QtCore.QSize(50, 56))
         self.buttonDeleteAccompte.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonDeleteAccompte.setText("")
         self.buttonDeleteAccompte.setIcon(icon9)
@@ -1867,7 +2714,7 @@ class Ui_MainWindow(object):
         self.label_20.setObjectName("label_20")
         self.verticalLayout_20.addWidget(self.label_20, 0, QtCore.Qt.AlignBottom)
         self.cbBoxEmployeOperationByName = QtWidgets.QComboBox(self.frameToolBar_4)
-        self.cbBoxEmployeOperationByName.setMinimumSize(QtCore.QSize(220, 44))
+        self.cbBoxEmployeOperationByName.setMinimumSize(QtCore.QSize(220, 54))
         self.cbBoxEmployeOperationByName.setObjectName("cbBoxEmployeOperationByName")
         self.cbBoxEmployeOperationByName.addItem("")
         self.verticalLayout_20.addWidget(self.cbBoxEmployeOperationByName)
@@ -1880,7 +2727,7 @@ class Ui_MainWindow(object):
         self.label_18.setObjectName("label_18")
         self.verticalLayout_27.addWidget(self.label_18)
         self.cbBoxEmployeOperationByType = QtWidgets.QComboBox(self.frameToolBar_4)
-        self.cbBoxEmployeOperationByType.setMinimumSize(QtCore.QSize(160, 44))
+        self.cbBoxEmployeOperationByType.setMinimumSize(QtCore.QSize(160, 54))
         self.cbBoxEmployeOperationByType.setObjectName("cbBoxEmployeOperationByType")
         self.cbBoxEmployeOperationByType.addItem("")
         self.cbBoxEmployeOperationByType.addItem("")
@@ -1896,7 +2743,7 @@ class Ui_MainWindow(object):
         self.label_19.setObjectName("label_19")
         self.verticalLayout_28.addWidget(self.label_19)
         self.cbBoxEmployeOperationByDate = QtWidgets.QComboBox(self.frameToolBar_4)
-        self.cbBoxEmployeOperationByDate.setMinimumSize(QtCore.QSize(110, 44))
+        self.cbBoxEmployeOperationByDate.setMinimumSize(QtCore.QSize(110, 54))
         self.cbBoxEmployeOperationByDate.setObjectName("cbBoxEmployeOperationByDate")
         self.cbBoxEmployeOperationByDate.addItem("")
         self.cbBoxEmployeOperationByDate.addItem("")
@@ -2002,7 +2849,7 @@ class Ui_MainWindow(object):
         self.label_31.setObjectName("label_31")
         self.horizontalLayout_32.addWidget(self.label_31)
         self.cbBoxChargeByMonth = QtWidgets.QComboBox(self.groupBoxToolBar_4)
-        self.cbBoxChargeByMonth.setMinimumSize(QtCore.QSize(141, 44))
+        self.cbBoxChargeByMonth.setMinimumSize(QtCore.QSize(141, 54))
         self.cbBoxChargeByMonth.setObjectName("cbBoxChargeByMonth")
         self.cbBoxChargeByMonth.addItem("")
         self.cbBoxChargeByMonth.addItem("")
@@ -2042,7 +2889,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.buttonNewCharge.sizePolicy().hasHeightForWidth())
         self.buttonNewCharge.setSizePolicy(sizePolicy)
-        self.buttonNewCharge.setMinimumSize(QtCore.QSize(0, 58))
+        self.buttonNewCharge.setMinimumSize(QtCore.QSize(0, 56))
         self.buttonNewCharge.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonNewCharge.setStyleSheet("")
         self.buttonNewCharge.setIcon(icon8)
@@ -2196,8 +3043,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.buttonRegleCredit, self.buttonEmployeNewPrime)
         MainWindow.setTabOrder(self.buttonEmployeNewPrime, self.buttonEmployeNewRetenu)
         MainWindow.setTabOrder(self.buttonEmployeNewRetenu, self.buttonCalculateSalaire)
-        MainWindow.setTabOrder(self.buttonCalculateSalaire, self.buttonDeleteEmploye)
-        MainWindow.setTabOrder(self.buttonDeleteEmploye, self.buttonIconSumPrime)
+        MainWindow.setTabOrder(self.buttonCalculateSalaire, self.buttonIconSumPrime)
         MainWindow.setTabOrder(self.buttonIconSumPrime, self.buttonIconSumAvance)
         MainWindow.setTabOrder(self.buttonIconSumAvance, self.buttonIconSumRetenu)
         MainWindow.setTabOrder(self.buttonIconSumRetenu, self.cbBoxEmployeOperationByName)
@@ -2413,6 +3259,8 @@ class Ui_MainWindow(object):
         self.creditTableWidget.setSortingEnabled(__sortingEnabled)
         self.editSearchEmploye.setPlaceholderText(_translate("MainWindow", "Recherche...."))
         self.buttonRefreshEmpolyeTable.setToolTip(_translate("MainWindow", "Refresh Table"))
+        self.label_15.setText(_translate("MainWindow", "Export Accompte"))
+        self.buttonExportAccomptDetails.setToolTip(_translate("MainWindow", "Générer Excel Détaillé"))
         self.groupBoxToolBar_2.setTitle(_translate("MainWindow", "Opération"))
         self.buttonNewEmploye.setToolTip(_translate("MainWindow", "Ajouter des Employés"))
         self.buttonNewEmploye.setText(_translate("MainWindow", "N. Employée"))
@@ -2424,7 +3272,6 @@ class Ui_MainWindow(object):
         self.buttonEmployeNewRetenu.setText(_translate("MainWindow", "Retenu"))
         self.buttonCalculateSalaire.setToolTip(_translate("MainWindow", "Calculer le Salaire"))
         self.buttonCalculateSalaire.setText(_translate("MainWindow", "Calculer"))
-        self.buttonExportAccomptDetails.setToolTip(_translate("MainWindow", "Générer Excel Détaillé"))
         self.buttonDeleteEmploye.setToolTip(_translate("MainWindow", "Suprimer"))
         self.labelEmployesCount.setText(_translate("MainWindow", "TextLabel"))
         self.employesTableWidget.setSortingEnabled(True)

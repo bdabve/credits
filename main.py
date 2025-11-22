@@ -472,6 +472,8 @@ class Credit(QtWidgets.QMainWindow):
         Display all personnes in the table widget.
         """
         if rows is None: rows = self.db.dump_employes()
+        logger.debug(f"Set SpinBox Month to Current Month({self.CURRENT_MONTH_TEXT})")
+        self.ui.spinBoxExportAccpmptMonth.setValue(self.CURRENT_DATE.month)
         utils.populate_table_widget(self.ui.employesTableWidget, rows, utils.EMPLOYES_HEADERS)
         utils.set_table_column_sizes(self.ui.employesTableWidget, 80, 300, 120, 250, 190, 200)
         self.ui.labelEmployesCount.setText(f"Total: {len(rows)}")
@@ -709,7 +711,7 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelAccompteEdit.hide()
         for cbbox in cbboxes: cbbox.blockSignals(False)     # Unblock signals
 
-        # Display Result in QTableWidget
+        # Display Result in QTableWidget        
         utils.populate_table_widget(self.ui.accompteTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.accompteTableWidget, 220, 170, 170, 170, 200)
         self.ui.labelAccompteCount.setText(f"Total: {len(rows)}")
@@ -756,7 +758,7 @@ class Credit(QtWidgets.QMainWindow):
 
         logger.debug(f"Getting accompte for employe({emp_name} - {emp_id}), month({month})")
 
-        # Here the date for displaying result
+        # Here the date for displaying result        
         # the month to display in ComboBox
         date = f"{self.CURRENT_MONTH}" if not month else f"{self.CURRENT_YEAR}-{month}"
         rows = self.db.employee_accompts(emp_id, date)
@@ -930,12 +932,14 @@ class Credit(QtWidgets.QMainWindow):
         self.accompte_by_employee(emp_id, month=month)
 
     def export_accomptes_details(self):
-        month = self.CURRENT_MONTH
+        month_number = self.ui.spinBoxExportAccpmptMonth.value()
+        month = f"{self.CURRENT_YEAR}-{month_number:02d}"
+        logger.info(f"Exporting Accompte Details for Month({month})...")
         rows = self.db.accompte_details(month)
         if not rows:
             self.show_error_message("Aucun acompte trouvé.", success=False)
             return
-        result = utils.export_salary_report_openpyxl(rows)
+        result = utils.export_salary_report_openpyxl(rows, f"Accompte-mois-{month_number:02d}")
         self.show_error_message(result, success=True)
 
     # =========================================
