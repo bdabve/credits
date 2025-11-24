@@ -744,6 +744,25 @@ class Database:
             cursor.execute(query, (status,))
             return cursor.fetchall()
 
+    def credit_by_commune(self, commune):
+        """
+        Retrieve all credits for clients in a specific commune.
+        :commune: the commune name
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            query = f"""
+                SELECT {', '.join(self.credit_fields)}
+                FROM credit cr
+                JOIN clients c ON cr.client_id = c.id
+                LEFT JOIN paiement v on v.credit_id = cr.id
+                WHERE c.commune = ?
+                GROUP BY cr.id
+                ORDER BY c.nom DESC
+            """
+            cursor.execute(query, (commune,))
+            return cursor.fetchall()
+        
     def insert_new_credit(self, client, credit_date, montant, motif=''):
         """
         Add a credit entry for a specific persone.

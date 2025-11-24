@@ -3598,7 +3598,7 @@ background-position: left center;
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>2</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -4284,38 +4284,102 @@ background-position: left center;
                         </spacer>
                        </item>
                        <item>
-                        <widget class="QLabel" name="label_12">
-                         <property name="text">
-                          <string>Status</string>
+                        <widget class="QFrame" name="frame_8">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
                          </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QVBoxLayout" name="verticalLayout_30">
+                          <property name="spacing">
+                           <number>0</number>
+                          </property>
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <item>
+                           <widget class="QLabel" name="label_16">
+                            <property name="text">
+                             <string>Commune</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QComboBox" name="cbBoxCreditByCommune"/>
+                          </item>
+                         </layout>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QComboBox" name="cbBoxCreditByStatus">
-                         <property name="minimumSize">
-                          <size>
-                           <width>200</width>
-                           <height>54</height>
-                          </size>
+                        <widget class="QFrame" name="frame_7">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
                          </property>
-                         <property name="currentIndex">
-                          <number>0</number>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
                          </property>
-                         <item>
-                          <property name="text">
-                           <string>Tous</string>
+                         <layout class="QVBoxLayout" name="verticalLayout_29">
+                          <property name="spacing">
+                           <number>0</number>
                           </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>Terminé</string>
+                          <property name="leftMargin">
+                           <number>0</number>
                           </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>En Cours</string>
+                          <property name="topMargin">
+                           <number>0</number>
                           </property>
-                         </item>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <item>
+                           <widget class="QLabel" name="label_12">
+                            <property name="text">
+                             <string>Status</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QComboBox" name="cbBoxCreditByStatus">
+                            <property name="minimumSize">
+                             <size>
+                              <width>200</width>
+                              <height>54</height>
+                             </size>
+                            </property>
+                            <property name="currentIndex">
+                             <number>0</number>
+                            </property>
+                            <item>
+                             <property name="text">
+                              <string>Tous</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Terminé</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>En Cours</string>
+                             </property>
+                            </item>
+                           </widget>
+                          </item>
+                         </layout>
                         </widget>
                        </item>
                       </layout>
@@ -6608,7 +6672,6 @@ background-position: left center;
   <tabstop>employesTableWidget</tabstop>
   <tabstop>editSearchCredit</tabstop>
   <tabstop>buttonRefreshCreditTable</tabstop>
-  <tabstop>cbBoxCreditByStatus</tabstop>
   <tabstop>buttonNewCredit</tabstop>
   <tabstop>buttonDeleteCredit</tabstop>
   <tabstop>creditTableWidget</tabstop>

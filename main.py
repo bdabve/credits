@@ -502,15 +502,6 @@ class Credit(QtWidgets.QMainWindow):
         # ---- Add combobox for commune
         # ---- add search with commune list
         # ---- Add A versement Page
-        # ---- Handle the Employées Accompte with Month
-        # ---- Handle the Situation with versement
-        COMMUNE = [
-            "CHIFALO", "KHMISTI", "BOUHAROUN", "BIRARD", "DAMOUS", "LARHAT", 
-            "BOUISMAIL", "SIDI-MOUSSA", "HAMDANIA", "BELDJ", "CHAIBA",
-            "FOUKA", "BENHENNI", "AIN-LAHDJER", "SIDI-GHILES", "HADJRET-ENNOS", "DOUAOUDA",
-            "DOUAOUDA-MARINE", "FOUKA-MARINE", "KOLEA", "TIPAZA", "NADOR", "CHERCHEL",
-            "COMMUNEL", "CHAIG", "MESSELMOUN", "GHOURAYA", "HADJOUT",
-        ]
         # Remove and show lineEdits based on type( client | employe )
         employe_edits = [
             # self.ui.labelNewPersonJobText, # self.ui.editNewPersonJob,
@@ -551,7 +542,7 @@ class Credit(QtWidgets.QMainWindow):
         job = self.ui.editNewPersonJob.text()
         salaire = self.ui.editNewPersonSalaire.value()
         date_embauche = self.ui.editNewPersonDateEmbauche.date().toPyDate()
-        commune = self.ui.editNewPersonJob.text()        # FIXME This work with lineEditJob
+        commune = self.ui.editNewPersonJob.text().lower()        # FIXME This work with lineEditJob
         obs = self.ui.editNewPersonObs.toPlainText()
 
         logger.info(f"Saving new {person_type} with Values: ")
@@ -711,7 +702,7 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelAccompteEdit.hide()
         for cbbox in cbboxes: cbbox.blockSignals(False)     # Unblock signals
 
-        # Display Result in QTableWidget        
+        # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.accompteTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.accompteTableWidget, 220, 170, 170, 170, 200)
         self.ui.labelAccompteCount.setText(f"Total: {len(rows)}")
@@ -758,7 +749,7 @@ class Credit(QtWidgets.QMainWindow):
 
         logger.debug(f"Getting accompte for employe({emp_name} - {emp_id}), month({month})")
 
-        # Here the date for displaying result        
+        # Here the date for displaying result
         # the month to display in ComboBox
         date = f"{self.CURRENT_MONTH}" if not month else f"{self.CURRENT_YEAR}-{month}"
         rows = self.db.employee_accompts(emp_id, date)
@@ -1021,7 +1012,7 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.clientsTableWidget, rows, utils.CLIENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.clientsTableWidget, 80, 320, 270, 200, 300)
         self.ui.labelClientsCount.setText(f"Total: {len(rows)}")
-        self.set_total_credits(rows, page="clients")
+        self.set_total_credits(rows, page="clients")        
 
     def client_credit_list(self):
         """
@@ -1160,6 +1151,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # Calculate the total
         self.set_total_credits(rows, page="credits", client_id=client_id)
+        utils.populate_comboBox(self.ui.cbBoxCreditByCommune, utils.COMMUNES_LIST)
 
     def refresh_credit_table(self):
         logger.info('Refreshing credit table...')
@@ -1192,6 +1184,22 @@ class Credit(QtWidgets.QMainWindow):
                 self.show_error_message(f"Aucun crédit trouvé pour le statut '{status}'.", success=False)
                 return
             logger.debug(f'Filter Credit By Status: {rows}')
+            self.display_credits(rows)
+
+    def filter_credits_by_commune(self):
+        """
+        Filter credits by commune selected in the comboBox.
+        """
+        commune = self.ui.cbBoxCreditByCommune.currentText().strip().lower()
+        if commune == 'TOUS':
+            self.display_credits()
+            return
+        else:
+            rows = self.db.credit_by_commune(commune)
+            if not rows:
+                self.show_error_message(f"Aucun crédit trouvé pour la commune '{commune}'.", success=False)
+                return
+            logger.debug(f'Filter Credit By Commune: {rows}')
             self.display_credits(rows)
 
     def ui_create_credit(self, client=False):

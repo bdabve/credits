@@ -79,6 +79,15 @@ CREDITS_HEADERS = ['ID', 'Date', 'Client', 'Motif', 'Montant Total', 'Versement'
 CHARGE_HEADERS = ["ID", "Date", "Effectué par", "Montant", "Motif"]
 VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Observation']
 
+# commune list
+COMMUNES_LIST = [
+    "TOUS",
+    "CHIFALO", "KHMISTI", "BOUHAROUN", "BIRARD", "DAMOUS", "LARHAT",
+    "BOUISMAIL", "SIDI-MOUSSA", "HAMDANIA", "BELDJ", "CHAIBA",
+    "FOUKA", "BENHENNI", "AIN-LAHDJER", "SIDI-GHILES", "HADJRET-ENNOS", "DOUAOUDA",
+    "DOUAOUDA-MARINE", "FOUKA-MARINE", "KOLEA", "TIPAZA", "NADOR", "CHERCHEL",
+    "COMMUNEL", "CHAIG", "MESSELMOUN", "GHOURAYA", "HADJOUT",
+]
 
 class ThemeManager:
     def __init__(self, app, themes, default="dark"):
@@ -257,8 +266,9 @@ def setup_main_callbacks(root):
     # === ComboBoxes ===
     cbBoxes = [
         (root.ui.cbBoxCreditByStatus, root.filter_credit_by_status),
+        (root.ui.cbBoxCreditByCommune, root.filter_credits_by_commune),
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
-        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
+        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),        
     ]
     for cbBox, callback in cbBoxes:
         cbBox.currentIndexChanged.connect(callback)
@@ -985,7 +995,7 @@ def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
 
     # ---- Build filename with timestamp ----
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = os.path.join(output_dir, f"{file_name}_{timestamp}.xlsx")
+    filename = os.path.join(output_dir, f"{file_name}__{timestamp}.xlsx")
 
     wb = Workbook()
     ws = wb.active
