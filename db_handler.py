@@ -51,6 +51,7 @@ class Database:
             'ch.id', 'strftime("%d-%m-%Y", ch.date_charge)',
             'emp.nom', 'ch.montant', 'ch.motif'
         ]
+        self.payments_fields = ['date_versement', 'c.', 'montant', 'observation']
 
     def connect(self):
         conn = sqlite3.connect(self.db_name)
@@ -762,7 +763,7 @@ class Database:
             """
             cursor.execute(query, (commune,))
             return cursor.fetchall()
-        
+
     def insert_new_credit(self, client, credit_date, montant, motif=''):
         """
         Add a credit entry for a specific persone.
@@ -995,6 +996,21 @@ class Database:
     # ====================================
     # === PAYMENTS(VERSEMENT) METHODES ===
     # ====================================
+    def dump_payments(self):
+        """
+        Retrieve all versements (payments) from the database.
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            query = """
+                SELECT p.id, p.date_versement, c.nom, p.montant, p.observation
+                FROM paiement p
+                JOIN clients c ON p.client_id = c.id
+                ORDER BY p.date_versement DESC
+            """
+            cursor.execute(query)
+            return cursor.fetchall()
+
     def get_client_versement(self, client_id):
         """
         Retrieve all versements (payments) associated with a specific client.

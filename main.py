@@ -124,6 +124,15 @@ class Credit(QtWidgets.QMainWindow):
                      self.ui.buttonRegleCredit)
                 )
             },
+            'payments': {
+                'title': 'List des Versements',
+                'widget': lambda self: self.ui.PaymentsPage,
+                'action': lambda self: self.display_payments(),
+                'buttons': lambda self: (
+                    self.ui.paymentsTableWidget,
+                    (self.ui.buttonDeletePayment,)
+                )
+            },
             'payment': {
                 'title': 'List des Versements',
                 'widget': lambda self: self.ui.versementTableWidget,
@@ -245,7 +254,8 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.buttonEmployesPage: '  Employés',
             self.ui.buttonCreditPage: '  Crédits',
             self.ui.buttonAccomptePage: '  Accomptes',
-            self.ui.buttonChargePage: '  Les Charges'
+            self.ui.buttonChargePage: '  Les Charges',
+            self.ui.buttonPaymentsPage: '  Versements',
 
         }
         if collapse:
@@ -1339,6 +1349,21 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Payments(Versement) Functions ==
     # ===================================
+    def display_payments(self, rows=None):
+        """
+        Docstring for display_payments
+
+        :param self: Description
+        :param rows: Description
+        """
+        if rows is None:
+            rows = self.db.dump_payments()
+        utils.populate_table_widget(self.ui.paymentsTableWidget, rows, utils.PAYMENTS_HEADERS)
+        utils.set_table_column_sizes(self.ui.paymentsTableWidget, 80, 270, 500, 270)
+        self.ui.labelPaymentsCount.setText(f"Total: {len(rows)}")
+        # self.set_total_credits(rows, page="clients")
+
+    # == Small Table Versement By Crédit ==
     def display_versement(self, rows):
         """
         Displays a list of versements in the table widget and updates the versement count label.

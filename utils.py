@@ -75,6 +75,7 @@ OPERATIONS_SUM_HEADERS = ["Employé", "T. Prime", "T. Retenu", "T. Avance"]
 
 CLIENTS_HEADERS = ["ID", "Nom", "Crédit", "Telephone", "Commune", "Observation"]
 CREDITS_HEADERS = ['ID', 'Date', 'Client', 'Motif', 'Montant Total', 'Versement', 'Reste', 'Statut']
+PAYMENTS_HEADERS = ['ID', 'Date', 'Client', 'Montant', 'Observation']
 
 CHARGE_HEADERS = ["ID", "Date", "Effectué par", "Montant", "Motif"]
 VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Observation']
@@ -166,6 +167,8 @@ def setup_main_callbacks(root):
         (root.ui.buttonCreditPage, lambda: root.goto_page("credit")),
         (root.ui.buttonRefreshCreditTable, root.refresh_credit_table),
 
+        # Payments Page
+        (root.ui.buttonPaymentsPage, lambda: root.goto_page("payments")),
         # versement for a specific credit
         (root.ui.buttonCreditVersement, root.credit_list_versement),
         # == New Credit
@@ -378,13 +381,14 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
 
     # --- Example: Credit Page
     root.ui.buttonCreditPage.setIcon(theme_manager.icon("ph.currency-circle-dollar", "MENU_COLOR"))
-    root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)
+    root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)    
     root.ui.buttonCreditVersement.setIcon(qta.icon('fa6s.money-check-dollar', color=NEW_COLOR))
     root.ui.buttonNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonSaveCredit.setIcon(SAVE_ICON)
     root.ui.buttonDeleteCredit.setIcon(TRASH_ICON)
 
     # --- Versements
+    root.ui.buttonPaymentsPage.setIcon(theme_manager.icon("mdi6.cash-multiple", "MENU_COLOR"))
     root.ui.buttonCreditAddVersement.setIcon(theme_manager.icon('fa6s.hand-holding-dollar', "NEW_COLOR"))
     root.ui.buttonSaveVersement.setIcon(SAVE_ICON)
     root.ui.buttonRegleCredit.setIcon(qta.icon('mdi6.cash-check', color=NEW_COLOR))
