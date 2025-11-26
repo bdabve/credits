@@ -51,7 +51,7 @@ class Database:
             'ch.id', 'strftime("%d-%m-%Y", ch.date_charge)',
             'emp.nom', 'ch.montant', 'ch.motif'
         ]
-        self.payments_fields = ['date_versement', 'c.', 'montant', 'observation']
+        self.payments_fields = ["p.id", "p.date_versement", "c.nom", "p.montant", "p.observation"]
 
     def connect(self):
         conn = sqlite3.connect(self.db_name)
@@ -1002,15 +1002,56 @@ class Database:
         """
         with self.connect() as conn:
             cursor = conn.cursor()
-            query = """
-                SELECT p.id, p.date_versement, c.nom, p.montant, p.observation
+            query = f"""
+                SELECT {', '.join(self.payments_fields)}
                 FROM paiement p
                 JOIN clients c ON p.client_id = c.id
-                ORDER BY p.date_versement DESC
+                ORDER BY p.id DESC
             """
             cursor.execute(query)
             return cursor.fetchall()
 
+    def update_payment(self, paiement_id, column, new_text):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            try:
+                if column == 1:     # Date Versement
+                    cursor.execute("UPDATE paiement SET date_versement = ? WHERE id = ?", (new_text, paiement_id))
+                    message = 'Date de versement mis à jour avec succès.'
+                # Fixme: retrieve the credit_id by paiement_id to change the versement and reste
+                # elif column == 3:   # Montant
+                #     cursor.execute("UPDATE paiement SET montant = ? WHERE id = ?", (str(new_text), paiement_id))
+                #     message = 'Montant mis à jour avec succès.'
+                elif column == 4:   # Observation
+                    cursor.execute("UPDATE paiement SET observation = ? WHERE id = ?", (new_text, paiement_id))
+                    message = 'Observation mis à jour avec succès.'
+                else:
+                    return {'success': False, 'error': 'Colonne invalide.'}
+                conn.commit()
+                return {'success': True, 'message': message}
+            except Exception as e:
+                conn.rollback()
+                return {'success': False, 'error': f"Erreur lors de la mise à jour: {e}"}
+
+    def search_payments(self, search_word):
+        """
+        Search for versements (payments) by client name or observation.
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            query = f"""
+                SELECT  {', '.join(self.payments_fields)}
+                FROM paiement p
+                JOIN clients c ON p.client_id = c.id
+                WHERE c.nom LIKE ? OR p.observation LIKE ? OR p.date_versement LIKE ? OR p.montant LIKE ?
+                ORDER BY p.id DESC
+            """
+            search_pattern = f'%{search_word}%'
+            params = [search_pattern] * 4  # For nom and observation
+            cursor.execute(query, params)
+            return cursor.fetchall()
+
+    # =========================================
     def get_client_versement(self, client_id):
         """
         Retrieve all versements (payments) associated with a specific client.

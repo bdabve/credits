@@ -1022,7 +1022,7 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.clientsTableWidget, rows, utils.CLIENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.clientsTableWidget, 80, 320, 270, 200, 300)
         self.ui.labelClientsCount.setText(f"Total: {len(rows)}")
-        self.set_total_credits(rows, page="clients")        
+        self.set_total_credits(rows, page="clients")
 
     def client_credit_list(self):
         """
@@ -1361,7 +1361,62 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, utils.PAYMENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.paymentsTableWidget, 80, 270, 500, 270)
         self.ui.labelPaymentsCount.setText(f"Total: {len(rows)}")
-        # self.set_total_credits(rows, page="clients")
+        self.ui.labelTotalPayments.setText(f"Total: {utils.format_money(sum(r[3] for r in rows))} DA")
+
+    def edit_payment(self, row, col, text):
+        payment_id = self.get_item_id(self.ui.paymentsTableWidget)
+        logger.info(f"Edit Payment({payment_id}) at Row({row}), Column({col}), New Text({text})")
+        if col == 1:
+            # Validate the date
+            if not utils.is_date(text):
+                self.show_error_message("La date n'est pas valide. Utilisez le format Année-Mois-Jour.", success=False)
+                self.display_payments()
+                return
+        elif col == 3:
+            # handle montant converstion to decimal
+            text = utils.format_to_decimal(text)
+            if not text['success']:
+                self.show_error_message(f"Erreur: {text['error']}", success=False)
+                self.display_payments()      # refresh tablhu
+                return
+            else:
+                text = text['value']
+
+        result = self.db.update_payment(payment_id, col, text)
+        if result['success']:
+            self.show_error_message(result['message'], success=True)
+            self.display_payments()
+        else:
+            self.show_error_message(f"Erreur: {result['error']}", success=False)
+
+    def filter_payments(self):
+        """
+        Search Payments
+        """
+        search_word = self.ui.editSearchPayments.text()
+        if not search_word: return  # or show a message to the user that the search input is empty
+        else: search_word = f"%{search_word}%"
+        rows = self.db.search_payments(search_word)
+        self.display_payments(rows)
+
+    def delete_payment(self):
+        ids = utils.table_multi_selection(self.ui.paymentsTableWidget)
+        if len(ids) > 1:
+            logger.debug(f'Delete Multitple IDS({ids})')
+            title = f"Etes-vous sûr de vouloir supprimer la selection [{ids}] ?"
+        else:
+            logger.debug(f"Deleting the selected payment: ID({ids[0]})...")
+            title = f"Etes-vous sûr de vouloir supprimer le versement N° '{ids[0]}' ?"
+
+        dialog = utils.ConfirmDialog(title)
+        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+            result = self.db.delete_item('versements', ids)
+            logger.debug(f"Delete Payments: {result}")
+            if result['success']:
+                self.show_error_message("Versement supprimé avec succès.", success=True)
+                self.display_payments()
+            else:
+                self.show_error_message(f"{result['error']}", success=False)
 
     # == Small Table Versement By Crédit ==
     def display_versement(self, rows):
@@ -1586,8 +1641,6 @@ class Credit(QtWidgets.QMainWindow):
         logger.debug(f"Display Charge Records for {month_text}")
 
         # Calculate and display totals
-        for r in rows:
-            print(type(r[3]), r)
         total_charges = sum(r[3] for r in rows)  # Assuming 'montant' is at index 3
         message = f"Total Charges {month_name.title()}: {utils.format_money(total_charges)}"
         self.ui.labelTotalCharge.setText(message)

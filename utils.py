@@ -78,7 +78,7 @@ CREDITS_HEADERS = ['ID', 'Date', 'Client', 'Motif', 'Montant Total', 'Versement'
 PAYMENTS_HEADERS = ['ID', 'Date', 'Client', 'Montant', 'Observation']
 
 CHARGE_HEADERS = ["ID", "Date", "Effectué par", "Montant", "Motif"]
-VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Observation']
+VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Récupérateur']
 
 # commune list
 COMMUNES_LIST = [
@@ -179,6 +179,7 @@ def setup_main_callbacks(root):
         # ============================================================================================
         # == Versement Page ==
         # ====================
+        (root.ui.buttonDeletePayment, root.delete_payment),
         (root.ui.buttonCreditAddVersement, root.ui_add_versement),
         (root.ui.buttonSaveVersement, root.save_new_versement),
         (root.ui.buttonRegleCredit, root.regle_credit),
@@ -252,6 +253,7 @@ def setup_main_callbacks(root):
         (root.ui.versementTableWidget, "payment"),
         (root.ui.accompteTableWidget, "operations"),
         (root.ui.chargeTableWidget, "charge"),
+        (root.ui.paymentsTableWidget, "payments"),
     ]
     for table, page in tables:
         table.itemSelectionChanged.connect(lambda p=page: root.enable_buttons(p))
@@ -262,6 +264,7 @@ def setup_main_callbacks(root):
         (root.ui.clientsTableWidget, root.edit_client),
         (root.ui.creditTableWidget, root.edit_credit),
         (root.ui.chargeTableWidget, root.edit_charge),
+        (root.ui.paymentsTableWidget, root.edit_payment),
     ]
     for table, callback in table_edits:
         table.editingFinished.connect(callback)
@@ -271,7 +274,7 @@ def setup_main_callbacks(root):
         (root.ui.cbBoxCreditByStatus, root.filter_credit_by_status),
         (root.ui.cbBoxCreditByCommune, root.filter_credits_by_commune),
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
-        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),        
+        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
     ]
     for cbBox, callback in cbBoxes:
         cbBox.currentIndexChanged.connect(callback)
@@ -289,6 +292,7 @@ def setup_main_callbacks(root):
         (root.ui.editSearchClients, root.filter_clients),
         (root.ui.editSearchEmploye, root.filter_employe),
         (root.ui.editSearchCharge, root.filter_charge),
+        (root.ui.editSearchPayments, root.filter_payments),
     ]
     for edit, callback in lineEdits:
         edit.textChanged.connect(callback)
@@ -381,14 +385,16 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
 
     # --- Example: Credit Page
     root.ui.buttonCreditPage.setIcon(theme_manager.icon("ph.currency-circle-dollar", "MENU_COLOR"))
-    root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)    
+    root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)
     root.ui.buttonCreditVersement.setIcon(qta.icon('fa6s.money-check-dollar', color=NEW_COLOR))
     root.ui.buttonNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonSaveCredit.setIcon(SAVE_ICON)
     root.ui.buttonDeleteCredit.setIcon(TRASH_ICON)
 
     # --- Versements
-    root.ui.buttonPaymentsPage.setIcon(theme_manager.icon("mdi6.cash-multiple", "MENU_COLOR"))
+    root.ui.buttonPaymentsPage.setIcon(theme_manager.icon("fa6s.hand-holding-dollar", "NEW_COLOR"))
+    root.ui.buttonDeletePayment.setIcon(TRASH_ICON)
+
     root.ui.buttonCreditAddVersement.setIcon(theme_manager.icon('fa6s.hand-holding-dollar', "NEW_COLOR"))
     root.ui.buttonSaveVersement.setIcon(SAVE_ICON)
     root.ui.buttonRegleCredit.setIcon(qta.icon('mdi6.cash-check', color=NEW_COLOR))
@@ -742,6 +748,7 @@ def pagebuttons_stats(root):
     ui.buttonEmployesPage.setChecked(current_page == 2)
     ui.buttonAccomptePage.setChecked(current_page == 3)
     ui.buttonChargePage.setChecked(current_page == 4)
+    ui.buttonPaymentsPage.setChecked(current_page == 5)
 
 
 def clear_inputs(inputs: list) -> None:
