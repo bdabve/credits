@@ -380,65 +380,6 @@
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="buttonEmployesPage">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>51</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>Lucida Casual</family>
-                    <pointsize>13</pointsize>
-                    <weight>50</weight>
-                    <italic>false</italic>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="toolTip">
-                   <string>Liste des Employée</string>
-                  </property>
-                  <property name="statusTip">
-                   <string>Articles</string>
-                  </property>
-                  <property name="layoutDirection">
-                   <enum>Qt::LeftToRight</enum>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>  Employées</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/icons/images/icons/cil-user-female.png</normaloff>:/icons/images/icons/cil-user-female.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>35</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QPushButton" name="buttonClientsPage">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -498,15 +439,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="buttonChargePage">
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="toolTip">
-                   <string>Les Charges</string>
-                  </property>
+                 <widget class="QPushButton" name="buttonPaymentsPage">
                   <property name="text">
-                   <string>  Les Charges</string>
+                   <string>Versements</string>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -523,6 +458,65 @@
                  <widget class="Line" name="line_9">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="buttonEmployesPage">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>51</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Lucida Casual</family>
+                    <pointsize>13</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="toolTip">
+                   <string>Liste des Employée</string>
+                  </property>
+                  <property name="statusTip">
+                   <string>Articles</string>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>  Employées</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/icons/images/icons/cil-user-female.png</normaloff>:/icons/images/icons/cil-user-female.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -558,9 +552,22 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="buttonPaymentsPage">
+                 <widget class="Line" name="line_12">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="buttonChargePage">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="toolTip">
+                   <string>Les Charges</string>
+                  </property>
                   <property name="text">
-                   <string>Versements</string>
+                   <string>  Les Charges</string>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -2784,7 +2791,7 @@
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>5</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2852,8 +2859,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>362</width>
-                           <height>54</height>
+                           <width>366</width>
+                           <height>58</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -3394,8 +3401,8 @@
                         <widget class="QLineEdit" name="editSearchCredit">
                          <property name="minimumSize">
                           <size>
-                           <width>362</width>
-                           <height>54</height>
+                           <width>366</width>
+                           <height>58</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -4067,8 +4074,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>362</width>
-                           <height>54</height>
+                           <width>366</width>
+                           <height>58</height>
                           </size>
                          </property>
                          <property name="maximumSize">
@@ -4156,7 +4163,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>96</width>
-                           <height>54</height>
+                           <height>58</height>
                           </size>
                          </property>
                          <property name="buttonSymbols">
@@ -4933,13 +4940,6 @@
                         <number>10</number>
                        </property>
                        <item>
-                        <widget class="QLabel" name="labelAccompteEdit">
-                         <property name="text">
-                          <string/>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
                         <widget class="QLabel" name="labelAccompteEmpID">
                          <property name="text">
                           <string/>
@@ -5019,6 +5019,13 @@
                         <widget class="Line" name="line_7">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="labelAccompteEdit">
+                         <property name="text">
+                          <string/>
                          </property>
                         </widget>
                        </item>
@@ -6034,7 +6041,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>58</width>
-                           <height>56</height>
+                           <height>58</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -6145,7 +6152,7 @@
                           </sizepolicy>
                          </property>
                          <property name="text">
-                          <string/>
+                          <string>Total Payments</string>
                          </property>
                          <property name="alignment">
                           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -6324,7 +6331,6 @@
   <tabstop>buttonCreditPage</tabstop>
   <tabstop>editSearchClients</tabstop>
   <tabstop>buttonIcon</tabstop>
-  <tabstop>buttonChargePage</tabstop>
   <tabstop>dateEditEmployeOperationDate</tabstop>
   <tabstop>editEmployeOperationMontant</tabstop>
   <tabstop>editEmployeOperationMotif</tabstop>
