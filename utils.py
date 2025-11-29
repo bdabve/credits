@@ -328,8 +328,8 @@ def setup_main_callbacks(root):
 
     # === Context Menus ===
     employe_table_actions = [
-        ('L. Accompte', qta.icon("fa6s.money-check-dollar", color=NEW_COLOR), lambda: root.accompte_by_employee()),
-        ('Calculer Salaire', qta.icon('mdi.calculator-variant', color=ICON_COLOR), lambda: root.calculate_salaire(from_btn=False)),
+        ('L. Accompte', qta.icon("fa6s.money-check-dollar", color=NEW_COLOR), root.accompte_by_employee),
+        ('Calculer Salaire', qta.icon('mdi.calculator-variant', color=ICON_COLOR), lambda: root.calculate_salaire(from_btn=True)),
         ('separator', None, None),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_employe),
     ]
