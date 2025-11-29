@@ -1365,7 +1365,7 @@ if __name__ == '__main__':
     #
     # result = db.get_client_versement(8)
     # print(result)
-    result = db.get_situation(3)        # 8: GM1, 3: boughrassa
+    result = db.get_situation(13)        # 8: GM1, 3: boughrassa
     for row in result:
         print(row)
     # for row in result:

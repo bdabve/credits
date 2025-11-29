@@ -40,6 +40,10 @@ class Credit(QtWidgets.QMainWindow):
         self.theme_manager.apply(self.current_theme)    # Apply the saved theme
         self.refresh_icons()    # Refresh icons based on the current theme
 
+        # Callback Functions
+        utils.setup_main_callbacks(self)
+        utils.refresh_main_icons(self, self.theme_manager)
+
         # Set app icon
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
@@ -70,11 +74,6 @@ class Credit(QtWidgets.QMainWindow):
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
         self.ui.contentTopBg.mouseMoveEvent = self.move_window  # to move window from the upBar
-
-        # Callback Functions
-        # utils.main_icons_callbacks(self, self.theme_manager)
-        utils.setup_main_callbacks(self)
-        utils.refresh_main_icons(self, self.theme_manager)
 
         self.PAGES = {
             'client': {
@@ -430,6 +429,38 @@ class Credit(QtWidgets.QMainWindow):
             item_id = utils.get_column_value(tableWidget, row, 0)
             return item_id
 
+    # ==============================
+    # == Search & Refresh Table  ==
+    # ==============================
+    def search_item(self):
+        search_word = self.ui.editSearchItem.text()
+        page = self.ui.stackedWidget.currentWidget().objectName()
+        logger.info(f"Search for '{search_word}' in page: {page}")
+        if page == "ClientsPage":
+            self.filter_clients()
+        elif page == "EmployesPage":
+            self.filter_employe()
+        elif page == "CreditPage":
+            self.filter_credits()
+        elif page == "ChargePage":
+            self.filter_charge()
+        elif page == "PaymentsPage":
+            self.filter_payments()
+
+    def refresh_table(self):
+        page = self.ui.stackedWidget.currentWidget().objectName()
+        logger.info(f"Refresh table in page: {page}")
+        if page == "ClientsPage":
+            self.display_clients(rows=None)
+        elif page == "EmployesPage":
+            self.display_employes(rows=None)
+        elif page == "CreditPage":
+            self.refresh_credit_table()
+        elif page == "ChargePage":
+            self.display_charge(rows=None, month_text=None)
+        elif page == "PaymentsPage":
+            self.display_payments()
+
     # ======================
     # == Server Controls ===
     # =======================
@@ -585,7 +616,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         Search Persones
         """
-        search_word = self.ui.editSearchEmploye.text()
+        search_word = self.ui.editSearchItem.text()
         if not search_word: return  # or show a message to the user that the search input is empty
         else: search_word = f"%{search_word}%"
         rows = self.db.search_employe(search_word)
@@ -1053,17 +1084,11 @@ class Credit(QtWidgets.QMainWindow):
 
         self.display_versement(rows)
 
-    def refresh_clients_table(self):
-        """
-        Refresh the persone table widget.
-        """
-        logger.info('Refreshing persone table...')
-
     def filter_clients(self):
         """
         Search Persones
         """
-        search_word = self.ui.editSearchClients.text()
+        search_word = self.ui.editSearchItem.text()
         if not search_word: return  # or show a message to the user that the search input is empty
         else: search_word = f"%{search_word}%"
         rows = self.db.search_clients(search_word)
@@ -1171,7 +1196,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         Search Credits
         """
-        search_word = self.ui.editSearchCredit.text()
+        search_word = self.ui.editSearchItem.text()
         statut = self.ui.cbBoxCreditByStatus.currentText().strip().lower()
 
         if not search_word: return  # or show a message to the user that the search input is empty
@@ -1393,7 +1418,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         Search Payments
         """
-        search_word = self.ui.editSearchPayments.text()
+        search_word = self.ui.editSearchItem.text()
         if not search_word: return  # or show a message to the user that the search input is empty
         else: search_word = f"%{search_word}%"
         rows = self.db.search_payments(search_word)
@@ -1630,7 +1655,6 @@ class Credit(QtWidgets.QMainWindow):
             month = self.CURRENT_MONTH
             rows = self.db.dump_charges(month)
             self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
-            self.ui.editSearchCharge.clear()
         else:
             month = (
                 self.CURRENT_MONTH
@@ -1655,7 +1679,7 @@ class Credit(QtWidgets.QMainWindow):
     def filter_charge(self):
         """
         """
-        search_text = self.ui.editSearchCharge.text()
+        search_text = self.ui.editSearchItem.text()
         month_text = self.ui.cbBoxChargeByMonth.currentText()
         month = self.CURRENT_MONTH if month_text == 'Mois' else f"{self.CURRENT_YEAR}-{month_text}"
         rows = self.db.search_charge(search_text, month)

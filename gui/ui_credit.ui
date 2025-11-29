@@ -2786,12 +2786,123 @@
               </widget>
              </item>
              <item>
+              <widget class="QFrame" name="searchFrame_2">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLineEdit" name="editSearchItem">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>366</width>
+                    <height>58</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>260</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Lucida Casual</family>
+                    <pointsize>13</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Recherche....</string>
+                  </property>
+                  <property name="cursorMoveStyle">
+                   <enum>Qt::LogicalMoveStyle</enum>
+                  </property>
+                  <property name="clearButtonEnabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="buttonRefreshTableWidget">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>58</width>
+                    <height>58</height>
+                   </size>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="toolTip">
+                   <string>Refresh Table</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>30</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="styleSheet">
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>3</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2828,117 +2939,6 @@
                     <property name="bottomMargin">
                      <number>0</number>
                     </property>
-                    <item>
-                     <widget class="QFrame" name="searchFrame_2">
-                      <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_11">
-                       <property name="leftMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>0</number>
-                       </property>
-                       <item>
-                        <widget class="QLineEdit" name="editSearchClients">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>366</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>260</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Lucida Casual</family>
-                           <pointsize>13</pointsize>
-                           <weight>50</weight>
-                           <italic>false</italic>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true"/>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Recherche....</string>
-                         </property>
-                         <property name="cursorMoveStyle">
-                          <enum>Qt::LogicalMoveStyle</enum>
-                         </property>
-                         <property name="clearButtonEnabled">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonRefreshClientsTable">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>58</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Refresh Table</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>25</width>
-                           <height>25</height>
-                          </size>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <spacer name="horizontalSpacer_9">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
                     <item>
                      <widget class="QGroupBox" name="groupBoxToolBar_3">
                       <property name="title">
@@ -3397,72 +3397,6 @@
                        <property name="bottomMargin">
                         <number>0</number>
                        </property>
-                       <item>
-                        <widget class="QLineEdit" name="editSearchCredit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>366</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>350</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Lucida Casual</family>
-                           <pointsize>13</pointsize>
-                           <weight>50</weight>
-                           <italic>false</italic>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Recherche</string>
-                         </property>
-                         <property name="clearButtonEnabled">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonRefreshCreditTable">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>58</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Refresh</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                         <property name="icon">
-                          <iconset>
-                           <normaloff>:/icons/icons/cil-reload.png</normaloff>:/icons/icons/cil-reload.png</iconset>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>30</width>
-                           <height>30</height>
-                          </size>
-                         </property>
-                        </widget>
-                       </item>
                        <item>
                         <spacer name="horizontalSpacer_5">
                          <property name="orientation">
@@ -4064,80 +3998,6 @@
                        <property name="bottomMargin">
                         <number>0</number>
                        </property>
-                       <item>
-                        <widget class="QLineEdit" name="editSearchEmploye">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>366</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>260</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Lucida Casual</family>
-                           <pointsize>13</pointsize>
-                           <weight>50</weight>
-                           <italic>false</italic>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true"/>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Recherche....</string>
-                         </property>
-                         <property name="cursorMoveStyle">
-                          <enum>Qt::LogicalMoveStyle</enum>
-                         </property>
-                         <property name="clearButtonEnabled">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonRefreshEmpolyeTable">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>58</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Refresh Table</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>25</width>
-                           <height>25</height>
-                          </size>
-                         </property>
-                        </widget>
-                       </item>
                        <item>
                         <spacer name="horizontalSpacer_6">
                          <property name="orientation">
@@ -5403,49 +5263,6 @@
                         <number>5</number>
                        </property>
                        <item>
-                        <widget class="QLineEdit" name="editSearchCharge">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>364</width>
-                           <height>56</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>260</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Lucida Casual</family>
-                           <pointsize>13</pointsize>
-                           <weight>50</weight>
-                           <italic>false</italic>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true"/>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Recherche....</string>
-                         </property>
-                         <property name="cursorMoveStyle">
-                          <enum>Qt::LogicalMoveStyle</enum>
-                         </property>
-                         <property name="clearButtonEnabled">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
                         <widget class="Line" name="line_8">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
@@ -5540,37 +5357,6 @@
                           </widget>
                          </item>
                         </layout>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonRefreshChargeTable">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>58</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Refresh Table</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>30</width>
-                           <height>30</height>
-                          </size>
-                         </property>
-                        </widget>
                        </item>
                        <item>
                         <widget class="Line" name="line_6">
@@ -5892,49 +5678,6 @@
                         <number>5</number>
                        </property>
                        <item>
-                        <widget class="QLineEdit" name="editSearchPayments">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>364</width>
-                           <height>56</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>260</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Lucida Casual</family>
-                           <pointsize>13</pointsize>
-                           <weight>50</weight>
-                           <italic>false</italic>
-                           <bold>false</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true"/>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Recherche....</string>
-                         </property>
-                         <property name="cursorMoveStyle">
-                          <enum>Qt::LogicalMoveStyle</enum>
-                         </property>
-                         <property name="clearButtonEnabled">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
                         <widget class="Line" name="line_10">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
@@ -6029,37 +5772,6 @@
                           </widget>
                          </item>
                         </layout>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonRefreshPaymentTable">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>58</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Refresh Table</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>30</width>
-                           <height>30</height>
-                          </size>
-                         </property>
-                        </widget>
                        </item>
                        <item>
                         <widget class="Line" name="line_11">
@@ -6296,7 +6008,7 @@
   <tabstop>editNewPersonDateEmbauche</tabstop>
   <tabstop>editNewPersonObs</tabstop>
   <tabstop>buttonSaveNewPerson</tabstop>
-  <tabstop>buttonRefreshClientsTable</tabstop>
+  <tabstop>buttonRefreshTableWidget</tabstop>
   <tabstop>dateEditVersementDate</tabstop>
   <tabstop>editVersementMontant</tabstop>
   <tabstop>editVersementDescription</tabstop>
@@ -6308,13 +6020,9 @@
   <tabstop>maximizeRestoreAppBtn</tabstop>
   <tabstop>closeAppBtn</tabstop>
   <tabstop>buttonCloseMsgsFrame</tabstop>
-  <tabstop>editSearchEmploye</tabstop>
-  <tabstop>buttonRefreshEmpolyeTable</tabstop>
   <tabstop>buttonNewEmploye</tabstop>
   <tabstop>buttonEmployeNewAvance</tabstop>
   <tabstop>employesTableWidget</tabstop>
-  <tabstop>editSearchCredit</tabstop>
-  <tabstop>buttonRefreshCreditTable</tabstop>
   <tabstop>buttonNewCredit</tabstop>
   <tabstop>buttonDeleteCredit</tabstop>
   <tabstop>creditTableWidget</tabstop>
@@ -6329,7 +6037,7 @@
   <tabstop>buttonClientCreditList</tabstop>
   <tabstop>clientsTableWidget</tabstop>
   <tabstop>buttonCreditPage</tabstop>
-  <tabstop>editSearchClients</tabstop>
+  <tabstop>editSearchItem</tabstop>
   <tabstop>buttonIcon</tabstop>
   <tabstop>dateEditEmployeOperationDate</tabstop>
   <tabstop>editEmployeOperationMontant</tabstop>
@@ -6354,8 +6062,6 @@
   <tabstop>cbBoxEmployeOperationByType</tabstop>
   <tabstop>cbBoxEmployeOperationByDate</tabstop>
   <tabstop>accompteTableWidget</tabstop>
-  <tabstop>editSearchCharge</tabstop>
-  <tabstop>buttonRefreshChargeTable</tabstop>
   <tabstop>buttonNewCharge</tabstop>
   <tabstop>buttonDeleteCharge</tabstop>
   <tabstop>chargeTableWidget</tabstop>

@@ -165,7 +165,7 @@ def setup_main_callbacks(root):
     buttons = [
         # == Credit Page ==
         (root.ui.buttonCreditPage, lambda: root.goto_page("credit")),
-        (root.ui.buttonRefreshCreditTable, root.refresh_credit_table),
+        # (root.ui.buttonRefreshCreditTable, root.refresh_credit_table),
 
         # Payments Page
         (root.ui.buttonPaymentsPage, lambda: root.goto_page("payments")),
@@ -195,7 +195,7 @@ def setup_main_callbacks(root):
             lambda: root.goto_page('client')
         ),
         (root.ui.buttonNewClient, lambda: root.ui_create_persone('client')),
-        (root.ui.buttonRefreshClientsTable, lambda: root.display_clients(rows=None)),
+        # (root.ui.buttonRefreshClientsTable, lambda: root.display_clients(rows=None)),
         (root.ui.buttonClientNewCredit, lambda: root.ui_create_credit(client=True)),
         (root.ui.buttonClientCreditList, root.client_credit_list),
         (root.ui.buttonDeleteClient, root.delete_client),
@@ -204,7 +204,7 @@ def setup_main_callbacks(root):
         # ==================
         (root.ui.buttonEmployesPage, lambda: root.goto_page('employe')),
         (root.ui.buttonNewEmploye, lambda: root.ui_create_persone('employe')),
-        (root.ui.buttonRefreshEmpolyeTable, lambda: root.display_employes(rows=None)),
+        # (root.ui.buttonRefreshEmpolyeTable, lambda: root.display_employes(rows=None)),
         # button save new both (EMPLOYE & CLIENTS)
         (root.ui.buttonSaveNewPerson, root.save_new_persone),
         (root.ui.buttonDeleteEmploye, root.delete_employe),
@@ -237,7 +237,7 @@ def setup_main_callbacks(root):
             root.ui.buttonChargePage,
             lambda: root.goto_page('charge', from_btn=True)
         ),
-        (root.ui.buttonRefreshChargeTable, lambda: root.display_charge(rows=None, month_text=None)),
+        # (root.ui.buttonRefreshChargeTable, lambda: root.display_charge(rows=None, month_text=None)),
         (root.ui.buttonNewCharge, root.ui_create_charge),
         (root.ui.buttonSaveCharge, root.insert_new_charge),
         (root.ui.buttonDeleteCharge, root.delete_charge),
@@ -287,16 +287,9 @@ def setup_main_callbacks(root):
         cbBox.currentIndexChanged.connect(root.filter_accomptes)
 
     # === LineEdits ===
-    lineEdits = [
-        (root.ui.editSearchCredit, root.filter_credits),
-        (root.ui.editSearchClients, root.filter_clients),
-        (root.ui.editSearchEmploye, root.filter_employe),
-        (root.ui.editSearchCharge, root.filter_charge),
-        (root.ui.editSearchPayments, root.filter_payments),
-    ]
-    for edit, callback in lineEdits:
-        edit.textChanged.connect(callback)
-        edit.returnPressed.connect(callback)
+    root.ui.editSearchItem.textChanged.connect(root.search_item)
+    root.ui.editSearchItem.returnPressed.connect(root.search_item)
+    root.ui.buttonRefreshTableWidget.clicked.connect(root.refresh_table)
 
     # === Menus ===
     create_menu(
@@ -383,9 +376,11 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.toggleMenuButton.setIcon(theme_manager.icon("ri.menu-fold-fill", "ICON_COLOR"))
     root.ui.extraCloseColumnBtn.setIcon(theme_manager.icon("ph.x", "ICON_COLOR"))
 
+    root.ui.buttonRefreshTableWidget.setIcon(REFRESH_ICON)
+
     # --- Example: Credit Page
     root.ui.buttonCreditPage.setIcon(theme_manager.icon("ph.currency-circle-dollar", "MENU_COLOR"))
-    root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)
+    # root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)
     root.ui.buttonCreditVersement.setIcon(qta.icon('fa6s.money-check-dollar', color=NEW_COLOR))
     root.ui.buttonNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonSaveCredit.setIcon(SAVE_ICON)
@@ -403,7 +398,6 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     # --- Clients
     root.ui.buttonClientsPage.setIcon(theme_manager.icon('ph.users', "MENU_COLOR"))
     root.ui.buttonNewClient.setIcon(PLUS_ICON)
-    root.ui.buttonRefreshClientsTable.setIcon(REFRESH_ICON)
     root.ui.buttonClientNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonClientCreditList.setIcon(LIST_ICON)
     root.ui.buttonDeleteClient.setIcon(TRASH_ICON)
@@ -411,7 +405,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     # --- Employés
     root.ui.buttonEmployesPage.setIcon(theme_manager.icon('mdi.account-hard-hat', "MENU_COLOR"))
     root.ui.buttonNewEmploye.setIcon(PLUS_ICON)
-    root.ui.buttonRefreshEmpolyeTable.setIcon(REFRESH_ICON)
+    # root.ui.buttonRefreshEmpolyeTable.setIcon(REFRESH_ICON)
     root.ui.buttonSaveNewPerson.setIcon(SAVE_ICON)
     root.ui.buttonDeleteEmploye.setIcon(TRASH_ICON)
 
@@ -427,7 +421,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
 
     # --- Charges
     root.ui.buttonChargePage.setIcon(theme_manager.icon('mdi6.cash-minus', "EDIT_COLOR"))
-    root.ui.buttonRefreshChargeTable.setIcon(REFRESH_ICON)
+    # root.ui.buttonRefreshChargeTable.setIcon(REFRESH_ICON)
     root.ui.buttonNewCharge.setIcon(PLUS_ICON)
     root.ui.buttonSaveCharge.setIcon(SAVE_ICON)
     root.ui.buttonDeleteCharge.setIcon(TRASH_ICON)
@@ -437,304 +431,6 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonIconSumAvance.setIcon(qta.icon('fa5s.comment-medical', color=ICON_COLOR))
     root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=ICON_COLOR))
     root.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=SKYPE_COLOR))
-
-
-def main_icons_callbacks(root, theme_manager: ThemeManager):
-    # credit_icon = qta.icon('mdi6.cash', color=NEW_COLOR).themeSearchPaths
-    # root.ui.buttonCreditPage.setStyleSheet(f"background-image: {credit_icon}")
-    PLUS_ICON = theme_manager.icon('ph.plus', "NEW_COLOR")
-    CASH_PLUS_ICON = theme_manager.icon('mdi6.cash-plus', "NEW_COLOR")
-    SAVE_ICON = theme_manager.icon('mdi.content-save', "BLUE_COLOR")
-    TRASH_ICON = theme_manager.icon('msc.trashcan', "TRASH_COLOR")
-    REFRESH_ICON = theme_manager.icon("mdi6.refresh", "ICON_COLOR")
-    EDIT_ICON = theme_manager.icon('ph.pencil-line-light', "EDIT_COLOR")
-    LIST_ICON = theme_manager.icon('ph.list', "ICON_COLOR")
-
-    # == PushButtons Menus
-    # New Button with Menu
-    create_menu(
-        root,
-        root.ui.plusButtonShurtcut,
-        "ph.plus",  # main button icon (QtAwesome)
-        [
-            ("Client", lambda: root.ui_create_persone('client'), "ph.plus"),
-            ("Crédit", root.ui_create_credit, "ph.plus"),
-            ("Employée", lambda: root.ui_create_persone('employee'), "ph.plus"),
-            ("Charge", root.ui_create_charge, "ph.plus"),
-        ],
-        with_icons=True
-    )
-    # Settings Menu
-    create_menu(
-        root,
-        root.ui.buttonSettings,
-        "fa6s.gear",  # main button icon (QtAwesome)
-        [
-            ("Run Server", root.toggle_server, "mdi6.play-pause"),
-        ],
-        icon_color=ICON_COLOR,
-        with_icons=True
-    )
-    # Actions Credit Menu
-    create_menu(
-        root,
-        root.ui.buttonCreditActions,
-        # ph.caret-down
-        "ph.caret-down-bold",  # main button icon (QtAwesome)
-        [
-            ("Exporté", lambda: root.excel_export_credits("credits"), "mdi6.microsoft-excel"),
-        ],
-        icon_color=ICON_COLOR,
-        with_icons=True
-    )
-    # action clients page
-    create_menu(
-        root,
-        root.ui.buttonClientActions,
-        "ph.caret-down-bold",  # main button icon (QtAwesome)
-        [
-            ("Exporté", lambda: root.excel_export_credits(page="clients"), "mdi6.microsoft-excel"),
-        ],
-        icon_color=ICON_COLOR,
-        with_icons=True
-    )
-    # =============================
-    buttons = [
-        # --- MENUS
-        # (root.ui.toggleMenuButton, False, lambda: root.toggle_menu(from_btn=True)),
-        (root.ui.toggleMenuButton, qta.icon("ri.menu-fold-fill", color=ICON_COLOR), root.on_toggle_menu),
-
-        # TEST:
-        (root.ui.extraCloseColumnBtn, False, lambda: root.toggle_left_box(close=True)),
-
-        # -- Close, Maximize, Minimize
-        (root.ui.closeAppBtn, theme_manager.icon("ph.x", "MENU_COLOR"), root.close),  # Close the application
-        (root.ui.minimizeAppBtn, theme_manager.icon("mdi.window-minimize", "MENU_COLOR"), root.showMinimized),  # Minimize the application
-        (root.ui.maximizeRestoreAppBtn, False, root.toggle_maximize_restore),  # Maximize/Restore the application
-        (root.ui.toggleThemeBtn, qta.icon('fa6s.lightbulb', color=ICON_COLOR), root.toggle_theme),  # Toggle theme
-
-        # -- Close Messages Frame
-        (root.ui.buttonCloseMsgsFrame, False, lambda: root.close_msgs_frame(close=True)),
-        # ===============================================================================
-
-        # == Credit Page ==
-        (
-            # mdi6.cash
-            # ph.currency-circle-dollar-fill
-            # ph.currency-circle-dollar-light
-            root.ui.buttonCreditPage,
-            theme_manager.icon("ph.currency-circle-dollar", "MENU_COLOR"),
-            lambda: root.goto_page('credit')
-        ),
-        (root.ui.buttonRefreshCreditTable, REFRESH_ICON, root.refresh_credit_table),
-        (
-            # versement for a specific credit
-            root.ui.buttonCreditVersement,
-            qta.icon('fa6s.money-check-dollar', color=NEW_COLOR),
-            root.credit_list_versement
-        ),
-        # == New Credit
-        (root.ui.buttonNewCredit, CASH_PLUS_ICON, root.ui_create_credit),
-        (root.ui.buttonSaveCredit, SAVE_ICON, root.save_new_credit),
-        # == Credit Actions Edit/Versement/Delete
-        # (root.ui.buttonEditCredit, EDIT_ICON, root.edit_credit),
-        (root.ui.buttonDeleteCredit, TRASH_ICON, root.delete_credit),
-        # ============================================================================================
-        # == Versement Page ==
-        # ====================
-        (root.ui.buttonCreditAddVersement, qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
-        (root.ui.buttonSaveVersement, SAVE_ICON, root.save_new_versement),
-        (root.ui.buttonRegleCredit, qta.icon('mdi6.cash-check', color=NEW_COLOR), root.regle_credit),
-        (root.ui.buttonDeleteVersement, TRASH_ICON, root.delete_versement),
-        # ==================================================================================================
-        # == Clients Page ==
-        # ==================
-        (
-            # ph.users-three-thin
-            # ph.users-three-light
-            # ph.users-three
-            root.ui.buttonClientsPage,
-            qta.icon('ph.users', color=MENU_COLOR),
-            lambda: root.goto_page('client')
-        ),
-        (root.ui.buttonNewClient, PLUS_ICON, lambda: root.ui_create_persone('client')),
-        (root.ui.buttonRefreshClientsTable, REFRESH_ICON, lambda: root.display_clients(rows=None)),
-        (root.ui.buttonClientNewCredit, CASH_PLUS_ICON, lambda: root.ui_create_credit(client=True)),
-        (root.ui.buttonClientCreditList, LIST_ICON, root.client_credit_list),
-        (root.ui.buttonDeleteClient, TRASH_ICON, root.delete_client),
-        # ================================================================================================
-        # == Employes Page ==
-        # ==================
-        (
-            root.ui.buttonEmployesPage,
-            qta.icon('mdi.account-hard-hat', color=MENU_COLOR),
-            lambda: root.goto_page('employe')
-        ),
-        (root.ui.buttonNewEmploye, PLUS_ICON, lambda: root.ui_create_persone('employe')),
-        (root.ui.buttonRefreshEmpolyeTable, REFRESH_ICON, lambda: root.display_employes(rows=None)),
-        # button save new both (EMPLOYE & CLIENTS)
-        (root.ui.buttonSaveNewPerson, SAVE_ICON, root.save_new_persone),
-        (root.ui.buttonDeleteEmploye, TRASH_ICON, root.delete_employe),
-
-        # == Accompte Employee ==
-        (
-            # fa6s.sack-dollar
-            # fa5s.file-invoice-dollar
-            root.ui.buttonAccomptePage,
-            qta.icon('fa6s.file-invoice-dollar', color=MENU_COLOR),
-            lambda: root.goto_page('operations', from_btn=True)
-        ),
-        (root.ui.buttonEmployeNewAvance, CASH_PLUS_ICON, lambda: root.ui_employe_opration('avance')),
-        (root.ui.buttonEmployeNewPrime, CASH_PLUS_ICON, lambda: root.ui_employe_opration('prime')),
-        (
-            root.ui.buttonEmployeNewRetenu,
-            qta.icon('mdi6.cash-minus', color=TRASH_COLOR),
-            lambda: root.ui_employe_opration('retenu')
-        ),
-        (
-            root.ui.buttonCalculateSalaire,
-            qta.icon('mdi.calculator-variant', color=ICON_COLOR),
-            lambda: root.calculate_salaire(from_btn=True)
-        ),
-
-        # Save Operation for Employees
-        (root.ui.buttonEmployeSaveOperation, SAVE_ICON, root.save_new_operation),
-        # refresh to all
-        (
-            root.ui.buttonRefreshAccompteTable,
-            REFRESH_ICON,
-            lambda: root.display_accomptes(rows=None, headers_type="all")
-        ),
-        (root.ui.buttonDeleteAccompte, TRASH_ICON, root.delete_accompte),
-        # ==================================================================================================
-        # == Charge Page ==
-        # ==================
-        (
-            root.ui.buttonChargePage,
-            qta.icon('mdi6.cash-minus', color=EDIT_COLOR),
-            lambda: root.goto_page('charge', from_btn=True)
-        ),
-        (root.ui.buttonRefreshChargeTable, REFRESH_ICON, lambda: root.display_charge(rows=None, month_text=None)),
-        (root.ui.buttonNewCharge, PLUS_ICON, root.ui_create_charge),
-        (root.ui.buttonSaveCharge, SAVE_ICON, root.insert_new_charge),
-        (root.ui.buttonDeleteCharge, TRASH_ICON, root.delete_charge),
-    ]
-    for button, icon, callback in buttons:
-        if icon: button.setIcon(icon)
-        if callback: button.clicked.connect(callback)
-
-    # == Just Icons for Buttons ==
-    root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=ICON_COLOR))
-    root.ui.buttonIconSumAvance.setIcon(qta.icon('fa5s.comment-medical', color=ICON_COLOR))
-    root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=ICON_COLOR))
-    root.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=SKYPE_COLOR))
-
-    # =============================
-    # == QTableWidget Signals
-    # ==============================
-    # Enable/Disable buttons based on selection
-    # Map each table widget to its page key
-    tables = [
-        (root.ui.clientsTableWidget, "client"),
-        (root.ui.employesTableWidget, "employe"),
-        (root.ui.creditTableWidget, "credit"),
-        (root.ui.versementTableWidget, "payment"),
-        (root.ui.accompteTableWidget, "operations"),
-        (root.ui.chargeTableWidget, "charge"),
-    ]
-
-    # Connect signals dynamically
-    for table, page in tables:
-        table.itemSelectionChanged.connect(lambda p=page: root.enable_buttons(p))
-
-    # Commit edits when editing is finished
-    table_edits = [
-        (root.ui.employesTableWidget, root.edit_employe),
-        (root.ui.accompteTableWidget, root.edit_accompte),
-        (root.ui.clientsTableWidget, root.edit_client),
-        (root.ui.creditTableWidget, root.edit_credit),
-        (root.ui.chargeTableWidget, root.edit_charge),
-    ]
-    for table, callback in table_edits:
-        table.editingFinished.connect(callback)
-
-    # == Context Menus for Tables ==
-    # == Employee Menu
-    employe_table_actions = [
-        (
-            'L. Accompte',
-            qta.icon("fa6s.money-check-dollar", color=NEW_COLOR),
-            lambda: root.accompte_by_employee()
-        ),
-        (
-            'Calculer Salaire',
-            qta.icon('mdi.calculator-variant', color=ICON_COLOR),
-            lambda: root.calculate_salaire(from_btn=False)
-        ),
-        ('separator', None, None),
-        ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_employe),
-    ]
-    setup_table_context_menu(root.ui.employesTableWidget, employe_table_actions)
-
-    # == Clients Menu
-    client_table_actions = [
-        ('N. Crédit', CASH_PLUS_ICON, lambda: root.ui_create_credit(client=True)),
-        ('L. Crédits', LIST_ICON, root.client_credit_list),
-        ('separator', None, None),
-        ('Supprimer', TRASH_ICON, root.delete_client),
-    ]
-    setup_table_context_menu(root.ui.clientsTableWidget, client_table_actions)
-
-    # == Crédits Menu
-    credit_table_actions = [
-        ('A. Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
-        ('L. Versements', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.credit_list_versement),
-        ('Régler', qta.icon('mdi6.cash-check', color=NEW_COLOR), root.regle_credit),
-        ('separator', None, None),
-        ('Supprimer', TRASH_ICON, root.delete_credit),
-    ]
-    setup_table_context_menu(root.ui.creditTableWidget, credit_table_actions)
-
-    # Charge Menu
-    charge_table_actions = [
-        ('Modifier', EDIT_ICON, lambda: root.ui_create_charge(edit=True)),
-        ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_charge),
-    ]
-    setup_table_context_menu(root.ui.chargeTableWidget, charge_table_actions)
-
-    # ==============================
-    # == ComboBox Signals
-    # ==============================
-    # QComboBox for Credit, Salaire, Charge
-    cbBoxes = [
-        (root.ui.cbBoxCreditByStatus, root.filter_credit_by_status),
-        (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
-        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
-    ]
-    for cbBox, callback in cbBoxes:
-        cbBox.currentIndexChanged.connect(callback)
-
-    # QComboBox for Accomptes
-    for cbBox in (
-            root.ui.cbBoxEmployeOperationByName,
-            root.ui.cbBoxEmployeOperationByType,
-            root.ui.cbBoxEmployeOperationByDate
-    ):
-        cbBox.currentIndexChanged.connect(root.filter_accomptes)
-
-    # ================================
-    # == LineEdit Signals
-    # ================================
-    # QLineEdit for Search
-    lineEdits = [
-        (root.ui.editSearchCredit, root.filter_credits),
-        (root.ui.editSearchClients, root.filter_clients),
-        (root.ui.editSearchEmploye, root.filter_employe),
-        (root.ui.editSearchCharge, root.filter_charge),
-    ]
-    for edit, callback in lineEdits:
-        edit.textChanged.connect(callback)
-        edit.returnPressed.connect(callback)
 
 
 def pagebuttons_stats(root):
