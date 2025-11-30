@@ -2282,7 +2282,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.extraCenter.setCurrentIndex(5)
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(6)
         self.cbBoxCreditByStatus.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.toggleMenuButton, self.extraCloseColumnBtn)
