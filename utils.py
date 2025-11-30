@@ -165,20 +165,19 @@ def setup_main_callbacks(root):
     buttons = [
         # == Credit Page ==
         (root.ui.buttonCreditPage, lambda: root.goto_page("credit")),
-        # (root.ui.buttonRefreshCreditTable, root.refresh_credit_table),
-
-        # Payments Page
-        (root.ui.buttonPaymentsPage, lambda: root.goto_page("payments")),
-        # versement for a specific credit
-        (root.ui.buttonCreditVersement, root.credit_list_versement),
-        # == New Credit
         (root.ui.buttonNewCredit, root.ui_create_credit),
         (root.ui.buttonSaveCredit, root.save_new_credit),
         # == Credit Actions Edit/Versement/Delete
         (root.ui.buttonDeleteCredit, root.delete_credit),
         # ============================================================================================
-        # == Versement Page ==
-        # ====================
+        # == Payments Page ==
+        (root.ui.buttonPaymentsPage, lambda: root.goto_page("payments")),
+        (root.ui.buttonPaiementsEtatJournalier, root.paiements_etat_journalier),
+        # versement for a specific credit
+        (root.ui.buttonCreditVersement, root.credit_list_versement),
+
+        # == Versement Small Table Page ==
+        # ================================
         (root.ui.buttonDeletePayment, root.delete_payment),
         (root.ui.buttonCreditAddVersement, root.ui_add_versement),
         (root.ui.buttonSaveVersement, root.save_new_versement),
@@ -241,6 +240,8 @@ def setup_main_callbacks(root):
         (root.ui.buttonNewCharge, root.ui_create_charge),
         (root.ui.buttonSaveCharge, root.insert_new_charge),
         (root.ui.buttonDeleteCharge, root.delete_charge),
+
+        (root.ui.buttonEtatPage, lambda: root.goto_page("etats")),
     ]
     for button, callback in buttons:
         button.clicked.connect(callback)
@@ -426,6 +427,8 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonSaveCharge.setIcon(SAVE_ICON)
     root.ui.buttonDeleteCharge.setIcon(TRASH_ICON)
 
+    root.ui.buttonEtatPage.setIcon(theme_manager.icon('mdi6.chart-bar', "ICON_COLOR"))
+
     # --- Standalone Icons
     root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=ICON_COLOR))
     root.ui.buttonIconSumAvance.setIcon(qta.icon('fa5s.comment-medical', color=ICON_COLOR))
@@ -445,6 +448,7 @@ def pagebuttons_stats(root):
     ui.buttonAccomptePage.setChecked(current_page == 3)
     ui.buttonChargePage.setChecked(current_page == 4)
     ui.buttonPaymentsPage.setChecked(current_page == 5)
+    ui.buttonEtatPage.setChecked(current_page == 6)
 
 
 def clear_inputs(inputs: list) -> None:
@@ -474,7 +478,10 @@ def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: li
     table.setSortingEnabled(False)
 
     # These columns will be formatted as money
-    money_headers = {'Salaire', 'Crédit', 'Montant Total', 'Versement', 'Reste', 'Montant'}
+    money_headers = {
+        'Salaire', 'Crédit', 'Montant Total', 'Versement', 'Reste',
+        'Montant', 'Accomptes', 'Credits', 'Versements', 'Charges'
+    }
     for row_idx, row_data in enumerate(rows):
         for col_idx, value in enumerate(row_data):
             header = headers[col_idx].strip()

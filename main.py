@@ -150,6 +150,15 @@ class Credit(QtWidgets.QMainWindow):
                     (self.ui.buttonDeleteCharge,)
                 )
 
+            },
+            'etats': {
+                'title': 'Etat Journalier',
+                'widget': lambda self: self.ui.EtatPage,
+                'action': lambda self: self.display_etat_journalier(),
+                'buttons': lambda self: (
+                    self.ui.etatJournalierTableWidget,
+                    ()
+                )
             }
         }
 
@@ -255,7 +264,7 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.buttonAccomptePage: '  Accomptes',
             self.ui.buttonChargePage: '  Les Charges',
             self.ui.buttonPaymentsPage: '  Versements',
-
+            self.ui.buttonEtatPage: '  Etats',
         }
         if collapse:
             # Close Menu
@@ -1443,6 +1452,12 @@ class Credit(QtWidgets.QMainWindow):
             else:
                 self.show_error_message(f"{result['error']}", success=False)
 
+    def paiements_etat_journalier(self):
+        rows = self.db.dump_payments(by_date=True)
+        utils.populate_table_widget(self.ui.paymentsTableWidget, rows, ['Date', 'Versement'])
+        self.ui.labelPaymentsCount.setText(f"Total: {len(rows)}")
+        self.ui.labelTotalPayments.setText(f"Total: {utils.format_money(sum(r[1] for r in rows))} DA")
+
     # == Small Table Versement By Crédit ==
     def display_versement(self, rows):
         """
@@ -1823,6 +1838,16 @@ class Credit(QtWidgets.QMainWindow):
                 self.goto_page('charge', title='Charges')
             else:
                 self.show_error_message(f"{result['error']}", success=False)
+
+    # =================================================================================
+    # == Statistics Page ==
+    # =====================
+    def display_etat_journalier(self):
+        rows = self.db.etat_journalier()
+        print(rows)
+        headers = ['Date', 'Accomptes', 'Credits', 'Versements', 'Charges']
+        utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
+        utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 300, 300, 300, 300)
 
 
 if __name__ == '__main__':

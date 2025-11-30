@@ -136,26 +136,14 @@ QPushButton::menu-indicator {
 }
 
 /* === Buttons Just Icons == */
-#buttonRefreshClientsTable,
+#buttonRefreshTableWidget,		/* One button refresh table widgets */
 #buttonDeleteClient,
-
-#buttonRefreshEmpolyeTable,
 #buttonDeleteEmploye,
-
-#buttonRefreshEmpolyeOperationTable,
 #buttonDeleteEmployeOperation,
 #buttonExportAccomptDetails,
-
-#buttonRefreshCreditTable,
-#buttonRefreshChargeTable,
-
 #buttonDeleteCredit,
 #buttonDeleteVersement,
-
 #buttonDeleteCharge,
-#buttonRefreshChargeTable,
-
-#buttonRefreshPaymentTable,
 #buttonDeletePayment
 {
 	min-width: 58;
@@ -635,7 +623,8 @@ QCommandLinkButton:pressed {
 #VersementPage,
 #EmployeOperationsPage,
 #ChargePage,
-#PaymentsWidgetContainer
+#PaymentsWidgetContainer,
+#EtatPage
 {
 	background-color: #252525;
 }
