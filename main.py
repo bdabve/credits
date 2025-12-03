@@ -1392,12 +1392,11 @@ class Credit(QtWidgets.QMainWindow):
         """
         month = self.ui.cbBoxPaymentByMonth.currentText()
         if month == 'Mois':
-            month = self.CURRENT_MONTH_TEXT
+            month = f"{self.CURRENT_YEAR}-{self.CURRENT_MONTH_TEXT}"
             self.ui.cbBoxPaymentByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
         else:
             month = f"{self.CURRENT_YEAR}-{month}"
             self.ui.cbBoxPaymentByMonth.setCurrentText(month)
-        # month = self.CURRENT_MONTH_TEXT if month == 'Tous' else f"{self.CURRENT_YEAR}-{month}"
 
         if rows is None:
             rows = self.db.dump_payments(month)
