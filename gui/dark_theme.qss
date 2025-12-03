@@ -238,7 +238,8 @@ QGroupBox .QPushButton:pressed {
 }
 
 /* == Checked == */
-#topMenu .QPushButton:checked {
+#topMenu .QPushButton:checked,
+#buttonPaiementsEtatJournalier:checked {
 	/*background-color: rgb(40, 44, 52);*/	
 	background-color: #454545;
 	color: rgb(255, 255, 255);
@@ -671,12 +672,17 @@ QCommandLinkButton:pressed {
 ===============================*/
 
 /* == SUM Labels ==*/
+#labelEtatSumCredit,
 #labelTotalCredits,
 #labelTotalCreditClients,
 #labelAddVersementMontant,
+
 #labelTotalCharge,
+#labelEtatSumCharge,
+
+#labelEtatSumAccompte,
 #labelTotalPayments {
-	font: 14pt "Lucida Casual";
+	font: 12pt "Lucida Casual";
 	background: #3b3230;
 	color: #f77861;
 	padding: 12px 10px;
@@ -688,11 +694,15 @@ QCommandLinkButton:pressed {
 #labelCreditCount,
 #labelEmployesCount,
 #labelAccompteCount,
+
+
+#labelEtatSumVerse,
 #labelVersementCount,
+
 #labelChargeCount,
 #labelPaymentsCount
 {
-	font: 10pt "Lucida Casual";
+	font: 12pt "Lucida Casual";
 	background-color: #0d4c3f;
 	color: #c4d0cd;
 	padding: 0px 10px;

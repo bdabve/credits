@@ -276,6 +276,8 @@ def setup_main_callbacks(root):
         (root.ui.cbBoxCreditByCommune, root.filter_credits_by_commune),
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
         (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
+        (root.ui.cbBoxPaymentByMonth, root.payment_from_cbbox),
+        (root.ui.cbBoxEtatByMonth, root.display_etat_journalier),
     ]
     for cbBox, callback in cbBoxes:
         cbBox.currentIndexChanged.connect(callback)

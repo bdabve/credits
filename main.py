@@ -1390,8 +1390,18 @@ class Credit(QtWidgets.QMainWindow):
         :param self: Description
         :param rows: Description
         """
+        month = self.ui.cbBoxPaymentByMonth.currentText()
+        if month == 'Mois':
+            month = self.CURRENT_MONTH_TEXT
+            self.ui.cbBoxPaymentByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+        else:
+            month = f"{self.CURRENT_YEAR}-{month}"
+            self.ui.cbBoxPaymentByMonth.setCurrentText(month)
+        # month = self.CURRENT_MONTH_TEXT if month == 'Tous' else f"{self.CURRENT_YEAR}-{month}"
+
         if rows is None:
-            rows = self.db.dump_payments()
+            rows = self.db.dump_payments(month)
+
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, utils.PAYMENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.paymentsTableWidget, 80, 270, 500, 270)
         self.ui.labelPaymentsCount.setText(f"Total: {len(rows)}")
@@ -1423,6 +1433,14 @@ class Credit(QtWidgets.QMainWindow):
         else:
             self.show_error_message(f"Erreur: {result['error']}", success=False)
 
+    def payment_from_cbbox(self):
+        journalier_button = self.ui.buttonPaiementsEtatJournalier.isChecked()
+        if journalier_button:
+            self.paiements_etat_journalier()
+            return
+        else:
+            self.display_payments()
+
     def filter_payments(self):
         """
         Search Payments
@@ -1453,8 +1471,12 @@ class Credit(QtWidgets.QMainWindow):
                 self.show_error_message(f"{result['error']}", success=False)
 
     def paiements_etat_journalier(self):
-        rows = self.db.dump_payments(by_date=True)
+        month = self.ui.cbBoxPaymentByMonth.currentText()
+        month = self.CURRENT_MONTH_TEXT if month == 'Mois' else f"{self.CURRENT_YEAR}-{month}"
+
+        rows = self.db.dump_payments(month, journalier=True)
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, ['Date', 'Versement'])
+        utils.set_table_column_sizes(self.ui.paymentsTableWidget, 300, 300)
         self.ui.labelPaymentsCount.setText(f"Total: {len(rows)}")
         self.ui.labelTotalPayments.setText(f"Total: {utils.format_money(sum(r[1] for r in rows))} DA")
 
@@ -1843,8 +1865,26 @@ class Credit(QtWidgets.QMainWindow):
     # == Statistics Page ==
     # =====================
     def display_etat_journalier(self):
-        rows = self.db.etat_journalier()
-        print(rows)
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        if selected_month == "Mois":
+            month = self.CURRENT_MONTH
+        else:
+            month = f"{self.CURRENT_YEAR}-{selected_month}"
+        rows = self.db.etat_journalier(month=month)
+        # Sums
+        self.ui.labelEtatSumAccompte.setText(
+            f"Total Accomptes: {utils.format_money(sum(r[1] for r in rows))} DA"
+        )
+        self.ui.labelEtatSumCredit.setText(
+            f"Total Crédits: {utils.format_money(sum(r[2] for r in rows))} DA"
+        )
+        self.ui.labelEtatSumVerse.setText(
+            f"Total Versements: {utils.format_money(sum(r[3] for r in rows))} DA"
+        )
+        self.ui.labelEtatSumCharge.setText(
+            f"Total Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
+        )
+        # Display in Table
         headers = ['Date', 'Accomptes', 'Credits', 'Versements', 'Charges']
         utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 300, 300, 300, 300)

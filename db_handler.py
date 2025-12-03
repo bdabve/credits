@@ -996,14 +996,15 @@ class Database:
     # ====================================
     # === PAYMENTS(VERSEMENT) METHODES ===
     # ====================================
-    def dump_payments(self, by_date=False):
+    def dump_payments(self, month, journalier=False):
         with self.connect() as conn:
             cursor = conn.cursor()
-            if by_date:
+            if journalier:
                 payments_fields = ["p.date_versement", "IFNULL(SUM(p.montant), 0)"]
                 query = f"""
                     SELECT {', '.join(payments_fields)}
                     FROM paiement p
+                    WHERE strftime('%Y-%m', p.date_versement) = ?
                     GROUP BY p.date_versement
                     ORDER BY p.id DESC
                 """
@@ -1012,9 +1013,10 @@ class Database:
                     SELECT {', '.join(self.payments_fields)}
                     FROM paiement p
                     JOIN clients c ON p.client_id = c.id
+                    WHERE strftime('%Y-%m', p.date_versement) = ?
                     ORDER BY p.id DESC
                 """
-            cursor.execute(query)
+            cursor.execute(query, (month,))
             return cursor.fetchall()
 
     def update_payment(self, paiement_id, column, new_text):
@@ -1313,12 +1315,24 @@ class Database:
             conn.commit()
             return {'success': True, 'message': message}
 
-    def etat_journalier(self):
+    def etat_journalier(self, month):
         queries = {
-            "accompte": "SELECT date, SUM(montant) FROM operations GROUP BY date",
-            "credit": "SELECT date_credit, SUM(montant) FROM credit GROUP BY date_credit",
-            "paiement": "SELECT date_versement, SUM(montant) FROM paiement GROUP BY date_versement",
-            "charges": "SELECT date_charge, SUM(montant) FROM charges GROUP BY date_charge"
+            "accompte": """
+                    SELECT date, SUM(montant) FROM operations
+                    WHERE STRFTIME('%Y-%m', date) = ? GROUP BY date
+                """,
+            "credit": """
+                    SELECT date_credit, SUM(montant) FROM credit
+                    WHERE STRFTIME('%Y-%m', date_credit) = ? GROUP BY date_credit
+                """,
+            "paiement": """
+                    SELECT date_versement, SUM(montant) FROM paiement
+                    WHERE STRFTIME('%Y-%m', date_versement) = ? GROUP BY date_versement
+                """,
+            "charges": """
+                    SELECT date_charge, SUM(montant) FROM charges
+                    WHERE STRFTIME('%Y-%m', date_charge) = ? GROUP BY date_charge
+                """
         }
 
         with self.connect() as conn:
@@ -1328,7 +1342,7 @@ class Database:
 
             # Collect data from each query
             for key, query in queries.items():
-                cursor.execute(query)
+                cursor.execute(query, [month])
                 rows = cursor.fetchall()     # (date, sum)
 
                 for d, total in rows:
