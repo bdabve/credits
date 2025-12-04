@@ -699,7 +699,7 @@ def export_salary_report_openpyxl(rows, file_path):
         rows (list of tuples): Each tuple = (id, date, type, name, somme, motif)
         file_name (str): Name of the Excel file to save.
     """
-    
+
     wb = Workbook()
     ws = wb.active
     ws.title = "Report"

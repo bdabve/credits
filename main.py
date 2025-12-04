@@ -588,13 +588,13 @@ class Credit(QtWidgets.QMainWindow):
         logger.info(f"Saving the new {person_type}...")
 
         # Get values from UI
-        name = self.ui.editNewPersonName.text()
+        name = self.ui.editNewPersonName.text().lower()
         phone = self.ui.editNewPersonPhone.text()
-        job = self.ui.editNewPersonJob.text()
+        job = self.ui.editNewPersonJob.text().lower()
         salaire = self.ui.editNewPersonSalaire.value()
         date_embauche = self.ui.editNewPersonDateEmbauche.date().toPyDate()
         commune = self.ui.editNewPersonJob.text().lower()        # FIXME This work with lineEditJob
-        obs = self.ui.editNewPersonObs.toPlainText()
+        obs = self.ui.editNewPersonObs.toPlainText().lower()
 
         logger.info(f"Saving new {person_type} with Values: ")
         if person_type == 'client':
@@ -1321,7 +1321,7 @@ class Credit(QtWidgets.QMainWindow):
         client = self.ui.cbBoxAddCreditClients.currentText()
         date_credit = self.ui.dateEditCreditDate.date().toPyDate()
         montant = self.ui.editCreditMontant.value()
-        motif = self.ui.editCreditDescription.toPlainText()         # FIXME: this work for motif
+        motif = self.ui.editCreditDescription.toPlainText().lower()         # FIXME: this work for motif
 
         # Validate the montant must be greater the 0
         if montant <= 0:
@@ -1614,7 +1614,7 @@ class Credit(QtWidgets.QMainWindow):
         client_id = self.ui.labelVersementClientID.text()
         date_vers = self.ui.dateEditVersementDate.date().toPyDate()
         montant = self.ui.editVersementMontant.value()
-        description = self.ui.editVersementDescription.toPlainText()
+        description = self.ui.editVersementDescription.toPlainText().lower()
 
         self.insert_versement_db(credit_id, client_id, date_vers, montant, reste, description)
 
