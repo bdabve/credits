@@ -84,7 +84,8 @@ class Credit(QtWidgets.QMainWindow):
                     self.ui.clientsTableWidget,
                     (self.ui.buttonClientCreditList,
                      self.ui.buttonDeleteClient,
-                     self.ui.buttonClientNewCredit)
+                     self.ui.buttonClientNewCredit,
+                     self.ui.buttonClientSituation)
                 )
             },
             'employe': {
@@ -980,7 +981,19 @@ class Credit(QtWidgets.QMainWindow):
         if not rows:
             self.show_error_message("Aucun acompte trouvé.", success=False)
             return
-        result = utils.export_salary_report_openpyxl(rows, f"Accompte-mois-{month_number:02d}")
+        # Open the QFileDialog to select save location
+        options = QtWidgets.QFileDialog.Options()
+        file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
+            None,
+            "Enregistrer fichier Excel",
+            f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\Accompte_{month}.xlsx",
+            "Fichiers Excel (*.xlsx)",
+            options=options
+        )
+        if not file_path:
+            self.show_error_message("Exportation annulée par l'utilisateur.", success=False)
+            return
+        result = utils.export_salary_report_openpyxl(rows, file_path)
         self.show_error_message(result, success=True)
 
     # =========================================
@@ -1138,6 +1151,37 @@ class Credit(QtWidgets.QMainWindow):
                 self.display_clients()
             else:
                 self.show_error_message(f"{result['error']}", success=False)
+
+    def client_situation_report(self):
+        """
+        Generate and export a client situation report.
+        """
+        client_id = self.get_item_id(self.ui.clientsTableWidget)
+        client_name = utils.get_column_value(
+            self.ui.clientsTableWidget,
+            self.ui.clientsTableWidget.currentRow(),
+            1
+        )
+        logger.info("Generating client situation report...")
+        rows = self.db.get_situation(client_id)
+        if not rows:
+            self.show_error_message("Aucun client trouvé pour le rapport de situation.", success=False)
+            return
+        # Open the QFileDialog to select save location
+        options = QtWidgets.QFileDialog.Options()
+        file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
+            None,
+            "Enregistrer fichier Excel",
+            f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\Situtation_{client_name}.xlsx",
+            "Fichiers Excel (*.xlsx)",
+            options=options
+        )
+        if not file_path:
+            self.show_error_message("Exportation annulée par l'utilisateur.", success=False)
+            return
+        # Export to Excel
+        result = utils.export_situation_to_excel(rows, file_path)
+        self.show_error_message(result, success=True)
 
     # ========================================
     # == Credits Functions ==

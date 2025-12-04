@@ -138,10 +138,12 @@ QPushButton::menu-indicator {
 /* === Buttons Just Icons == */
 #buttonRefreshTableWidget,		/* One button refresh table widgets */
 #buttonDeleteClient,
+#buttonClientActions,
 #buttonDeleteEmploye,
 #buttonDeleteEmployeOperation,
 #buttonExportAccomptDetails,
 #buttonDeleteCredit,
+#buttonCreditActions,
 #buttonDeleteVersement,
 #buttonDeleteCharge,
 #buttonDeletePayment

@@ -18,6 +18,7 @@ import qtawesome as qta
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils import get_column_letter
 
 from gui.h_confirm_dialog import Ui_Dialog
@@ -194,7 +195,7 @@ def setup_main_callbacks(root):
             lambda: root.goto_page('client')
         ),
         (root.ui.buttonNewClient, lambda: root.ui_create_persone('client')),
-        # (root.ui.buttonRefreshClientsTable, lambda: root.display_clients(rows=None)),
+        (root.ui.buttonClientSituation, root.client_situation_report),
         (root.ui.buttonClientNewCredit, lambda: root.ui_create_credit(client=True)),
         (root.ui.buttonClientCreditList, root.client_credit_list),
         (root.ui.buttonDeleteClient, root.delete_client),
@@ -203,7 +204,6 @@ def setup_main_callbacks(root):
         # ==================
         (root.ui.buttonEmployesPage, lambda: root.goto_page('employe')),
         (root.ui.buttonNewEmploye, lambda: root.ui_create_persone('employe')),
-        # (root.ui.buttonRefreshEmpolyeTable, lambda: root.display_employes(rows=None)),
         # button save new both (EMPLOYE & CLIENTS)
         (root.ui.buttonSaveNewPerson, root.save_new_persone),
         (root.ui.buttonDeleteEmploye, root.delete_employe),
@@ -224,19 +224,12 @@ def setup_main_callbacks(root):
         # Save Operation for Employees
         (root.ui.buttonEmployeSaveOperation, root.save_new_operation),
         # refresh to all
-        (
-            root.ui.buttonRefreshAccompteTable,
-            lambda: root.display_accomptes(rows=None, headers_type="all")
-        ),
+        (root.ui.buttonRefreshAccompteTable, lambda: root.display_accomptes(rows=None, headers_type="all")),
         (root.ui.buttonDeleteAccompte, root.delete_accompte),
         # ==================================================================================================
         # == Charge Page ==
         # ==================
-        (
-            root.ui.buttonChargePage,
-            lambda: root.goto_page('charge', from_btn=True)
-        ),
-        # (root.ui.buttonRefreshChargeTable, lambda: root.display_charge(rows=None, month_text=None)),
+        (root.ui.buttonChargePage, lambda: root.goto_page('charge', from_btn=True)),
         (root.ui.buttonNewCharge, root.ui_create_charge),
         (root.ui.buttonSaveCharge, root.insert_new_charge),
         (root.ui.buttonDeleteCharge, root.delete_charge),
@@ -373,17 +366,17 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     EDIT_ICON       = theme_manager.icon('ph.pencil-line-light', "EDIT_COLOR")
     LIST_ICON       = theme_manager.icon('ph.list', "ICON_COLOR")
 
-    root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))                       # Close the application
-    root.ui.minimizeAppBtn.setIcon(theme_manager.icon("mdi.window-minimize", "MENU_COLOR"))     # Minimize the application
-    root.ui.maximizeRestoreAppBtn.setIcon(theme_manager.icon("mdi.window-restore", "MENU_COLOR"))  # Maximize/Restore the application
+    # --- Main Window Buttons
+    root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))
+    root.ui.minimizeAppBtn.setIcon(theme_manager.icon("mdi.window-minimize", "MENU_COLOR"))
+    root.ui.maximizeRestoreAppBtn.setIcon(theme_manager.icon("mdi.window-restore", "MENU_COLOR"))
     root.ui.toggleMenuButton.setIcon(theme_manager.icon("ri.menu-fold-fill", "ICON_COLOR"))
     root.ui.extraCloseColumnBtn.setIcon(theme_manager.icon("ph.x", "ICON_COLOR"))
 
     root.ui.buttonRefreshTableWidget.setIcon(REFRESH_ICON)
 
-    # --- Example: Credit Page
+    # --- Credit Page
     root.ui.buttonCreditPage.setIcon(theme_manager.icon("ph.currency-circle-dollar", "MENU_COLOR"))
-    # root.ui.buttonRefreshCreditTable.setIcon(REFRESH_ICON)
     root.ui.buttonCreditVersement.setIcon(qta.icon('fa6s.money-check-dollar', color=NEW_COLOR))
     root.ui.buttonNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonSaveCredit.setIcon(SAVE_ICON)
@@ -404,11 +397,11 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonClientNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonClientCreditList.setIcon(LIST_ICON)
     root.ui.buttonDeleteClient.setIcon(TRASH_ICON)
+    root.ui.buttonClientSituation.setIcon(theme_manager.icon('ri.file-excel-2-fill', "NEW_COLOR"))
 
     # --- Employés
     root.ui.buttonEmployesPage.setIcon(theme_manager.icon('mdi.account-hard-hat', "MENU_COLOR"))
     root.ui.buttonNewEmploye.setIcon(PLUS_ICON)
-    # root.ui.buttonRefreshEmpolyeTable.setIcon(REFRESH_ICON)
     root.ui.buttonSaveNewPerson.setIcon(SAVE_ICON)
     root.ui.buttonDeleteEmploye.setIcon(TRASH_ICON)
 
@@ -424,12 +417,13 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
 
     # --- Charges
     root.ui.buttonChargePage.setIcon(theme_manager.icon('mdi6.cash-minus', "EDIT_COLOR"))
-    # root.ui.buttonRefreshChargeTable.setIcon(REFRESH_ICON)
     root.ui.buttonNewCharge.setIcon(PLUS_ICON)
     root.ui.buttonSaveCharge.setIcon(SAVE_ICON)
     root.ui.buttonDeleteCharge.setIcon(TRASH_ICON)
 
-    root.ui.buttonEtatPage.setIcon(theme_manager.icon('mdi6.chart-bar', "ICON_COLOR"))
+    # --- Etats
+    # ph.chart-line-up
+    root.ui.buttonEtatPage.setIcon(theme_manager.icon('ph.presentation-chart-thin', "ICON_COLOR"))
 
     # --- Standalone Icons
     root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=ICON_COLOR))
@@ -696,7 +690,7 @@ def create_menu(root, menu_button, icon_name, actions, icon_color=NEW_COLOR, wit
 
 
 # == Excel functions
-def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
+def export_salary_report_openpyxl(rows, file_path):
     """
     Create a nicely formatted Excel report from rows using openpyxl.
     All tables are placed in one sheet.
@@ -705,14 +699,7 @@ def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
         rows (list of tuples): Each tuple = (id, date, type, name, somme, motif)
         file_name (str): Name of the Excel file to save.
     """
-    # ---- Ensure directory exists ----
-    output_dir = "excel_fichier"
-    os.makedirs(output_dir, exist_ok=True)
-
-    # ---- Build filename with timestamp ----
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = os.path.join(output_dir, f"{file_name}__{timestamp}.xlsx")
-
+    
     wb = Workbook()
     ws = wb.active
     ws.title = "Report"
@@ -797,63 +784,72 @@ def export_salary_report_openpyxl(rows, file_name="accompte_report.xlsx"):
                 max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[col_letter].width = max_length + 2
 
-    wb.save(filename)
-    return f"✅ Accompte Exporté avec succès dans '{filename}'."
+    wb.save(file_path)
+    return f"✅ Accompte Exporté avec succès dans '{file_path}'."
 
 
-def export_situation_to_excel(data, file_path):
+def export_situation_to_excel(rows, file_path):
     # TODO: fix this function
     """
     Export the client's situation (credits + versements) in a structured Excel table.
     Each credit and its versements are grouped with clear separation lines.
     """
-    # data = self.get_situation(client_id)
 
     wb = Workbook()
     ws = wb.active
-    ws.title = "Situation Client"
+    ws.title = "Versements"
 
-    # Title style
-    bold = Font(bold=True)
-    center = Alignment(horizontal="center")
+    # Informations client
+    ws.append(["Client", rows[0]['client']])
+    ws.append(["Total Crédit", rows[0]['total_montant']])
+    ws.append(["Reste", rows[0]['reste']])
+    # Calculate total versement
+    sum_versement = sum(r['montant'] for r in rows[1:])
+    ws.append(["Total Versement", sum_versement])
 
-    # Headers
-    headers = ["Date Credit", "Montant", "Reste", "Statut",
-               "Date Versement", "Montant Versement", "Observation"]
-    ws.append(headers)
+    # --- Add this to format the numbers as money ---
+    ws["B2"].number_format = '#,##0'   # Total Crédit
+    ws["B3"].number_format = '#,##0'   # Reste
+    ws["B4"].number_format = '#,##0'   # Total Versement
 
-    for col in range(1, len(headers) + 1):
-        ws.cell(row=1, column=col).font = bold
-        ws.cell(row=1, column=col).alignment = center
-        ws.column_dimensions[chr(64 + col)].width = 22
+    # Empty lines
+    ws.append([])
+    ws.append([])
 
-    row = 2
-    for credit in data:
-        # Write credit info
-        base_row = row
-        ws.cell(row=row, column=1, value=credit['date_credit'])
-        ws.cell(row=row, column=2, value=credit['montant'])
-        ws.cell(row=row, column=3, value=credit['reste'])
-        ws.cell(row=row, column=4, value=credit['statut'])
+    # En-têtes du tableau
+    ws.append(["Date de versement", "Montant", "Recupérateur"])
 
-        # If there are versements, list them
-        if credit['versements']:
-            for v in credit['versements']:
-                ws.cell(row=row, column=5, value=v['date_versement'])
-                ws.cell(row=row, column=6, value=v['montant'])
-                ws.cell(row=row, column=7, value=v['observation'])
-                row += 1
-        else:
-            # If no versements, just one empty row
-            row += 1
+    # Lignes du tableau
+    payments = rows[1:]
+    for p in payments:
+        ws.append([p['date_versement'], p['montant'], p['recuperateur']])
 
-        # Add separator line (like “------------------------------”)
-        for col in range(1, len(headers) + 1):
-            ws.cell(row=row, column=col, value="------------------------------")
-        row += 1  # leave a blank line after each block
+    # Définir le tableau Excel
+    start_row = 7  # Ligne où commence le tableau (après infos client)
+    end_row = start_row + len(payments)
+    table_ref = f"A{start_row}:C{end_row}"
 
+    table = Table(displayName="TableVersements", ref=table_ref)
+    style = TableStyleInfo(name="TableStyleLight8", showRowStripes=True)
+    table.tableStyleInfo = style
+
+    ws.add_table(table)
+
+    # Auto-size des colonnes
+    for col in range(1, 4):
+        max_length = 0
+        for row in ws.iter_rows(min_col=col, max_col=col):
+            val = row[0].value
+            if val is not None:
+                max_length = max(max_length, len(str(val)))
+        ws.column_dimensions[get_column_letter(col)].width = max_length + 2
+
+    table.showTotals = True
+    table.totalsRowShown = True
+
+    # Sauvegarde du fichier
     wb.save(file_path)
-    print(f"✅ Situation exported successfully to {file_path}")
+    return f"✔️ Fichier généré : {file_path}"
 
 
 class ServerThread(Thread):

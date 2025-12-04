@@ -944,8 +944,9 @@ class Database:
             cursor = conn.cursor()
             # Get all credits for the client
             cursor.execute("""
-                SELECT SUM(montant), SUM(reste)
-                FROM credit
+                SELECT c.nom, SUM(montant), SUM(reste)
+                FROM credit AS cr
+                JOIN clients c ON cr.client_id = c.id
                 WHERE client_id = ?
             """, (client_id,))
             credits = cursor.fetchall()
@@ -960,12 +961,12 @@ class Database:
             result = []
             for row in credits:
                 result.append({
-                    'total_montant': row[0], 'reste': row[1]})
+                    'client': row[0], 'total_montant': row[1], 'reste': row[2]})
             for vers in versements:
                 result.append({
                     'date_versement': vers[0],
                     'montant': vers[1],
-                    'observation': vers[2]
+                    'recuperateur': vers[2]
                 })
             # TODO: Situation détaillée
             # for credit in credits:
@@ -1449,6 +1450,6 @@ if __name__ == '__main__':
     # rows = db.etat_journalier()
     # print(rows)
 
-    rows = db.dump_payments(by_date=True)
-    for row in rows:
-        print(row)
+    # rows = db.dump_payments(by_date=True)
+    # for row in rows:
+    #     print(row)
