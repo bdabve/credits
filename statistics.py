@@ -8,18 +8,24 @@
 import pandas as pd
 
 
-def cleaned_data(sheet_df):
+def load_excel(file_path, sheet_name):
+    """
+    This will return converted numeric values
+    """
+    import pandas as pd
+    dfs = pd.read_excel(file_path, sheet_name=None)
+    sheet = dfs[sheet_name]
     # --- Clean DATE column ---
-    sheet_df["DATE"] = pd.to_datetime(sheet_df["DATE"], errors="coerce")
+    sheet["DATE"] = pd.to_datetime(sheet["DATE"], errors="coerce")
 
     # --- Numeric columns ---
-    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "Observation"]
+    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF"]
 
     for col in fields:
         # to numeric
-        sheet_df[col] = pd.to_numeric(sheet_df[col], errors="coerce")
+        sheet[col] = pd.to_numeric(sheet[col], errors="coerce")
 
-    clean_df = sheet_df[sheet_df["DATE"].notna()]
+    clean_df = sheet[sheet["DATE"].notna()]     # clean by date to remove the SUBTOTAL rows
     return clean_df
 
 
@@ -36,7 +42,7 @@ def show_day_details(clean_df, day, fields):
     day = pd.to_datetime(day).normalize()
 
     if day in daily_driver.index.get_level_values("DATE"):
-        return daily_driver.loc[day]
+        return daily_driver.loc[day].reset_index()
     else:
         return f"No data for {day.date()}"
 
@@ -48,7 +54,7 @@ def etat_journalier(clean_df, fields):
     :fields: list of fields to sum
     """
     # --- SUM By Date
-    daily_stats = clean_df.groupby("DATE")[fields].sum()
+    daily_stats = clean_df.groupby("DATE")[fields[:-1]].sum()
     daily_stats = daily_stats.sort_values(by="DATE", ascending=True)
 
     # Create totals row
@@ -71,65 +77,53 @@ def sum_by_driver(clean_df, fields):
     return driver_stats.reset_index()
 
 
-def terminal(sheet_df, fields):
+def driver_observations(clean_df):
+    """
+    Generate observations for each driver based on their performance.
+    :clean_df: DataFrame
+    """
+    driver_obs = clean_df.groupby(["LIVREUR", "DATE"])["OBSERVATION"].sum()
+    return driver_obs.reset_index()
+
+
+def terminal(clean_df, fields):
     """
     sheet_name: DECEMBRE
     """
-    clean_df = sheet_df[sheet_df["DATE"].notna()]
     divider = "=" * 40
     # -----------------------------------------------------
 
     # --- Group by DATE and LIVREUR ---
-    # print(f'🚚 Daily driver stats All Data: \n{divider}\n{daily_driver}')
-
     date = "2025-12-04"
     print(divider)
     print(f'🚚 Daily driver stats for {date}:')
     print(divider)
     print(show_day_details(clean_df, date, fields))                                      # unsorted
 
-    # Printing
+    # =======================================
     print(divider)
     print("📅 Etat Journalier:")
     print(divider)
     print(etat_journalier(clean_df, fields))
-
-    # print(f"{divider}\n📊 TOTALS: \n{divider}")
-    # print(" • Total commande :", daily_stats["T. COMMANDE"].sum())
-    # print(" • Total logiciel :", daily_stats["T.LOGICIEL"].sum())
-    # print(" • Total versement:", daily_stats["VERSEMENT"].sum())
-    # print(" • Total charge   :", daily_stats["CHARGE"].sum())
-    # print(" • Total diff     :", daily_stats["DIFF"].sum(), "\n")
+    # =======================================
     print(divider)
     print("🚚 Total Par Livreur:")
     print(divider)
     print(sum_by_driver(clean_df, fields))
-
-
-def load_excel(file_path):
-    import pandas as pd
-    dfs = pd.read_excel(file_path, sheet_name=None)
-    sheet = dfs["DECEMBRE"]
-    # --- Clean DATE column ---
-    sheet["DATE"] = pd.to_datetime(sheet["DATE"], errors="coerce")
-
-    # --- Numeric columns ---
-    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-
-    for col in fields:
-        # to numeric
-        sheet[col] = pd.to_numeric(sheet[col], errors="coerce")
-
-    # clean_df = sheet[sheet["DATE"].notna()]
-    return sheet, fields
+    # =======================================
+    print(divider)
+    print("🚚 Livreur Observation:")
+    print(divider)
+    print(driver_observations(clean_df))
 
 
 if __name__ == "__main__":
-    file = "../VERSEMENT_LIVREUR_AOUT.xlsx"
+    file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
         # return pd.read_excel(file_path, sheet_name=None)
 
     # print(show_day_details(clean_df, "2025-12-04", fields))
-    sheet, fields = load_excel(file)
+    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
+    sheet_name = "DECEMBRE"
+    sheet = load_excel(file, sheet_name)
     terminal(sheet, fields)
-    # print(sum_by_driver(clean_df, fields))

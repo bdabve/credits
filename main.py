@@ -1909,44 +1909,62 @@ class Credit(QtWidgets.QMainWindow):
     # =====================
     def display_etat_journalier(self):
         import statistics as st
+        # MONTHS_FR = {
+            # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
+            # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
+            # "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
+        # }
 
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
         file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
-        sheet, fields = st.load_excel(file)
-        etat = st.etat_journalier(sheet, fields)
-        print(etat)
 
+        # sheet_month = MONTHS_FR.get(selected_month) if selected_month != "Mois" else MONTHS_FR[self.CURRENT_MONTH_TEXT]
+        fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
+        df = st.load_excel(file, "DECEMBRE")         # FIXME
+
+        logger.debug(
+            f"Displaying Etat Journalier for month: {selected_month}\n"
+            f"File Name: {file}"
+        )
+
+        # === Etat Detailé ===
+        date = "2025-12-04"
+        self.ui.etatDetailJournalierLabelDate.setText(f"Etat du jour: {date}")      # Title
+
+        detail_journe = st.show_day_details(df, date, fields)                                      # unsorted
+        rows = detail_journe.values.tolist()
+        headers = detail_journe.columns.tolist()
+        utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
+
+        # === Etat Journalier from file ===
+        etat = st.etat_journalier(df, fields)
         rows = etat.values.tolist()
         headers = etat.columns.tolist()
-        print(headers)
-        print(rows)
-
         utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
 
-        # From database
-        selected_month = self.ui.cbBoxEtatByMonth.currentText()
-        if selected_month == "Mois":
-            month = self.CURRENT_MONTH
-        else:
-            month = f"{self.CURRENT_YEAR}-{selected_month}"
-        rows = self.db.etat_journalier(month=month)
-        # # Sums
-        self.ui.labelEtatSumAccompte.setText(
-            f"Total Accomptes: {utils.format_money(sum(r[1] for r in rows))} DA"
-        )
-        self.ui.labelEtatSumCredit.setText(
-            f"Total Crédits: {utils.format_money(sum(r[2] for r in rows))} DA"
-        )
-        self.ui.labelEtatSumVerse.setText(
-            f"Total Versements: {utils.format_money(sum(r[3] for r in rows))} DA"
-        )
-        self.ui.labelEtatSumCharge.setText(
-            f"Total Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
-        )
-
-        etat_par_livreur = st.sum_by_driver(sheet, fields)
+        # === Etat Par Livreur from file ===
+        etat_par_livreur = st.sum_by_driver(df, fields)
         headers = etat_par_livreur.columns.tolist()
         rows = etat_par_livreur.values.tolist()
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
+
+        # === Etat From database ==
+        month = self.CURRENT_MONTH if selected_month == "Mois" else f"{self.CURRENT_YEAR}-{selected_month}"
+        rows = self.db.etat_journalier(month=month)
+
+        # Sums
+        sum_accompte = f"Accompte: {utils.format_money(sum(r[1] for r in rows))} DA"
+        self.ui.labelEtatSumAccompte.setText(sum_accompte)
+
+        sum_credit = f"Crédit: {utils.format_money(sum(r[2] for r in rows))} DA"
+        self.ui.labelEtatSumCredit.setText(sum_credit)
+
+        sum_versement = f"Versement Crédit: {utils.format_money(sum(r[3] for r in rows))} DA"
+        self.ui.labelEtatSumVerse.setText(sum_versement)
+
+        sum_charges = f"Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
+        self.ui.labelEtatSumCharge.setText(sum_charges)
+
         # # Display in Table
         # headers = ['Date', 'Accomptes', 'Credits', 'Versements', 'Charges']
         # utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)

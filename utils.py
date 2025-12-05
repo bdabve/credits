@@ -477,7 +477,8 @@ def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: li
     # These columns will be formatted as money
     money_headers = {
         'Salaire', 'Crédit', 'Montant Total', 'Versement', 'Reste',
-        'Montant', 'Accomptes', 'Credits', 'Versements', 'Charges'
+        'Montant', 'Accomptes', 'Credits', 'Versements', 'Charges',
+        "T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF"
     }
     for row_idx, row_data in enumerate(rows):
         for col_idx, value in enumerate(row_data):

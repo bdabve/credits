@@ -627,7 +627,9 @@ QCommandLinkButton:pressed {
 #EmployeOperationsPage,
 #ChargePage,
 #PaymentsWidgetContainer,
-#EtatPage
+#EtatPage,
+
+#scrollAreaWidgetContents
 {
 	background-color: #252525;
 }

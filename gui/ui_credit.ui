@@ -20,7 +20,7 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_44">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -6090,6 +6090,12 @@
                        <enum>QFrame::Raised</enum>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_21">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
                        <item>
                         <widget class="QLabel" name="labelEtatSumAccompte">
                          <property name="text">
@@ -6210,94 +6216,254 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="MyTable" name="etatJournalierTableWidget">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>Lucida Casual</family>
-                        <pointsize>13</pointsize>
-                        <weight>50</weight>
-                        <italic>false</italic>
-                        <bold>false</bold>
-                       </font>
-                      </property>
+                     <widget class="QScrollArea" name="scrollArea">
                       <property name="frameShape">
                        <enum>QFrame::NoFrame</enum>
                       </property>
-                      <property name="editTriggers">
-                       <set>QAbstractItemView::DoubleClicked</set>
-                      </property>
-                      <property name="alternatingRowColors">
-                       <bool>false</bool>
-                      </property>
-                      <property name="selectionBehavior">
-                       <enum>QAbstractItemView::SelectRows</enum>
-                      </property>
-                      <property name="gridStyle">
-                       <enum>Qt::DashLine</enum>
-                      </property>
-                      <property name="sortingEnabled">
+                      <property name="widgetResizable">
                        <bool>true</bool>
                       </property>
-                      <property name="columnCount">
-                       <number>4</number>
-                      </property>
-                      <attribute name="horizontalHeaderVisible">
-                       <bool>false</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderCascadingSectionResizes">
-                       <bool>false</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
-                      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-                       <bool>false</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderStretchLastSection">
-                       <bool>true</bool>
-                      </attribute>
-                      <attribute name="verticalHeaderVisible">
-                       <bool>false</bool>
-                      </attribute>
-                      <column>
-                       <property name="text">
-                        <string>New Column</string>
+                      <widget class="QWidget" name="scrollAreaWidgetContents">
+                       <property name="geometry">
+                        <rect>
+                         <x>0</x>
+                         <y>0</y>
+                         <width>995</width>
+                         <height>687</height>
+                        </rect>
                        </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>New Column</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>New Column</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>New Column</string>
-                       </property>
-                      </column>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QTableWidget" name="etatParLivreurTableWidget">
-                      <property name="editTriggers">
-                       <set>QAbstractItemView::NoEditTriggers</set>
-                      </property>
-                      <attribute name="horizontalHeaderStretchLastSection">
-                       <bool>true</bool>
-                      </attribute>
-                      <attribute name="verticalHeaderVisible">
-                       <bool>false</bool>
-                      </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_45">
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>10</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="Line" name="line_14">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="etatDetailJournalierLabelDate">
+                          <property name="text">
+                           <string>Detail de la journée </string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="MyTable" name="etatJournalierDetailsTableWidget">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>193</height>
+                           </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Lucida Casual</family>
+                            <pointsize>13</pointsize>
+                            <weight>50</weight>
+                            <italic>false</italic>
+                            <bold>false</bold>
+                           </font>
+                          </property>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
+                          </property>
+                          <property name="editTriggers">
+                           <set>QAbstractItemView::DoubleClicked</set>
+                          </property>
+                          <property name="alternatingRowColors">
+                           <bool>false</bool>
+                          </property>
+                          <property name="selectionBehavior">
+                           <enum>QAbstractItemView::SelectRows</enum>
+                          </property>
+                          <property name="gridStyle">
+                           <enum>Qt::DashLine</enum>
+                          </property>
+                          <property name="sortingEnabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="columnCount">
+                           <number>4</number>
+                          </property>
+                          <attribute name="horizontalHeaderVisible">
+                           <bool>false</bool>
+                          </attribute>
+                          <attribute name="horizontalHeaderCascadingSectionResizes">
+                           <bool>false</bool>
+                          </attribute>
+                          <attribute name="horizontalHeaderDefaultSectionSize">
+                           <number>150</number>
+                          </attribute>
+                          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                           <bool>false</bool>
+                          </attribute>
+                          <attribute name="horizontalHeaderStretchLastSection">
+                           <bool>true</bool>
+                          </attribute>
+                          <attribute name="verticalHeaderVisible">
+                           <bool>false</bool>
+                          </attribute>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="Line" name="line_10">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_17">
+                          <property name="text">
+                           <string>Etats Journalier</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="MyTable" name="etatJournalierTableWidget">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>193</height>
+                           </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Lucida Casual</family>
+                            <pointsize>13</pointsize>
+                            <weight>50</weight>
+                            <italic>false</italic>
+                            <bold>false</bold>
+                           </font>
+                          </property>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
+                          </property>
+                          <property name="editTriggers">
+                           <set>QAbstractItemView::DoubleClicked</set>
+                          </property>
+                          <property name="alternatingRowColors">
+                           <bool>false</bool>
+                          </property>
+                          <property name="selectionBehavior">
+                           <enum>QAbstractItemView::SelectRows</enum>
+                          </property>
+                          <property name="gridStyle">
+                           <enum>Qt::DashLine</enum>
+                          </property>
+                          <property name="sortingEnabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="columnCount">
+                           <number>4</number>
+                          </property>
+                          <attribute name="horizontalHeaderVisible">
+                           <bool>false</bool>
+                          </attribute>
+                          <attribute name="horizontalHeaderCascadingSectionResizes">
+                           <bool>false</bool>
+                          </attribute>
+                          <attribute name="horizontalHeaderDefaultSectionSize">
+                           <number>150</number>
+                          </attribute>
+                          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                           <bool>false</bool>
+                          </attribute>
+                          <attribute name="horizontalHeaderStretchLastSection">
+                           <bool>true</bool>
+                          </attribute>
+                          <attribute name="verticalHeaderVisible">
+                           <bool>false</bool>
+                          </attribute>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>New Column</string>
+                           </property>
+                          </column>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="Line" name="line_13">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_33">
+                          <property name="text">
+                           <string>Etat Par Livreur</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QTableWidget" name="etatParLivreurTableWidget">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>193</height>
+                           </size>
+                          </property>
+                          <property name="editTriggers">
+                           <set>QAbstractItemView::NoEditTriggers</set>
+                          </property>
+                          <attribute name="horizontalHeaderStretchLastSection">
+                           <bool>true</bool>
+                          </attribute>
+                          <attribute name="verticalHeaderVisible">
+                           <bool>false</bool>
+                          </attribute>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
                      </widget>
                     </item>
                    </layout>
