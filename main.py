@@ -1908,13 +1908,28 @@ class Credit(QtWidgets.QMainWindow):
     # == Statistics Page ==
     # =====================
     def display_etat_journalier(self):
+        import statistics as st
+
+        file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+        sheet, fields = st.load_excel(file)
+        etat = st.etat_journalier(sheet, fields)
+        print(etat)
+
+        rows = etat.values.tolist()
+        headers = etat.columns.tolist()
+        print(headers)
+        print(rows)
+
+        utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
+
+        # From database
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
         if selected_month == "Mois":
             month = self.CURRENT_MONTH
         else:
             month = f"{self.CURRENT_YEAR}-{selected_month}"
         rows = self.db.etat_journalier(month=month)
-        # Sums
+        # # Sums
         self.ui.labelEtatSumAccompte.setText(
             f"Total Accomptes: {utils.format_money(sum(r[1] for r in rows))} DA"
         )
@@ -1927,10 +1942,15 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelEtatSumCharge.setText(
             f"Total Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
         )
-        # Display in Table
-        headers = ['Date', 'Accomptes', 'Credits', 'Versements', 'Charges']
-        utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
-        utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 300, 300, 300, 300)
+
+        etat_par_livreur = st.sum_by_driver(sheet, fields)
+        headers = etat_par_livreur.columns.tolist()
+        rows = etat_par_livreur.values.tolist()
+        utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
+        # # Display in Table
+        # headers = ['Date', 'Accomptes', 'Credits', 'Versements', 'Charges']
+        # utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
+        # utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 300, 300, 300, 300)
 
 
 if __name__ == '__main__':

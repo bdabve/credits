@@ -91,6 +91,7 @@ COMMUNES_LIST = [
     "COMMUNEL", "CHAIG", "MESSELMOUN", "GHOURAYA", "HADJOUT",
 ]
 
+
 class ThemeManager:
     def __init__(self, app, themes, default="dark"):
         self.app = app
@@ -358,13 +359,13 @@ def setup_main_callbacks(root):
 
 # === 2) Refresh icons (call on startup + every theme toggle) ===
 def refresh_main_icons(root, theme_manager: ThemeManager):
-    PLUS_ICON       = theme_manager.icon('ph.plus', "NEW_COLOR")
-    CASH_PLUS_ICON  = theme_manager.icon('mdi6.cash-plus', "NEW_COLOR")
-    SAVE_ICON       = theme_manager.icon('mdi.content-save', "BLUE_COLOR")
-    TRASH_ICON      = theme_manager.icon('msc.trashcan', "TRASH_COLOR")
-    REFRESH_ICON    = theme_manager.icon("mdi6.refresh", "ICON_COLOR")
-    EDIT_ICON       = theme_manager.icon('ph.pencil-line-light', "EDIT_COLOR")
-    LIST_ICON       = theme_manager.icon('ph.list', "ICON_COLOR")
+    PLUS_ICON = theme_manager.icon('ph.plus', "NEW_COLOR")
+    CASH_PLUS_ICON = theme_manager.icon('mdi6.cash-plus', "NEW_COLOR")
+    SAVE_ICON = theme_manager.icon('mdi.content-save', "BLUE_COLOR")
+    TRASH_ICON = theme_manager.icon('msc.trashcan', "TRASH_COLOR")
+    REFRESH_ICON = theme_manager.icon("mdi6.refresh", "ICON_COLOR")
+    # EDIT_ICON       = theme_manager.icon('ph.pencil-line-light', "EDIT_COLOR")
+    LIST_ICON = theme_manager.icon('ph.list', "ICON_COLOR")
 
     # --- Main Window Buttons
     root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))
@@ -712,7 +713,7 @@ def export_salary_report_openpyxl(rows, file_path):
 
     row_cursor = 1
     header_font = Font(bold=True)
-    total_fill = PatternFill(start_color="FFD966", end_color="FFD966", fill_type="solid")  # light yellow
+    # total_fill = PatternFill(start_color="FFD966", end_color="FFD966", fill_type="solid")  # light yellow
     for name, entries in grouped.items():
         salaire_base = 0
 

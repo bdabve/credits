@@ -2932,7 +2932,7 @@
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>6</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3927,11 +3927,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
                       <attribute name="horizontalHeaderMinimumSectionSize">
                        <number>31</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -5027,7 +5027,7 @@
                                 <height>54</height>
                                </size>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5081,9 +5081,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string>Tous</string>
+                               <string/>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6285,6 +6285,19 @@
                         <string>New Column</string>
                        </property>
                       </column>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QTableWidget" name="etatParLivreurTableWidget">
+                      <property name="editTriggers">
+                       <set>QAbstractItemView::NoEditTriggers</set>
+                      </property>
+                      <attribute name="horizontalHeaderStretchLastSection">
+                       <bool>true</bool>
+                      </attribute>
+                      <attribute name="verticalHeaderVisible">
+                       <bool>false</bool>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
