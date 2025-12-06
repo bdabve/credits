@@ -6043,7 +6043,7 @@
                   <widget class="QWidget" name="EtatWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_42">
                     <property name="spacing">
-                     <number>10</number>
+                     <number>15</number>
                     </property>
                     <property name="leftMargin">
                      <number>0</number>
@@ -6216,42 +6216,15 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QScrollArea" name="scrollArea">
-                      <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
+                     <widget class="QTabWidget" name="tabWidget">
+                      <property name="currentIndex">
+                       <number>2</number>
                       </property>
-                      <property name="widgetResizable">
-                       <bool>true</bool>
-                      </property>
-                      <widget class="QWidget" name="scrollAreaWidgetContents">
-                       <property name="geometry">
-                        <rect>
-                         <x>0</x>
-                         <y>0</y>
-                         <width>995</width>
-                         <height>687</height>
-                        </rect>
-                       </property>
-                       <layout class="QVBoxLayout" name="verticalLayout_45">
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>10</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>0</number>
-                        </property>
-                        <item>
-                         <widget class="Line" name="line_14">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                         </widget>
-                        </item>
+                      <widget class="QWidget" name="tabeDetailsJournee">
+                       <attribute name="title">
+                        <string>Détail de la journee</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_46">
                         <item>
                          <widget class="QLabel" name="etatDetailJournalierLabelDate">
                           <property name="text">
@@ -6337,13 +6310,13 @@
                           </column>
                          </widget>
                         </item>
-                        <item>
-                         <widget class="Line" name="line_10">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                         </widget>
-                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="tabSumByDays">
+                       <attribute name="title">
+                        <string>Somme Par Journée</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_47">
                         <item>
                          <widget class="QLabel" name="label_17">
                           <property name="text">
@@ -6429,13 +6402,13 @@
                           </column>
                          </widget>
                         </item>
-                        <item>
-                         <widget class="Line" name="line_13">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                         </widget>
-                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="tabEtatByDriver">
+                       <attribute name="title">
+                        <string>Etat Par Livreur</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_48">
                         <item>
                          <widget class="QLabel" name="label_33">
                           <property name="text">

@@ -86,6 +86,17 @@ def driver_observations(clean_df):
     return driver_obs.reset_index()
 
 
+def difference_commande_logiciel(df):
+    """
+    Calculate the difference between 'T. COMMANDE' and 'T.LOGICIEL' for each row.
+    :df: DataFrame
+    """
+    df["RETOUR"] = df["T. COMMANDE"] - df["T.LOGICIEL"]
+    les_retour = df[["DATE", "LIVREUR", "T. COMMANDE", "T.LOGICIEL", "RETOUR"]].dropna(subset=["RETOUR"])
+    sum_retour_by_driver = les_retour.groupby("LIVREUR")["RETOUR"].sum().reset_index()
+    return les_retour, sum_retour_by_driver
+
+
 def terminal(clean_df, fields):
     """
     sheet_name: DECEMBRE
@@ -126,4 +137,7 @@ if __name__ == "__main__":
     fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
     sheet_name = "DECEMBRE"
     sheet = load_excel(file, sheet_name)
-    terminal(sheet, fields)
+    # terminal(sheet, fields)
+    les_retour, sum_retour = difference_commande_logiciel(sheet)
+    print(les_retour)
+    print(sum_retour)

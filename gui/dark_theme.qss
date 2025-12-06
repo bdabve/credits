@@ -629,7 +629,10 @@ QCommandLinkButton:pressed {
 #PaymentsWidgetContainer,
 #EtatPage,
 
-#scrollAreaWidgetContents
+/* == QTabWidget Main Widget === */
+#tabeDetailsJournee,
+#tabSumByDays,
+#tabEtatByDriver
 {
 	background-color: #252525;
 }
@@ -639,6 +642,62 @@ QCommandLinkButton:pressed {
 	/* font: 14pt "Noto Sans Arabic";*/
 	padding-right: 10px;
 }
+
+/* ------------------------------
+   QTabWidget Dark Theme
+--------------------------------*/
+
+QTabWidget::pane {
+    border: 2px solid #444;
+    background: #222;
+    top: -1px;
+}
+
+/* Tab bar container */
+QTabWidget::tab-bar {
+    alignment: center;
+}
+
+/* Tabs basic */
+QTabBar::tab {
+    background: #333;
+    color: #ddd;
+    padding: 8px 18px;
+    margin-right: 2px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border: 1px solid #444;
+}
+
+/* Hover state */
+QTabBar::tab:hover {
+    background: #3e3e3e;
+}
+
+/* Selected tab */
+QTabBar::tab:selected {
+    background: #555;
+    color: #fff;
+    border-bottom: 1px solid #555; /* smooth merge */
+}
+
+/* Disabled tab */
+QTabBar::tab:disabled {
+    background: #222;
+    color: #666;
+}
+
+/* Bottom, left, right positions */
+QTabBar::tab:top:selected    { border-bottom-color: #555; }
+QTabBar::tab:bottom:selected { border-top-color: #555;   }
+QTabBar::tab:left:selected   { border-right-color: #555;  }
+QTabBar::tab:right:selected  { border-left-color: #555;   }
+
+/* Remove tab overlap */
+QTabBar::tab:selected {
+    margin-bottom: 0px;
+}
+
 
 /* ============================
    == Left Menu ==

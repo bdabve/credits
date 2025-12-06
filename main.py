@@ -1318,7 +1318,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         logger.info("Saving the new credit...")
         # Get values from UI
-        client = self.ui.cbBoxAddCreditClients.currentText()
+        client = self.ui.cbBoxAddCreditClients.currentText().lower()
         date_credit = self.ui.dateEditCreditDate.date().toPyDate()
         montant = self.ui.editCreditMontant.value()
         motif = self.ui.editCreditDescription.toPlainText().lower()         # FIXME: this work for motif
@@ -1909,6 +1909,8 @@ class Credit(QtWidgets.QMainWindow):
     # =====================
     def display_etat_journalier(self):
         import statistics as st
+        import os
+
         # MONTHS_FR = {
         #    # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
         #    # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
@@ -1916,18 +1918,21 @@ class Credit(QtWidgets.QMainWindow):
         # }
 
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
-        options = QtWidgets.QFileDialog.Options()
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            None,
-            "Sélectionner le fichier Excel",
-            "C:\\Users\\ADMIN\\OneDrive\\Desktop",
-            "Fichiers Excel (*.xlsx)",
-            options=options
-        )
+        if os.name == 'nt':     # means we are on Windows
+            options = QtWidgets.QFileDialog.Options()
+            file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+                None,
+                "Sélectionner le fichier Excel",
+                "C:\\Users\\ADMIN\\OneDrive\\Desktop",
+                "Fichiers Excel (*.xlsx)",
+                options=options
+            )
+        else:
+            file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+
         if not file_path:
             self.show_error_message("Error: ", success=False)
             return
-        # file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
         # sheet_month = MONTHS_FR.get(selected_month) if selected_month != "Mois" else MONTHS_FR[self.CURRENT_MONTH_TEXT]
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
@@ -1939,8 +1944,9 @@ class Credit(QtWidgets.QMainWindow):
         )
 
         # === Etat Detailé ===
-        date = "2025-12-04"
-        self.ui.etatDetailJournalierLabelDate.setText(f"Etat du jour: {date}")      # Title
+        # date = self.ui.etatDetailJournalierDateEdit.date().toString("yyyy-MM-dd")
+        date = self.CURRENT_DATE.now().strftime("%d-%m-%Y")      # FIXME
+        self.ui.etatDetailJournalierLabelDate.setText(f"Date: {date}")      # Title
 
         detail_journe = st.show_day_details(df, date, fields)                                      # unsorted
         rows = detail_journe.values.tolist()
@@ -1961,6 +1967,11 @@ class Credit(QtWidgets.QMainWindow):
         rows = etat_par_livreur.values.tolist()
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
+
+        # === Defference between T.COMMANDE and T.LOGICIEL
+        les_retour, sum_retour = st.difference_commande_logiciel(df)
+        print("[=] Retour: ", les_retour)
+        print("[=] SUM Retour: ", sum_retour)
 
         # === Etat From database ==
         month = self.CURRENT_MONTH if selected_month == "Mois" else f"{self.CURRENT_YEAR}-{selected_month}"
