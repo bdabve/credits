@@ -19,8 +19,8 @@ class Database:
 
         # employe and his tables
         self.employes_fields = [
-            'emp.id', 'emp.nom', 'emp.telephone', 'emp.poste', 's.montant_base',
-            'strftime("%d-%m-%Y", emp.date_embauche)', 'emp.observation'
+            'emp.id', 'title(emp.nom)', 'emp.telephone', 'title(emp.poste)', 's.montant_base',
+            'strftime("%d-%m-%Y", emp.date_embauche)', 'title(emp.observation)'
         ]
 
         self.operation_fields = [
@@ -34,13 +34,13 @@ class Database:
         ]
         # clients and his tables
         self.clients_fields = [
-            "c.id", "c.nom",
+            "c.id", "title(c.nom)",
             "IFNULL(SUM(CASE WHEN cr.statut = 'en cours' THEN cr.reste ELSE 0 END), 0) AS total_en_cours",
-            "c.telephone", "c.commune", "c.observation"
+            "c.telephone", "title(c.commune)", "title(c.observation)"
         ]
 
         self.credit_fields = [
-            'cr.id', 'strftime("%d-%m-%Y", cr.date_credit)', 'c.nom', 'cr.motif', 'cr.montant',
+            'cr.id', 'strftime("%d-%m-%Y", cr.date_credit)', 'title(c.nom)', 'title(cr.motif)', 'cr.montant',
             'IFNULL(SUM(v.montant), 0) AS Versement',
             'cr.reste', 'cr.statut'
         ]
@@ -56,6 +56,8 @@ class Database:
     def connect(self):
         conn = sqlite3.connect(self.db_name)
         conn.execute("PRAGMA foreign_keys = ON")
+        # Register Python's str.title() as a SQLite function
+        conn.create_function("title", 1, lambda s: s.title() if s else '')
         return conn
 
     def _create_tables(self):
@@ -333,13 +335,13 @@ class Database:
         with self.connect() as conn:
             cursor = conn.cursor()
             if column == 1:  # Nom
-                cursor.execute("UPDATE employes SET nom = ? WHERE id = ?", (new_text, emp_id))
+                cursor.execute("UPDATE employes SET nom = ? WHERE id = ?", (new_text.lower(), emp_id))
                 message = 'Nom mis à jour avec succès.'
             elif column == 2:  # Telephone
                 cursor.execute("UPDATE employes SET telephone = ? WHERE id = ?", (new_text, emp_id))
                 message = 'Téléphone mis à jour avec succès.'
             elif column == 3:  # Poste
-                cursor.execute("UPDATE employes SET poste = ? WHERE id = ?", (new_text, emp_id))
+                cursor.execute("UPDATE employes SET poste = ? WHERE id = ?", (new_text.lower(), emp_id))
                 message = 'Poste mis à jour avec succès.'
             elif column == 4:  # Salaire
                 try:
@@ -356,7 +358,7 @@ class Database:
                 cursor.execute("UPDATE employes SET date_embauche = ? WHERE id = ?", (new_text, emp_id))
                 message = "Date d'embauche mise à jour avec succès."
             elif column == 6:  # Observation
-                cursor.execute("UPDATE employes SET observation = ? WHERE id = ?", (new_text, emp_id))
+                cursor.execute("UPDATE employes SET observation = ? WHERE id = ?", (new_text.lower(), emp_id))
                 message = 'Observation mise à jour avec succès.'
             else:
                 return {'success': False, 'error': 'Colonne invalide.'}
@@ -571,7 +573,7 @@ class Database:
                 cursor.execute("UPDATE operations SET montant = ? WHERE id = ?", (str(new_text), emp_id))
                 message = 'Montant mis à jour avec succès.'
             elif column == 5:   # Motif
-                cursor.execute("UPDATE operations SET motif = ? WHERE id = ?", (new_text, emp_id))
+                cursor.execute("UPDATE operations SET motif = ? WHERE id = ?", (new_text.lower(), emp_id))
                 message = 'Motif mis à jour avec succès.'
             else:
                 return {'success': False, 'error': 'Colonne invalide.'}
@@ -665,7 +667,7 @@ class Database:
         with self.connect() as conn:
             cursor = conn.cursor()
             if column == 1:     # Nom
-                cursor.execute("UPDATE clients SET nom = ? WHERE id = ?", (new_text, client_id))
+                cursor.execute("UPDATE clients SET nom = ? WHERE id = ?", (new_text.lower(), client_id))
                 message = 'Nom mis à jour avec succès.'
             elif column == 2:   # Credit
                 # Disabled
@@ -674,10 +676,10 @@ class Database:
                 cursor.execute("UPDATE clients SET telephone = ? WHERE id = ?", (new_text, client_id))
                 message = 'Téléphone mis à jour avec succès.'
             elif column == 4:   # Comune
-                cursor.execute("UPDATE clients SET commune = ? WHERE id = ?", (new_text, client_id))
+                cursor.execute("UPDATE clients SET commune = ? WHERE id = ?", (new_text.lower(), client_id))
                 message = 'Commune mise à jour avec succès.'
             elif column == 5:   # Observation
-                cursor.execute("UPDATE clients SET observation = ? WHERE id = ?", (new_text, client_id))
+                cursor.execute("UPDATE clients SET observation = ? WHERE id = ?", (new_text.lower(), client_id))
                 message = 'Observation mise à jour avec succès.'
             else:
                 return {'success': False, 'error': 'Colonne invalide.'}
