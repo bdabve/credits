@@ -1910,21 +1910,32 @@ class Credit(QtWidgets.QMainWindow):
     def display_etat_journalier(self):
         import statistics as st
         # MONTHS_FR = {
-            # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
-            # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
-            # "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
+        #    # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
+        #    # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
+        #    # "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
         # }
 
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
-        file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+        options = QtWidgets.QFileDialog.Options()
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            None,
+            "Sélectionner le fichier Excel",
+            "C:\\Users\\ADMIN\\OneDrive\\Desktop",
+            "Fichiers Excel (*.xlsx)",
+            options=options
+        )
+        if not file_path:
+            self.show_error_message("Error: ", success=False)
+            return
+        # file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
         # sheet_month = MONTHS_FR.get(selected_month) if selected_month != "Mois" else MONTHS_FR[self.CURRENT_MONTH_TEXT]
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-        df = st.load_excel(file, "DECEMBRE")         # FIXME
+        df = st.load_excel(file_path, "DECEMBRE")         # FIXME
 
         logger.debug(
             f"Displaying Etat Journalier for month: {selected_month}\n"
-            f"File Name: {file}"
+            f"File Name: {file_path}"
         )
 
         # === Etat Detailé ===
@@ -1935,18 +1946,21 @@ class Credit(QtWidgets.QMainWindow):
         rows = detail_journe.values.tolist()
         headers = detail_journe.columns.tolist()
         utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
+        utils.set_table_column_sizes(self.ui.etatJournalierDetailsTableWidget, 300, 250, 250, 250, 250, 250)
 
         # === Etat Journalier from file ===
         etat = st.etat_journalier(df, fields)
         rows = etat.values.tolist()
         headers = etat.columns.tolist()
         utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
+        utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 250, 250, 250, 200)
 
         # === Etat Par Livreur from file ===
         etat_par_livreur = st.sum_by_driver(df, fields)
         headers = etat_par_livreur.columns.tolist()
         rows = etat_par_livreur.values.tolist()
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
+        utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
 
         # === Etat From database ==
         month = self.CURRENT_MONTH if selected_month == "Mois" else f"{self.CURRENT_YEAR}-{selected_month}"
