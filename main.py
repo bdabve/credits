@@ -1945,10 +1945,10 @@ class Credit(QtWidgets.QMainWindow):
 
         # === Etat Detailé ===
         # date = self.ui.etatDetailJournalierDateEdit.date().toString("yyyy-MM-dd")
-        date = self.CURRENT_DATE.now().strftime("%d-%m-%Y")      # FIXME
+        date = self.CURRENT_DATE.now().strftime("%Y-%m-%d")                 # FIXME
         self.ui.etatDetailJournalierLabelDate.setText(f"Date: {date}")      # Title
 
-        detail_journe = st.show_day_details(df, date, fields)                                      # unsorted
+        detail_journe = st.show_day_details(df, date, fields)               # unsorted
         rows = detail_journe.values.tolist()
         headers = detail_journe.columns.tolist()
         utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
