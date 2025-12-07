@@ -313,7 +313,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>44</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="font">
@@ -715,8 +715,8 @@
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>30</width>
-                   <height>30</height>
+                   <width>0</width>
+                   <height>0</height>
                   </size>
                  </property>
                  <property name="text">
@@ -747,8 +747,8 @@
                 <widget class="QPushButton" name="extraCloseColumnBtn">
                  <property name="minimumSize">
                   <size>
-                   <width>40</width>
-                   <height>30</height>
+                   <width>0</width>
+                   <height>0</height>
                   </size>
                  </property>
                  <property name="maximumSize">
@@ -1500,8 +1500,8 @@
                            </property>
                            <property name="minimumSize">
                             <size>
-                             <width>58</width>
-                             <height>58</height>
+                             <width>0</width>
+                             <height>0</height>
                             </size>
                            </property>
                            <property name="font">
@@ -1748,7 +1748,7 @@
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>56</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="cursor">
@@ -1854,7 +1854,7 @@
                         <property name="minimumSize">
                          <size>
                           <width>98</width>
-                          <height>54</height>
+                          <height>0</height>
                          </size>
                         </property>
                         <item>
@@ -2224,7 +2224,7 @@
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
-                          <height>56</height>
+                          <height>0</height>
                          </size>
                         </property>
                         <property name="cursor">
@@ -2490,8 +2490,8 @@
                  <widget class="QPushButton" name="buttonSettings">
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
-                    <height>30</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2525,8 +2525,8 @@
                  <widget class="QPushButton" name="minimizeAppBtn">
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
-                    <height>30</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2560,8 +2560,8 @@
                  <widget class="QPushButton" name="maximizeRestoreAppBtn">
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
-                    <height>30</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2604,8 +2604,8 @@
                  <widget class="QPushButton" name="closeAppBtn">
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
-                    <height>30</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2781,8 +2781,8 @@
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>40</width>
-                       <height>30</height>
+                       <width>0</width>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -2846,8 +2846,8 @@
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>366</width>
-                    <height>58</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2889,8 +2889,8 @@
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>58</width>
-                    <height>58</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="cursor">
@@ -2998,7 +2998,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3039,7 +3039,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>108</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3077,7 +3077,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>108</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3105,7 +3105,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="text">
@@ -3130,7 +3130,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="layoutDirection">
@@ -3167,8 +3167,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>58</width>
-                           <height>58</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3466,7 +3466,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3504,7 +3504,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3542,7 +3542,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3580,7 +3580,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3622,7 +3622,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="layoutDirection">
@@ -3652,8 +3652,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>58</width>
-                           <height>58</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4075,7 +4075,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>96</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="buttonSymbols">
@@ -4099,8 +4099,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>58</width>
-                           <height>58</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -4149,7 +4149,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4190,7 +4190,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4231,7 +4231,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4272,7 +4272,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -4310,7 +4310,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -4360,8 +4360,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>58</width>
-                           <height>58</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4636,14 +4636,14 @@
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>108</width>
-                              <height>86</height>
+                              <width>0</width>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>96</width>
-                              <height>86</height>
+                              <width>16777215</width>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -4715,14 +4715,14 @@
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>96</width>
-                              <height>86</height>
+                              <width>0</width>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>96</width>
-                              <height>86</height>
+                              <width>16777215</width>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -4788,14 +4788,14 @@
                            <widget class="QPushButton" name="buttonIconSumRetenu">
                             <property name="minimumSize">
                              <size>
-                              <width>96</width>
-                              <height>86</height>
+                              <width>0</width>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>96</width>
-                              <height>86</height>
+                              <width>16777215</width>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -4869,7 +4869,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>50</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4903,7 +4903,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>50</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4992,7 +4992,7 @@
                               <property name="minimumSize">
                                <size>
                                 <width>220</width>
-                                <height>54</height>
+                                <height>0</height>
                                </size>
                               </property>
                               <item>
@@ -5024,7 +5024,7 @@
                               <property name="minimumSize">
                                <size>
                                 <width>160</width>
-                                <height>54</height>
+                                <height>0</height>
                                </size>
                               </property>
                               <property name="placeholderText">
@@ -5077,7 +5077,7 @@
                               <property name="minimumSize">
                                <size>
                                 <width>110</width>
-                                <height>54</height>
+                                <height>0</height>
                                </size>
                               </property>
                               <property name="currentText">
@@ -5331,7 +5331,7 @@
                            <property name="minimumSize">
                             <size>
                              <width>141</width>
-                             <height>54</height>
+                             <height>0</height>
                             </size>
                            </property>
                            <item>
@@ -5421,7 +5421,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>56</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5461,8 +5461,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>58</width>
-                           <height>58</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -5739,7 +5739,7 @@
                            <property name="minimumSize">
                             <size>
                              <width>141</width>
-                             <height>54</height>
+                             <height>0</height>
                             </size>
                            </property>
                            <item>
@@ -5841,8 +5841,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>58</width>
-                           <height>58</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -6043,44 +6043,20 @@
                   <widget class="QWidget" name="EtatWidgetContainer" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_42">
                     <property name="spacing">
-                     <number>15</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
-                     <number>0</number>
+                     <number>5</number>
                     </property>
                     <property name="topMargin">
                      <number>0</number>
                     </property>
                     <property name="rightMargin">
-                     <number>0</number>
+                     <number>5</number>
                     </property>
                     <property name="bottomMargin">
                      <number>0</number>
                     </property>
-                    <item>
-                     <widget class="QFrame" name="searchFrame_6">
-                      <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_36">
-                       <property name="leftMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>0</number>
-                       </property>
-                      </layout>
-                     </widget>
-                    </item>
                     <item>
                      <widget class="QFrame" name="frameToolButton">
                       <property name="frameShape">
@@ -6091,9 +6067,15 @@
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_21">
                        <property name="leftMargin">
-                        <number>0</number>
+                        <number>5</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>5</number>
                        </property>
                        <property name="rightMargin">
+                        <number>5</number>
+                       </property>
+                       <property name="bottomMargin">
                         <number>0</number>
                        </property>
                        <item>
@@ -6225,8 +6207,14 @@
                         <string>Détail de la journee</string>
                        </attribute>
                        <layout class="QVBoxLayout" name="verticalLayout_46">
+                        <property name="spacing">
+                         <number>10</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>30</number>
+                        </property>
                         <item>
-                         <widget class="QLabel" name="etatDetailJournalierLabelDate">
+                         <widget class="QLabel" name="etatLabelTitle">
                           <property name="text">
                            <string>Detail de la journée </string>
                           </property>
@@ -6317,8 +6305,11 @@
                         <string>Somme Par Journée</string>
                        </attribute>
                        <layout class="QVBoxLayout" name="verticalLayout_47">
+                        <property name="bottomMargin">
+                         <number>30</number>
+                        </property>
                         <item>
-                         <widget class="QLabel" name="label_17">
+                         <widget class="QLabel" name="etatLabelTitle_2">
                           <property name="text">
                            <string>Etats Journalier</string>
                           </property>
@@ -6409,8 +6400,11 @@
                         <string>Etat Par Livreur</string>
                        </attribute>
                        <layout class="QVBoxLayout" name="verticalLayout_48">
+                        <property name="bottomMargin">
+                         <number>30</number>
+                        </property>
                         <item>
-                         <widget class="QLabel" name="label_33">
+                         <widget class="QLabel" name="etatLabelTitle_3">
                           <property name="text">
                            <string>Etat Par Livreur</string>
                           </property>

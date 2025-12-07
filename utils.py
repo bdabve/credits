@@ -27,7 +27,8 @@ from gui.h_confirm_dialog import Ui_Dialog
 # ---- Global Var ---- #
 THEMES = {
     "light": {
-        "stylesheet": "light_theme.qss",
+        # "stylesheet": "light_theme.qss",
+        "stylesheet": "white_theme_gpt.qss",
         "colors": {
             "NEW_COLOR": "#1dd1a1",
             "MENU_COLOR": "#34495e",
@@ -101,6 +102,7 @@ class ThemeManager:
 
     def apply(self, theme_name):
         theme = self.themes[theme_name]
+        print(theme)
         with open(f"./gui/{theme["stylesheet"]}", "r") as f:
             self.app.setStyleSheet(f.read())
         self.current = theme_name

@@ -634,9 +634,12 @@ QCommandLinkButton:pressed {
 #tabSumByDays,
 #tabEtatByDriver
 {
-	background-color: #252525;
+	background-color: #202020;
 }
 
+#EtatWidgetContainer {
+	border-radius: 10px;
+}
 #labelDate,
 #labelHijri {
 	/* font: 14pt "Noto Sans Arabic";*/
@@ -676,9 +679,10 @@ QTabBar::tab:hover {
 
 /* Selected tab */
 QTabBar::tab:selected {
-    background: #555;
+    background: #202020;
     color: #fff;
-    border-bottom: 1px solid #555; /* smooth merge */
+	border-bottom: 0px;
+   /* border-bottom: 1px solid #555; /* smooth merge */
 }
 
 /* Disabled tab */
@@ -734,6 +738,12 @@ QTabBar::tab:selected {
 	== QLabels
 ===============================*/
 
+/* == Etat Labels ==*/
+#etatLabelTitle, #etatLabelTitle_2, #etatLabelTitle_3 {		
+	color: rgb(248, 206, 150);
+	
+	font: 75 15pt "Lucida Sans";
+}
 /* == SUM Labels ==*/
 #labelEtatSumCredit,
 #labelTotalCredits,
