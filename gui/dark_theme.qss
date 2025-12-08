@@ -702,7 +702,11 @@ QTabBar::tab:selected {
     margin-bottom: 0px;
 }
 
-
+#etatParLivreurTableWidget QHeaderView:section,
+#tabeDetailsJournee QHeaderView:section,
+#etatJournalierTableWidget QHeaderView:section {	
+	background-color: rgb(60, 62, 65);
+}
 /* ============================
    == Left Menu ==
    ============================ */

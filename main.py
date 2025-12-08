@@ -71,9 +71,9 @@ class Credit(QtWidgets.QMainWindow):
         # self.toggle_theme()
 
         # Remove title bar
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.ui.contentTopBg.mouseMoveEvent = self.move_window  # to move window from the upBar
+        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+        # self.ui.contentTopBg.mouseMoveEvent = self.move_window  # to move window from the upBar
 
         self.PAGES = {
             'client': {
@@ -191,24 +191,24 @@ class Credit(QtWidgets.QMainWindow):
         utils.refresh_main_icons(self, self.theme_manager)
 
     # -- Window UPBAR Controls --
-    def mousePressEvent(self, event):
-        """
-        Handles the mouse press event by storing the global position of the mouse click.
+    # def mousePressEvent(self, event):
+    #     """
+    #     Handles the mouse press event by storing the global position of the mouse click.
 
-        Args:
-            event (QMouseEvent): The mouse event containing information about the click.
-        """
-        self.clickPosition = event.globalPos()
+    #     Args:
+    #         event (QMouseEvent): The mouse event containing information about the click.
+    #     """
+    #     self.clickPosition = event.globalPos()
 
-    def move_window(self, e):
-        """Move the window from upBar"""
-        if not self.isMaximized():
-            if e.buttons() == QtCore.Qt.LeftButton:
-                self.move(self.pos() + e.globalPos() - self.clickPosition)
-                self.clickPosition = e.globalPos()
-                e.accept()
+    # def move_window(self, e):
+    #     """Move the window from upBar"""
+    #     if not self.isMaximized():
+    #         if e.buttons() == QtCore.Qt.LeftButton:
+    #             self.move(self.pos() + e.globalPos() - self.clickPosition)
+    #             self.clickPosition = e.globalPos()
+    #             e.accept()
 
-    def toggle_maximize_restore(self):
+    # def toggle_maximize_restore(self):
         icon = QtGui.QIcon()
         if self.isMaximized():
             icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_maximize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -1568,7 +1568,7 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.creditTableWidget.currentRow(),
             2
         )
-        client_id = self.db.get_item_id('clients', 'nom', client_name)
+        client_id = self.db.get_item_id('clients', 'nom', client_name.lower())
 
         # Update hidden labels
         self.ui.labelVersementCreditID.setText(str(credit_id))

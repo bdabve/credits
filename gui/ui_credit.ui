@@ -2411,21 +2411,18 @@
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignRight">
-                 <widget class="QLabel" name="labelDate">
-                  <property name="font">
-                   <font>
-                    <family>Lucida Casual</family>
-                    <pointsize>13</pointsize>
-                    <weight>50</weight>
-                    <italic>false</italic>
-                    <bold>false</bold>
-                   </font>
+                <item>
+                 <spacer name="horizontalSpacer_18">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="text">
-                   <string>milady date</string>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
                   </property>
-                 </widget>
+                 </spacer>
                 </item>
                 <item>
                  <widget class="QLabel" name="labelServerIsOn">
@@ -2449,7 +2446,7 @@
                </layout>
               </widget>
              </item>
-             <item alignment="Qt::AlignRight">
+             <item>
               <widget class="QFrame" name="rightButtons">
                <property name="minimumSize">
                 <size>
@@ -2479,13 +2476,6 @@
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QPushButton" name="toggleThemeBtn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <widget class="QPushButton" name="buttonSettings">
                   <property name="minimumSize">
@@ -2518,6 +2508,13 @@
                     <width>20</width>
                     <height>20</height>
                    </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="toggleThemeBtn">
+                  <property name="text">
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -2601,6 +2598,38 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="plusButtonShurtcut">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>30</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="closeAppBtn">
                   <property name="minimumSize">
                    <size>
@@ -2636,6 +2665,22 @@
                  </widget>
                 </item>
                </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelDate">
+               <property name="font">
+                <font>
+                 <family>Lucida Casual</family>
+                 <pointsize>13</pointsize>
+                 <weight>50</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>milady date</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -2677,35 +2722,6 @@
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QPushButton" name="plusButtonShurtcut">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>52</width>
-                    <height>52</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <spacer name="horizontalSpacer_12">
                   <property name="orientation">
@@ -3724,14 +3740,14 @@
                        <item>
                         <widget class="QFrame" name="frame_8">
                          <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
+                          <enum>QFrame::NoFrame</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_30">
+                         <layout class="QHBoxLayout" name="horizontalLayout_22">
                           <property name="spacing">
-                           <number>0</number>
+                           <number>10</number>
                           </property>
                           <property name="leftMargin">
                            <number>0</number>
@@ -3761,14 +3777,14 @@
                        <item>
                         <widget class="QFrame" name="frame_7">
                          <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
+                          <enum>QFrame::NoFrame</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_29">
+                         <layout class="QHBoxLayout" name="horizontalLayout_2">
                           <property name="spacing">
-                           <number>0</number>
+                           <number>10</number>
                           </property>
                           <property name="leftMargin">
                            <number>0</number>
@@ -3927,11 +3943,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderMinimumSectionSize">
-                       <number>31</number>
-                      </attribute>
                       <attribute name="horizontalHeaderDefaultSectionSize">
                        <number>150</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderMinimumSectionSize">
+                       <number>31</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -5027,7 +5043,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5081,9 +5097,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string/>
+                               <string>Tous</string>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6200,7 +6216,7 @@
                     <item>
                      <widget class="QTabWidget" name="tabWidget">
                       <property name="currentIndex">
-                       <number>2</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="tabeDetailsJournee">
                        <attribute name="title">
@@ -6476,7 +6492,6 @@
   <tabstop>buttonSaveVersement</tabstop>
   <tabstop>buttonDeleteVersement</tabstop>
   <tabstop>versementTableWidget</tabstop>
-  <tabstop>buttonSettings</tabstop>
   <tabstop>minimizeAppBtn</tabstop>
   <tabstop>maximizeRestoreAppBtn</tabstop>
   <tabstop>closeAppBtn</tabstop>

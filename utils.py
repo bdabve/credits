@@ -102,7 +102,6 @@ class ThemeManager:
 
     def apply(self, theme_name):
         theme = self.themes[theme_name]
-        print(theme)
         with open(f"./gui/{theme["stylesheet"]}", "r") as f:
             self.app.setStyleSheet(f.read())
         self.current = theme_name
@@ -145,6 +144,13 @@ def format_to_decimal(value):
 
 
 def is_date(value: str, fmt="%Y-%m-%d") -> bool:
+    """
+    Docstring for is_date
+    :type value: str
+    :param fmt: Description
+    :return: Description
+    :rtype: bool
+    """
     try:
         datetime.strptime(value, fmt)
         return True
@@ -158,11 +164,11 @@ def is_date(value: str, fmt="%Y-%m-%d") -> bool:
 # === 1) Setup callbacks/signals/menus (run once at startup) ===
 def setup_main_callbacks(root):
     # --- Button callbacks (no icons here!)
+    # root.ui.closeAppBtn.clicked.connect(root.close),
+    # root.ui.minimizeAppBtn.clicked.connect(root.showMinimized),
+    # root.ui.maximizeRestoreAppBtn.clicked.connect(root.toggle_maximize_restore),
     root.ui.toggleMenuButton.clicked.connect(root.on_toggle_menu),
-    root.ui.extraCloseColumnBtn.clicked.connect(lambda: root.toggle_left_box(close=True)),
-    root.ui.closeAppBtn.clicked.connect(root.close),
-    root.ui.minimizeAppBtn.clicked.connect(root.showMinimized),
-    root.ui.maximizeRestoreAppBtn.clicked.connect(root.toggle_maximize_restore),
+    root.ui.extraCloseColumnBtn.clicked.connect(lambda: root.toggle_left_box(close=True)),    
     root.ui.toggleThemeBtn.clicked.connect(root.toggle_theme),
     root.ui.buttonCloseMsgsFrame.clicked.connect(lambda: root.close_msgs_frame(close=True)),
 
@@ -370,9 +376,10 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     LIST_ICON = theme_manager.icon('ph.list', "ICON_COLOR")
 
     # --- Main Window Buttons
-    root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))
-    root.ui.minimizeAppBtn.setIcon(theme_manager.icon("mdi.window-minimize", "MENU_COLOR"))
-    root.ui.maximizeRestoreAppBtn.setIcon(theme_manager.icon("mdi.window-restore", "MENU_COLOR"))
+    # root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))
+    # root.ui.minimizeAppBtn.setIcon(theme_manager.icon("mdi.window-minimize", "MENU_COLOR"))
+    # root.ui.maximizeRestoreAppBtn.setIcon(theme_manager.icon("mdi.window-restore", "MENU_COLOR"))
+
     root.ui.toggleMenuButton.setIcon(theme_manager.icon("ri.menu-fold-fill", "ICON_COLOR"))
     root.ui.extraCloseColumnBtn.setIcon(theme_manager.icon("ph.x", "ICON_COLOR"))
 
