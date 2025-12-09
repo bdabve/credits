@@ -243,7 +243,11 @@ def setup_main_callbacks(root):
         (root.ui.buttonSaveCharge, root.insert_new_charge),
         (root.ui.buttonDeleteCharge, root.delete_charge),
 
+        # ==========================================================
+        # == Etats Page ==
+        # ================
         (root.ui.buttonEtatPage, lambda: root.goto_page("etats")),
+        (root.ui.buttonOpenEtatExcelFile, root.open_etat_excel_file),
     ]
     for button, callback in buttons:
         button.clicked.connect(callback)
@@ -434,6 +438,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     # --- Etats
     # ph.chart-line-up
     root.ui.buttonEtatPage.setIcon(theme_manager.icon('ph.presentation-chart-thin', "ICON_COLOR"))
+    root.ui.buttonOpenEtatExcelFile.setIcon(theme_manager.icon('mdi6.microsoft-excel', "NEW_COLOR"))
 
     # --- Standalone Icons
     root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=ICON_COLOR))

@@ -36,7 +36,7 @@ def show_day_details(clean_df, day, fields):
     :day: str or datetime [YYYY-MM-DD]
     :fields: list of fields to sum
     """
-    daily_driver = clean_df.groupby(["DATE", "LIVREUR"])[fields].sum()   # print(f"📅 Today's stats: {today_stats}\n")
+    daily_driver = clean_df.groupby(["DATE", "LIVREUR"])[fields].sum()
 
     # Convert input to datetime
     day = pd.to_datetime(day).normalize()
@@ -56,6 +56,7 @@ def etat_journalier(clean_df, fields):
     # --- SUM By Date
     daily_stats = clean_df.groupby("DATE")[fields[:-1]].sum()
     daily_stats = daily_stats.sort_values(by="DATE", ascending=True)
+    daily_stats.index = daily_stats.index.date  # Convert to date only
 
     # Create totals row
     total_row = pd.DataFrame(daily_stats.sum()).T
@@ -129,7 +130,7 @@ def terminal(clean_df, fields):
 
 
 if __name__ == "__main__":
-    file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+    file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR_AOUT.xlsx"
 
         # return pd.read_excel(file_path, sheet_name=None)
 
@@ -137,7 +138,7 @@ if __name__ == "__main__":
     fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
     sheet_name = "DECEMBRE"
     sheet = load_excel(file, sheet_name)
-    # terminal(sheet, fields)
+    terminal(sheet, fields)
     les_retour, sum_retour = difference_commande_logiciel(sheet)
     print(les_retour)
     print(sum_retour)

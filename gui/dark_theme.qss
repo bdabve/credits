@@ -627,7 +627,10 @@ QCommandLinkButton:pressed {
 #EmployeOperationsPage,
 #ChargePage,
 #PaymentsWidgetContainer,
-#EtatPage,
+#EtatPage
+{
+	background-color: #252525;
+}
 
 /* == QTabWidget Main Widget === */
 #tabeDetailsJournee,
@@ -637,9 +640,10 @@ QCommandLinkButton:pressed {
 	background-color: #202020;
 }
 
-#EtatWidgetContainer {
-	border-radius: 10px;
-}
+/* #EtatWidgetContainer {
+	background-color: #202020;
+} */
+
 #labelDate,
 #labelHijri {
 	/* font: 14pt "Noto Sans Arabic";*/

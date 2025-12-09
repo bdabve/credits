@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 
-import sys
+import sys, os
 from datetime import datetime
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
@@ -12,6 +12,7 @@ import utils
 from db_handler import Database
 from gui.h_credit import Ui_MainWindow
 from logger import logger
+import statistics as st
 
 
 class Credit(QtWidgets.QMainWindow):
@@ -155,7 +156,7 @@ class Credit(QtWidgets.QMainWindow):
             'etats': {
                 'title': 'Etat Journalier',
                 'widget': lambda self: self.ui.EtatPage,
-                'action': lambda self: self.display_etat_journalier(),
+                'action': lambda self: self.display_etat(),
                 'buttons': lambda self: (
                     self.ui.etatJournalierTableWidget,
                     ()
@@ -1907,17 +1908,10 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Statistics Page ==
     # =====================
-    def display_etat_journalier(self):
-        import statistics as st
-        import os
+    def display_etat(self):
+        pass
 
-        # MONTHS_FR = {
-        #    # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
-        #    # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
-        #    # "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
-        # }
-
-        selected_month = self.ui.cbBoxEtatByMonth.currentText()
+    def open_etat_excel_file(self):
         if os.name == 'nt':     # means we are on Windows
             options = QtWidgets.QFileDialog.Options()
             file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -1933,6 +1927,16 @@ class Credit(QtWidgets.QMainWindow):
         if not file_path:
             self.show_error_message("Error: ", success=False)
             return
+        self.display_etat_journalier(file_path)
+
+    def display_etat_journalier(self, file_path):
+        # MONTHS_FR = {
+        #    # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
+        #    # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
+        #    # "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
+        # }
+
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
 
         # sheet_month = MONTHS_FR.get(selected_month) if selected_month != "Mois" else MONTHS_FR[self.CURRENT_MONTH_TEXT]
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
@@ -1958,6 +1962,7 @@ class Credit(QtWidgets.QMainWindow):
         etat = st.etat_journalier(df, fields)
         rows = etat.values.tolist()
         headers = etat.columns.tolist()
+        headers[0] = "Date"
         utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 250, 250, 250, 200)
 
