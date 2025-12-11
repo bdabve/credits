@@ -78,6 +78,56 @@ def sum_by_driver(clean_df, fields):
     return driver_stats.reset_index()
 
 
+def plot_driver_percentages(clean_df, fields):
+    import matplotlib.pyplot as plt
+
+    # Filter drivers & create a real copy => removes warnings
+    livreur = ["AMINE", "TOUFIK", "REDA", "MOHAMED"]
+    driver_stats = clean_df.groupby("LIVREUR")[fields].sum()
+    driver_stats = driver_stats.sort_values(by="VERSEMENT", ascending=True).reset_index()
+    df = driver_stats[driver_stats["LIVREUR"].isin(livreur)].copy()
+
+    # Percentages based on VERSEMENT
+    total_livraison = df["VERSEMENT"].sum()
+    df["LIVRAISON %"] = (df["VERSEMENT"] / total_livraison) * 100
+
+    # Plot
+    plt.figure(figsize=(10, 7))
+    bars = plt.bar(df["LIVREUR"], df["LIVRAISON %"])
+
+    # Increase bottom margin for money text
+    plt.subplots_adjust(bottom=0.18)
+
+    # Add labels
+    for bar, pct, amount in zip(bars, df["LIVRAISON %"], df["VERSEMENT"]):
+        x = bar.get_x() + bar.get_width() / 2
+
+        # % above bar
+        plt.text(
+            x, bar.get_height(),
+            f"{pct:.1f}%",
+            ha='center', va='bottom', fontsize=11
+        )
+
+        # Money BELOW the x-axis labels
+        plt.text(
+            x, -5,  # lower value = lower under the name
+            f"{amount:,.0f} DA",
+            ha='center', va='top', fontsize=10
+        )
+
+    plt.title("Répartition (%) de la LIVRAISON par LIVREUR", fontsize=14)
+    plt.ylabel("Pourcentage (%)")
+    plt.xlabel("LIVREUR")
+    plt.xticks(rotation=0)
+
+    # Make sure we have space below
+    plt.ylim(-10, df["LIVRAISON %"].max() + 10)
+
+    plt.tight_layout()
+    plt.show()
+
+
 def driver_observations(clean_df):
     """
     Generate observations for each driver based on their performance.
@@ -87,7 +137,7 @@ def driver_observations(clean_df):
     return driver_obs.reset_index()
 
 
-def difference_commande_logiciel(df):
+def driver_retour(df):
     """
     Calculate the difference between 'T. COMMANDE' and 'T.LOGICIEL' for each row.
     :df: DataFrame
@@ -130,15 +180,16 @@ def terminal(clean_df, fields):
 
 
 if __name__ == "__main__":
-    file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR_AOUT.xlsx"
+    # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR_AOUT.xlsx"
+    file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
-        # return pd.read_excel(file_path, sheet_name=None)
-
-    # print(show_day_details(clean_df, "2025-12-04", fields))
     fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
     sheet_name = "DECEMBRE"
     sheet = load_excel(file, sheet_name)
-    terminal(sheet, fields)
-    les_retour, sum_retour = difference_commande_logiciel(sheet)
-    print(les_retour)
-    print(sum_retour)
+    # terminal(sheet, fields)
+    # les_retour, sum_retour = driver_retour(sheet)
+    # print(les_retour)
+    # print(sum_retour)
+    driver_stats = sum_by_driver(sheet, fields)
+    print(driver_stats)
+    plot_driver_percentages(sheet, fields)
