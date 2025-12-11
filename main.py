@@ -12,7 +12,7 @@ import utils
 from db_handler import Database
 from gui.h_credit import Ui_MainWindow
 from logger import logger
-import statistics as st
+import etat_statistics as st
 
 
 class Credit(QtWidgets.QMainWindow):
@@ -1974,7 +1974,7 @@ class Credit(QtWidgets.QMainWindow):
         utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
 
         # === Defference between T.COMMANDE and T.LOGICIEL
-        les_retour, sum_retour = st.difference_commande_logiciel(df)
+        les_retour, sum_retour = st.driver_retour(df)
         print("[=] Retour: ", les_retour)
         print("[=] SUM Retour: ", sum_retour)
 
