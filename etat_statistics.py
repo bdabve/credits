@@ -29,6 +29,9 @@ def load_excel(file_path, sheet_name):
     return clean_df
 
 
+# ==========================================
+# --- Day Details
+# ==========================================
 def show_day_details(clean_df, day, fields):
     """
     Show details for a specific day
@@ -44,9 +47,12 @@ def show_day_details(clean_df, day, fields):
     if day in daily_driver.index.get_level_values("DATE"):
         return daily_driver.loc[day].reset_index()
     else:
-        return f"No data for {day.date()}"
+        return "No data"
 
 
+# ==========================================
+# --- Etat jouralier
+# ==========================================
 def etat_journalier(clean_df, fields):
     """
     Total par jour avec ligne des totaux
@@ -66,6 +72,9 @@ def etat_journalier(clean_df, fields):
     return etat_journalier.reset_index()
 
 
+# ==========================================
+# --- Livreur
+# ==========================================
 def sum_by_driver(clean_df, fields):
     """
     Sum by driver
@@ -78,8 +87,13 @@ def sum_by_driver(clean_df, fields):
     return driver_stats.reset_index()
 
 
-def plot_driver_percentages(clean_df, fields):
+# ==========================================
+# --- Pliting LIVREUR Purentage
+# ==========================================
+def plot_driver_percentages(canvas, clean_df, fields):
     import matplotlib.pyplot as plt
+    ax = canvas.ax
+    ax.clear()
 
     # Filter drivers & create a real copy => removes warnings
     livreur = ["AMINE", "TOUFIK", "REDA", "MOHAMED"]
@@ -92,7 +106,7 @@ def plot_driver_percentages(clean_df, fields):
     df["LIVRAISON %"] = (df["VERSEMENT"] / total_livraison) * 100
 
     # Plot
-    plt.figure(figsize=(10, 7))
+    # plt.figure(figsize=(10, 7))
     bars = plt.bar(df["LIVREUR"], df["LIVRAISON %"])
 
     # Increase bottom margin for money text
@@ -128,6 +142,68 @@ def plot_driver_percentages(clean_df, fields):
     plt.show()
 
 
+def plot_driver_percentages_pyqt(canvas, df, allowed_livreur, fields, metric):
+    ax = canvas.ax
+    ax.clear()
+
+    # Drivers to keep
+    driver_stats = df.groupby("LIVREUR")[fields].sum()
+    driver_stats = driver_stats.sort_values(by="VERSEMENT", ascending=True).reset_index()
+    df = driver_stats[driver_stats["LIVREUR"].isin(allowed_livreur)].copy()
+
+    # If all values empty or df empty → display message
+    if df.empty or df[metric].isna().all():
+        ax.text(0.5, 0.5, "Aucune donnée disponible",
+                ha="center", va="center", fontsize=14)
+        ax.set_axis_off()
+        canvas.draw()
+        return
+
+    # Replace NaN by 0
+    df[metric] = df[metric].fillna(0)
+
+    total = df[metric].sum()
+    if total == 0:
+        ax.text(0.5, 0.5, f"{metric} = 0 pour tous les livreurs",
+                ha="center", va="center", fontsize=14)
+        ax.set_axis_off()
+        canvas.draw()
+        return
+
+    pct_col = f"{metric} %"
+    df[pct_col] = (df[metric] / total) * 100
+
+    # Bar chart
+    bars = ax.bar(df["LIVREUR"], df[pct_col])
+
+    ax.set_title(f"{metric} (%) par LIVREUR")
+    ax.set_ylabel("Pourcentage (%)")
+    ax.set_xlabel("LIVREUR")
+
+    # Add labels
+    for bar, pct, amount in zip(bars, df[pct_col], df[metric]):
+        x = bar.get_x() + bar.get_width() / 2
+
+        ax.text(x, bar.get_height(), f"{pct:.1f}%",
+                ha="center", va="bottom", fontsize=10)
+
+        ax.text(x, -5, f"{amount:,.0f}",
+                ha="center", va="top", fontsize=9)
+
+    # Safe Y limit
+    ymax = df[pct_col].max()
+    if pd.isna(ymax) or ymax == 0:
+        ymax = 10
+
+    ax.set_ylim(-10, ymax + 10)
+
+    canvas.fig.subplots_adjust(bottom=0.22)
+    canvas.draw()
+
+
+# ==========================================
+# --- Livreur Obs
+# ==========================================
 def driver_observations(clean_df):
     """
     Generate observations for each driver based on their performance.
@@ -137,6 +213,9 @@ def driver_observations(clean_df):
     return driver_obs.reset_index()
 
 
+# ==========================================
+# --- Retour Livreur
+# ==========================================
 def driver_retour(df):
     """
     Calculate the difference between 'T. COMMANDE' and 'T.LOGICIEL' for each row.
@@ -148,6 +227,9 @@ def driver_retour(df):
     return les_retour, sum_retour_by_driver
 
 
+# ==========================================
+# --- The terminal logger
+# ==========================================
 def terminal(clean_df, fields):
     """
     sheet_name: DECEMBRE

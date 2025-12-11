@@ -628,6 +628,7 @@ QCommandLinkButton:pressed {
 #ChargePage,
 #PaymentsWidgetContainer,
 #EtatPage
+
 {
 	background-color: #252525;
 }
@@ -635,7 +636,8 @@ QCommandLinkButton:pressed {
 /* == QTabWidget Main Widget === */
 #tabeDetailsJournee,
 #tabSumByDays,
-#tabEtatByDriver
+#tabEtatByDriver,
+#scrollAreaGraphContents
 {
 	background-color: #202020;
 }

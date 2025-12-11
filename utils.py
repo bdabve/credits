@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#
-# author        : el3arbi bdabve@gmail.com
-# created       :
-# desc          :
+# TODO:
+#       - Clean up this file
 # ----------------------------------------------------------------------------
 import os
 from datetime import datetime
@@ -168,7 +166,7 @@ def setup_main_callbacks(root):
     # root.ui.minimizeAppBtn.clicked.connect(root.showMinimized),
     # root.ui.maximizeRestoreAppBtn.clicked.connect(root.toggle_maximize_restore),
     root.ui.toggleMenuButton.clicked.connect(root.on_toggle_menu),
-    root.ui.extraCloseColumnBtn.clicked.connect(lambda: root.toggle_left_box(close=True)),    
+    root.ui.extraCloseColumnBtn.clicked.connect(lambda: root.toggle_left_box(close=True)),
     root.ui.toggleThemeBtn.clicked.connect(root.toggle_theme),
     root.ui.buttonCloseMsgsFrame.clicked.connect(lambda: root.close_msgs_frame(close=True)),
 
@@ -299,6 +297,8 @@ def setup_main_callbacks(root):
     root.ui.editSearchItem.textChanged.connect(root.search_item)
     root.ui.editSearchItem.returnPressed.connect(root.search_item)
     root.ui.buttonRefreshTableWidget.clicked.connect(root.refresh_table)
+
+    root.ui.dateEditEtatJournee.dateChanged.connect(root.etat_detail_journe)
 
     # === Menus ===
     create_menu(

@@ -3961,11 +3961,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
                       <attribute name="horizontalHeaderMinimumSectionSize">
                        <number>31</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -5061,7 +5061,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5115,9 +5115,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string>Tous</string>
+                               <string/>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6298,11 +6298,41 @@
                          <number>30</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="etatLabelTitle">
-                          <property name="text">
-                           <string>Detail de la journée </string>
+                         <layout class="QHBoxLayout" name="horizontalLayout_37">
+                          <property name="topMargin">
+                           <number>5</number>
                           </property>
-                         </widget>
+                          <property name="bottomMargin">
+                           <number>10</number>
+                          </property>
+                          <item>
+                           <widget class="QLabel" name="etatLabelTitle">
+                            <property name="text">
+                             <string>Detail de la journée </string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QDateEdit" name="dateEditEtatJournee">
+                            <property name="buttonSymbols">
+                             <enum>QAbstractSpinBox::NoButtons</enum>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <spacer name="horizontalSpacer_20">
+                            <property name="orientation">
+                             <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>40</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                         </layout>
                         </item>
                         <item>
                          <widget class="MyTable" name="etatJournalierDetailsTableWidget">
@@ -6511,6 +6541,33 @@
                           <attribute name="verticalHeaderVisible">
                            <bool>false</bool>
                           </attribute>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="tabPlot">
+                       <attribute name="title">
+                        <string>Graph</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_29">
+                        <item>
+                         <widget class="QScrollArea" name="scrollAreaGraph">
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
+                          </property>
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaGraphContents">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>969</width>
+                             <height>533</height>
+                            </rect>
+                           </property>
+                          </widget>
                          </widget>
                         </item>
                        </layout>

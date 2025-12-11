@@ -1927,9 +1927,13 @@ class Credit(QtWidgets.QMainWindow):
         if not file_path:
             self.show_error_message("Error: ", success=False)
             return
-        self.display_etat_journalier(file_path)
 
-    def display_etat_journalier(self, file_path):
+        # Display etat
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        self.etat_from_database(selected_month)
+        self.display_etat_journalier(file_path, selected_month)
+
+    def display_etat_journalier(self, file_path, selected_month):
         # MONTHS_FR = {
         #    # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
         #    # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
@@ -1947,17 +1951,6 @@ class Credit(QtWidgets.QMainWindow):
             f"File Name: {file_path}"
         )
 
-        # === Etat Detailé ===
-        # date = self.ui.etatDetailJournalierDateEdit.date().toString("yyyy-MM-dd")
-        date = self.CURRENT_DATE.now().strftime("%Y-%m-%d")                 # FIXME
-        self.ui.etatLabelTitle.setText(f"Date: {date}")      # Title
-
-        detail_journe = st.show_day_details(df, date, fields)               # unsorted
-        rows = detail_journe.values.tolist()
-        headers = detail_journe.columns.tolist()
-        utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
-        utils.set_table_column_sizes(self.ui.etatJournalierDetailsTableWidget, 300, 250, 250, 250, 250, 250)
-
         # === Etat Journalier from file ===
         etat = st.etat_journalier(df, fields)
         rows = etat.values.tolist()
@@ -1966,19 +1959,63 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 250, 250, 250, 200)
 
-        # === Etat Par Livreur from file ===
+        # === Etat Par Livreur ===
         etat_par_livreur = st.sum_by_driver(df, fields)
         headers = etat_par_livreur.columns.tolist()
         rows = etat_par_livreur.values.tolist()
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
 
+        # === Plot Pourcentage Livreur ===
+        import ploting
+        # container = QtWidgets.QWidget()
+        layout = QtWidgets.QHBoxLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(30)
+
+        # ----------- GRAPH 1: % LIVRAISON -----------
+        allowed_livreur = ["AMINE", "TOUFIK", "REDA", "MOHAMED", "VERS. CREDIT", "CREDIT"]
+        self.canvas_livraison = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
+        st.plot_driver_percentages_pyqt(self.canvas_livraison, df, allowed_livreur, fields, metric="VERSEMENT")
+        layout.addWidget(self.canvas_livraison)
+
+        # ----------- GRAPH 2: % COMMANDE -----------
+        self.canvas_command = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
+        st.plot_driver_percentages_pyqt(self.canvas_command, df, allowed_livreur[:4], fields[:-1], metric="T. COMMANDE")
+        layout.addWidget(self.canvas_command)
+
+        # Put layout inside scroll area
+        # self.ui.scrollAreaGraphContents.setWidget(container)
+        # self.ui.scrollAreaGraphContents.setWidgetResizable(True)
+        # Add Layout to Widgets
+        self.ui.scrollAreaGraphContents.setLayout(layout)
+
         # === Defference between T.COMMANDE and T.LOGICIEL
         les_retour, sum_retour = st.driver_retour(df)
         print("[=] Retour: ", les_retour)
         print("[=] SUM Retour: ", sum_retour)
 
-        # === Etat From database ==
+    # === Etat De Journé Detailé ===
+    def etat_detail_journe(self):
+        file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+
+        date = self.ui.dateEditEtatJournee.date().toString("yyyy-MM-dd")
+        # date = self.CURRENT_DATE.now().strftime("%Y-%m-%d")                 # FIXME
+        # self.ui.etatLabelTitle.setText(f"Date: {date}")      # Title
+
+        fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
+        df = st.load_excel(file_path, "DECEMBRE")         # FIXME
+        detail_journe = st.show_day_details(df, date, fields)               # unsorted
+        if isinstance(detail_journe, str) and detail_journe.startswith("No data"):
+            self.show_error_message("Pas de data", success=False)
+            return
+        rows = detail_journe.values.tolist()
+        headers = detail_journe.columns.tolist()
+        utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
+        utils.set_table_column_sizes(self.ui.etatJournalierDetailsTableWidget, 300, 250, 250, 250, 250, 250)
+
+    # === Etat From database ==
+    def etat_from_database(self, selected_month):
         month = self.CURRENT_MONTH if selected_month == "Mois" else f"{self.CURRENT_YEAR}-{selected_month}"
         rows = self.db.etat_journalier(month=month)
 
