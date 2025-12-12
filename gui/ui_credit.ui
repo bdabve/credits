@@ -6284,7 +6284,7 @@
                     <item>
                      <widget class="QTabWidget" name="tabWidget">
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>3</number>
                       </property>
                       <widget class="QWidget" name="tabeDetailsJournee">
                        <attribute name="title">
@@ -6316,6 +6316,13 @@
                            <widget class="QDateEdit" name="dateEditEtatJournee">
                             <property name="buttonSymbols">
                              <enum>QAbstractSpinBox::NoButtons</enum>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="buttonEtatDetailJournee">
+                            <property name="text">
+                             <string>Ok</string>
                             </property>
                            </widget>
                           </item>
@@ -6526,6 +6533,32 @@
                         </item>
                         <item>
                          <widget class="QTableWidget" name="etatParLivreurTableWidget">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>193</height>
+                           </size>
+                          </property>
+                          <property name="editTriggers">
+                           <set>QAbstractItemView::NoEditTriggers</set>
+                          </property>
+                          <attribute name="horizontalHeaderStretchLastSection">
+                           <bool>true</bool>
+                          </attribute>
+                          <attribute name="verticalHeaderVisible">
+                           <bool>false</bool>
+                          </attribute>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="tab">
+                       <attribute name="title">
+                        <string>Retour Par Livreur</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_30">
+                        <item>
+                         <widget class="QTableWidget" name="retourParLivreurTableWidget">
                           <property name="minimumSize">
                            <size>
                             <width>0</width>

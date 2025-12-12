@@ -6,10 +6,6 @@
 import os
 from datetime import datetime
 import decimal
-# Server for api
-from threading import Thread
-import uvicorn
-from api import app as server_app
 
 from PyQt5 import QtWidgets, QtCore         # , QtGui
 import qtawesome as qta
@@ -89,6 +85,12 @@ COMMUNES_LIST = [
     "DOUAOUDA-MARINE", "FOUKA-MARINE", "KOLEA", "TIPAZA", "NADOR", "CHERCHEL",
     "COMMUNEL", "CHAIG", "MESSELMOUN", "GHOURAYA", "HADJOUT",
 ]
+
+MONTHS_FR = {
+    "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
+    "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
+    "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
+}
 
 
 class ThemeManager:
@@ -246,6 +248,7 @@ def setup_main_callbacks(root):
         # ================
         (root.ui.buttonEtatPage, lambda: root.goto_page("etats")),
         (root.ui.buttonOpenEtatExcelFile, root.open_etat_excel_file),
+        (root.ui.buttonEtatDetailJournee, root.etat_detail_journe),
     ]
     for button, callback in buttons:
         button.clicked.connect(callback)
@@ -281,7 +284,7 @@ def setup_main_callbacks(root):
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
         (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
         (root.ui.cbBoxPaymentByMonth, root.payment_from_cbbox),
-        (root.ui.cbBoxEtatByMonth, root.display_etat_journalier),
+        # (root.ui.cbBoxEtatByMonth, root.display_etat_journalier),
     ]
     for cbBox, callback in cbBoxes:
         cbBox.currentIndexChanged.connect(callback)
@@ -866,19 +869,6 @@ def export_situation_to_excel(rows, file_path):
     # Sauvegarde du fichier
     wb.save(file_path)
     return f"✔️ Fichier généré : {file_path}"
-
-
-class ServerThread(Thread):
-    def __init__(self):
-        super().__init__(daemon=True)
-        config = uvicorn.Config(server_app, host="127.0.0.1", port=8000, log_level="info")
-        self.server = uvicorn.Server(config)
-
-    def run(self):
-        self.server.run()
-
-    def stop(self):
-        self.server.should_exit = True
 
 
 class ConfirmDialog(QtWidgets.QDialog):

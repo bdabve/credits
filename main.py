@@ -12,7 +12,9 @@ import utils
 from db_handler import Database
 from gui.h_credit import Ui_MainWindow
 from logger import logger
+from thread_objects import ServerThread, DriverGraphWorker  # PlotWorker,
 import etat_statistics as st
+import ploting
 
 
 class Credit(QtWidgets.QMainWindow):
@@ -48,7 +50,7 @@ class Credit(QtWidgets.QMainWindow):
         # Set app icon
         self.setWindowIcon(QtGui.QIcon('./images/images/app_icon.png'))
 
-        self.server_thread: utils.ServerThread | None = None   # type hint for clarity
+        self.server_thread: ServerThread | None = None   # type hint for clarity
         self.server_running = False
 
         # Setup current date values
@@ -175,6 +177,15 @@ class Credit(QtWidgets.QMainWindow):
         self.on_toggle_menu()
         self.goto_page('credit')  # Default page
         self.ui.labelDate.setText(f"{self.CURRENT_DATE.date()}")
+
+        # TODO: fix populating the nedded comboBox and Edits
+        self.ui.cbBoxEtatByMonth.blockSignals(True)
+        self.ui.cbBoxEtatByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+        self.ui.cbBoxEtatByMonth.blockSignals(False)
+
+        self.ui.dateEditEtatJournee.blockSignals(True)
+        self.ui.dateEditEtatJournee.setDate(self.CURRENT_DATE)
+        self.ui.dateEditEtatJournee.blockSignals(True)
         #
         self.showMaximized()
 
@@ -486,7 +497,7 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelServerIsOn.setStyleSheet(label_ssheet)
         if not self.server_running:
             # Start server
-            self.server_thread = utils.ServerThread()
+            self.server_thread = ServerThread()
             self.server_thread.start()
             self.server_running = True
             self.ui.labelServerIsOn.setText("✅ Server running at http://127.0.0.1:8000")
@@ -1912,6 +1923,9 @@ class Credit(QtWidgets.QMainWindow):
         pass
 
     def open_etat_excel_file(self):
+        self.ui.buttonOpenEtatExcelFile.setText(" Loading...")
+        self.ui.buttonOpenEtatExcelFile.setEnabled(False)
+
         if os.name == 'nt':     # means we are on Windows
             options = QtWidgets.QFileDialog.Options()
             file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -1931,23 +1945,24 @@ class Credit(QtWidgets.QMainWindow):
         # Display etat
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
         self.etat_from_database(selected_month)
-        self.display_etat_journalier(file_path, selected_month)
 
-    def display_etat_journalier(self, file_path, selected_month):
-        # MONTHS_FR = {
-        #    # "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
-        #    # "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
-        #    # "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
-        # }
+        self.display_etat_journalier(file_path)
 
+        # --- Ploting Graphs in Thread ---
+        self.worker = DriverGraphWorker(file_path)
+        self.worker.finished.connect(self.on_worker_finished)
+        self.worker.start()
+
+    def display_etat_journalier(self, file_path):
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        sheet_month = utils.MONTHS_FR.get(selected_month) if selected_month != "Mois" else utils.MONTHS_FR[self.CURRENT_MONTH_TEXT]
+        logger.debug(f"Selected Month for Etat Journalier: {sheet_month}")
 
-        # sheet_month = MONTHS_FR.get(selected_month) if selected_month != "Mois" else MONTHS_FR[self.CURRENT_MONTH_TEXT]
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-        df = st.load_excel(file_path, "DECEMBRE")         # FIXME
+        df = st.load_excel(file_path, sheet_month)         # FIXME
 
         logger.debug(
-            f"Displaying Etat Journalier for month: {selected_month}\n"
+            f"Etat Journalier for month: {selected_month}\n"
             f"File Name: {file_path}"
         )
 
@@ -1966,48 +1981,70 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
 
+    # -------- Ploting Thread Ready ------------
+    def on_worker_finished(self, df, error):
         # === Plot Pourcentage Livreur ===
-        import ploting
-        # container = QtWidgets.QWidget()
-        layout = QtWidgets.QHBoxLayout()
+        # layout = QtWidgets.QFormLayout(self.ui.scrollAreaGraphContents)
+        layout = QtWidgets.QGridLayout()
         layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(30)
+        layout.setHorizontalSpacing(10)
+        layout.setVerticalSpacing(10)
+
+        fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
 
         # ----------- GRAPH 1: % LIVRAISON -----------
         allowed_livreur = ["AMINE", "TOUFIK", "REDA", "MOHAMED", "VERS. CREDIT", "CREDIT"]
         self.canvas_livraison = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
         st.plot_driver_percentages_pyqt(self.canvas_livraison, df, allowed_livreur, fields, metric="VERSEMENT")
-        layout.addWidget(self.canvas_livraison)
+        self.canvas_livraison.setMinimumHeight(300)
+        layout.addWidget(self.canvas_livraison, 0, 0, 1, 1)
 
         # ----------- GRAPH 2: % COMMANDE -----------
         self.canvas_command = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
         st.plot_driver_percentages_pyqt(self.canvas_command, df, allowed_livreur[:4], fields[:-1], metric="T. COMMANDE")
-        layout.addWidget(self.canvas_command)
+        layout.addWidget(self.canvas_command, 0, 1, 1, 1)
+
+        # ----------- GRAPH 3: % DIFF -----------
+        self.canvas_diff = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
+        st.plot_driver_percentages_pyqt(self.canvas_diff, df, allowed_livreur[:4], fields[:-1], metric="DIFF")
+        self.canvas_diff.setMinimumHeight(300)
+        layout.addWidget(self.canvas_diff, 1, 0, 1, 1)
+
+        # ----------- GRAPH 3: % RETOUR -----------
+        les_retour, sum_retour = st.driver_retour(df)
+        self.canvas_retour = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
+        st.plot_driver_retour_pyqt(self.canvas_retour, sum_retour, allowed_livreur)
+        layout.addWidget(self.canvas_retour, 1, 1, 1, 1)
 
         # Put layout inside scroll area
-        # self.ui.scrollAreaGraphContents.setWidget(container)
-        # self.ui.scrollAreaGraphContents.setWidgetResizable(True)
-        # Add Layout to Widgets
         self.ui.scrollAreaGraphContents.setLayout(layout)
 
-        # === Defference between T.COMMANDE and T.LOGICIEL
-        les_retour, sum_retour = st.driver_retour(df)
-        print("[=] Retour: ", les_retour)
-        print("[=] SUM Retour: ", sum_retour)
+        # --- Retour in TableWidget --- #
+        headers = les_retour.columns.tolist()
+        rows = les_retour.values.tolist()
+        utils.populate_table_widget(self.ui.retourParLivreurTableWidget, rows, headers)
+        utils.set_table_column_sizes(self.ui.retourParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
+
+        self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
+        self.ui.buttonOpenEtatExcelFile.setEnabled(True)
 
     # === Etat De Journé Detailé ===
     def etat_detail_journe(self):
         file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
         date = self.ui.dateEditEtatJournee.date().toString("yyyy-MM-dd")
-        # date = self.CURRENT_DATE.now().strftime("%Y-%m-%d")                 # FIXME
-        # self.ui.etatLabelTitle.setText(f"Date: {date}")      # Title
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        if selected_month != "Mois":
+            sheet_name = utils.MONTHS_FR.get(selected_month)
+        else:
+            sheet_name = utils.MONTHS_FR[self.CURRENT_MONTH_TEXT]
 
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-        df = st.load_excel(file_path, "DECEMBRE")         # FIXME
+        df = st.load_excel(file_path, sheet_name)
         detail_journe = st.show_day_details(df, date, fields)               # unsorted
         if isinstance(detail_journe, str) and detail_journe.startswith("No data"):
-            self.show_error_message("Pas de data", success=False)
+            # Aucun detail pour cette date
+            self.show_error_message(f"Aucun détail trouvé pour la date {date}.", success=False)
             return
         rows = detail_journe.values.tolist()
         headers = detail_journe.columns.tolist()

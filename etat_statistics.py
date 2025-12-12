@@ -130,7 +130,7 @@ def plot_driver_percentages(canvas, clean_df, fields):
             ha='center', va='top', fontsize=10
         )
 
-    plt.title("Répartition (%) de la LIVRAISON par LIVREUR", fontsize=14)
+    plt.title("LIVRAISON (%) par LIVREUR", fontsize=14)
     plt.ylabel("Pourcentage (%)")
     plt.xlabel("LIVREUR")
     plt.xticks(rotation=0)
@@ -148,7 +148,7 @@ def plot_driver_percentages_pyqt(canvas, df, allowed_livreur, fields, metric):
 
     # Drivers to keep
     driver_stats = df.groupby("LIVREUR")[fields].sum()
-    driver_stats = driver_stats.sort_values(by="VERSEMENT", ascending=True).reset_index()
+    driver_stats = driver_stats.sort_values(by=metric, ascending=True).reset_index()
     df = driver_stats[driver_stats["LIVREUR"].isin(allowed_livreur)].copy()
 
     # If all values empty or df empty → display message
@@ -177,8 +177,8 @@ def plot_driver_percentages_pyqt(canvas, df, allowed_livreur, fields, metric):
     bars = ax.bar(df["LIVREUR"], df[pct_col])
 
     ax.set_title(f"{metric} (%) par LIVREUR")
-    ax.set_ylabel("Pourcentage (%)")
-    ax.set_xlabel("LIVREUR")
+    # ax.set_ylabel("Pourcentage (%)")
+    # ax.set_xlabel("LIVREUR")
 
     # Add labels
     for bar, pct, amount in zip(bars, df[pct_col], df[metric]):
@@ -218,13 +218,82 @@ def driver_observations(clean_df):
 # ==========================================
 def driver_retour(df):
     """
-    Calculate the difference between 'T. COMMANDE' and 'T.LOGICIEL' for each row.
-    :df: DataFrame
+    Calculate the difference between 'T. COMMANDE' and 'T.LOGICIEL'
+    and return detailed rows + sum grouped by livreur.
     """
+    df = df.copy()
     df["RETOUR"] = df["T. COMMANDE"] - df["T.LOGICIEL"]
-    les_retour = df[["DATE", "LIVREUR", "T. COMMANDE", "T.LOGICIEL", "RETOUR"]].dropna(subset=["RETOUR"])
-    sum_retour_by_driver = les_retour.groupby("LIVREUR")["RETOUR"].sum().reset_index()
-    return les_retour, sum_retour_by_driver
+
+    retour = df[["DATE", "LIVREUR", "T. COMMANDE", "T.LOGICIEL", "RETOUR"]].dropna().copy()
+    # Format DATE
+    retour["DATE"] = retour["DATE"].dt.strftime("%d/%m/%Y")
+
+    # === TOTAL ROW ===
+    # total_row = {
+        # "DATE": "",
+        # "LIVREUR": "TOTAL",
+        # "T. COMMANDE": retour["T. COMMANDE"].sum(),
+        # "T. LOGICIEL": retour["T. LOGICIEL"].sum(),
+        # "RETOUR": retour["RETOUR"].sum(),
+    # }
+
+    # Append total row
+    # retour = pd.concat([retour, pd.DataFrame([total_row])], ignore_index=True)
+
+    sum_retour_by_driver = (
+        retour.groupby("LIVREUR")["RETOUR"]
+        .sum()
+        .reset_index()
+    )
+
+    return retour, sum_retour_by_driver
+
+
+def plot_driver_retour_pyqt(canvas, df, allowed_livreur):
+    ax = canvas.ax
+    ax.clear()
+
+    # Filter only allowed drivers
+    df = df[df["LIVREUR"].isin(allowed_livreur)].copy()
+
+    # If empty → avoid crash
+    if df.empty:
+        canvas.ax.text(0.5, 0.5, "Aucune donnée", ha='center')
+        canvas.draw()
+        return
+
+    # Compute percentages
+    total_retour = df["RETOUR"].sum()
+
+    if total_retour == 0:
+        canvas.axes.text(0.5, 0.5, "Total Retour = 0", ha='center')
+        canvas.draw()
+        return
+
+    df["RETOUR %"] = df["RETOUR"] / total_retour * 100
+
+    # Plot
+    bars = canvas.ax.bar(df["LIVREUR"], df["RETOUR %"])
+
+    # Add labels
+    for bar, pct, amount in zip(bars, df["RETOUR %"], df["RETOUR"]):
+        x = bar.get_x() + bar.get_width() / 2
+
+        # percentage
+        canvas.ax.text(x, bar.get_height(), f"{pct:.1f}%", ha="center", va="bottom", fontsize=11)
+
+        # absolute amount under x-axis
+        canvas.ax.text(x, -5, f"{amount:,.0f} DA", ha="center", va="top", fontsize=10)
+
+    # Formatting
+    canvas.ax.set_title("RETOURS (%) par LIVREUR")
+    # canvas.ax.set_ylabel("Pourcentage (%)")
+    # canvas.ax.set_xlabel("LIVREUR")
+
+    # Good margin for under-money text
+    canvas.ax.set_ylim(-10, df["RETOUR %"].max() + 10)
+
+    canvas.draw()
 
 
 # ==========================================

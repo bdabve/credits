@@ -14,5 +14,5 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger("rich")
-# logging.getLogger("pymongo").setLevel(logging.WARNING)      # suppress Logging from pymongo
+logging.getLogger("matplotlib").setLevel(logging.WARNING)      # suppress Logging from pymongo
 # logging.getLogger("matplotlib").setLevel(logging.WARNING)
