@@ -22,7 +22,7 @@ from gui.h_confirm_dialog import Ui_Dialog
 THEMES = {
     "light": {
         # "stylesheet": "light_theme.qss",
-        "stylesheet": "white_theme_gpt.qss",
+        "stylesheet": "light_theme.qss",
         "colors": {
             "NEW_COLOR": "#1dd1a1",
             "MENU_COLOR": "#34495e",

@@ -2687,6 +2687,9 @@
                <property name="text">
                 <string>milady date</string>
                </property>
+               <property name="margin">
+                <number>15</number>
+               </property>
               </widget>
              </item>
             </layout>
@@ -3961,11 +3964,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderMinimumSectionSize">
-                       <number>31</number>
-                      </attribute>
                       <attribute name="horizontalHeaderDefaultSectionSize">
                        <number>150</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderMinimumSectionSize">
+                       <number>31</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -5061,7 +5064,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5115,9 +5118,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string/>
+                               <string>Tous</string>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6596,8 +6599,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>969</width>
-                             <height>533</height>
+                             <width>963</width>
+                             <height>523</height>
                             </rect>
                            </property>
                           </widget>
