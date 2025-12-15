@@ -62,6 +62,9 @@ class Credit(QtWidgets.QMainWindow):
         # Track menu state
         self.menu_expanded = True
 
+        # Etat Excel File
+        self.excel_etat_file = None
+
         if sys.platform.startswith('win'):
             self.menu_expanded_width = 350
             self.left_box_width = 600
@@ -482,6 +485,8 @@ class Credit(QtWidgets.QMainWindow):
             self.display_charge(rows=None, month_text=None)
         elif page == "PaymentsPage":
             self.display_payments()
+        elif page == "EtatPage":
+            self.refresh_etat_table()
 
     # ======================
     # == Server Controls ===
@@ -1922,34 +1927,38 @@ class Credit(QtWidgets.QMainWindow):
     def display_etat(self):
         pass
 
+    def refresh_etat_table(self):
+        if not self.excel_etat_file:
+            self.open_etat_excel_file()
+
     def open_etat_excel_file(self):
         self.ui.buttonOpenEtatExcelFile.setText(" Loading...")
         self.ui.buttonOpenEtatExcelFile.setEnabled(False)
-
-        if os.name == 'nt':     # means we are on Windows
-            options = QtWidgets.QFileDialog.Options()
-            file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-                None,
-                "Sélectionner le fichier Excel",
-                "C:\\Users\\ADMIN\\OneDrive\\Desktop",
-                "Fichiers Excel (*.xlsx)",
-                options=options
-            )
-        else:
-            file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+        # Dialog to select file
+        options = QtWidgets.QFileDialog.Options()
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            None,
+            "Sélectionner le fichier Excel",
+            "C:\\Users\\ADMIN\\OneDrive\\Desktop",
+            "Fichiers Excel (*.xlsx)",
+            options=options
+        )
+        self.excel_etat_file = file_path if file_path else None
 
         if not file_path:
-            self.show_error_message("Error: ", success=False)
+            self.show_error_message("Annuler Par l'utilisateur", success=False)
+            self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
+            self.ui.buttonOpenEtatExcelFile.setEnabled(True)
             return
 
         # Display etat
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
         self.etat_from_database(selected_month)
 
-        self.display_etat_journalier(file_path)
+        self.display_etat_journalier(self.excel_etat_file)
 
         # --- Ploting Graphs in Thread ---
-        self.worker = DriverGraphWorker(file_path)
+        self.worker = DriverGraphWorker(self.excel_etat_file)
         self.worker.finished.connect(self.on_worker_finished)
         self.worker.start()
 
@@ -1984,7 +1993,6 @@ class Credit(QtWidgets.QMainWindow):
     # -------- Ploting Thread Ready ------------
     def on_worker_finished(self, df, error):
         # === Plot Pourcentage Livreur ===
-        # layout = QtWidgets.QFormLayout(self.ui.scrollAreaGraphContents)
         layout = QtWidgets.QGridLayout()
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setHorizontalSpacing(10)

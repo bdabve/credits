@@ -330,9 +330,71 @@ def terminal(clean_df, fields):
     print(driver_observations(clean_df))
 
 
+def reminder(file_name):
+    df = pd.read_excel(file_name, sheet_name="DECEMBRE")
+    divider = "-" * 30
+    # ----
+    # print("[+] Head: ")
+    # print(df.head())
+    # # ---
+    # print("[+] Tail: ")
+    # print(df.tail(3))
+    # ---
+    print("[+] Info: ")
+    print(df.info())
+    # ---
+    print("[+] Dtypes: ")
+    print(df.dtypes)
+    # ---
+    print("[+] Description: ")
+    print(df.describe(include='all'))
+    # ---
+    print("[+] Columns: ")
+    print(df.columns)
+    # ---
+    print("[+] Index: ")
+    print(df.index)
+    print(divider)
+    # ----------------------------------------
+    # --- Selecting Data
+    print("[+] Dates: ")
+    print(df["DATE"].unique())
+    print("[+] A Given Day: ")
+    print(df[df["DATE"] == "2025-12-04"])
+    print(divider)
+    # --- Filtering
+    print("[+] Commande = 0")
+    print(df[df["T. COMMANDE"].isna() | (df["T. COMMANDE"] == 0)].head(4))
+    print(divider)
+    # ---
+    print("[+] Livreur is in [AMINE, TOUFIK]")
+    print(df[df["LIVREUR"].isin(["AMINE", "TOUFIK"])].head(4))
+    print(divider)
+    # ----------------------------------------
+    # --- Drop Duplicates
+    print("[+] Drop Duplicates based on DATE & LIVREUR")
+    df_no_dup = df.drop_duplicates(subset=["LIVREUR"])
+    print(df_no_dup.head(4))
+    print(divider)
+    # --- Drop Null on Values
+    df_date_clean = df[df["DATE"].notna()]
+    print("[+] Drop Null based on DATE")
+    print(df_date_clean.head(10))
+
+    # --- Stats
+    print(divider)
+    print("[+] Group by LIVREUR and sum VERSEMENT")
+    driver_stats = df_date_clean.groupby("LIVREUR")["VERSEMENT"].sum().reset_index()
+    print(driver_stats)
+    print(divider)
+    print("[+] Filter LIVREUR in [ACCOMPTE, CREDIT, VERS. CREDIT]")
+    print(driver_stats[driver_stats["LIVREUR"].isin(["ACCOMPTE", "CREDIT", "VERS. CREDIT"])])
+    print(divider)
+
+
 if __name__ == "__main__":
-    # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR_AOUT.xlsx"
-    file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+    file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
+    # file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
     fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
     sheet_name = "DECEMBRE"
@@ -341,6 +403,9 @@ if __name__ == "__main__":
     # les_retour, sum_retour = driver_retour(sheet)
     # print(les_retour)
     # print(sum_retour)
-    driver_stats = sum_by_driver(sheet, fields)
-    print(driver_stats)
-    plot_driver_percentages(sheet, fields)
+    # driver_stats = sum_by_driver(sheet, fields)
+    # print(driver_stats)
+    # plot_driver_percentages(sheet, fields)
+
+    # Reminder
+    reminder(file)

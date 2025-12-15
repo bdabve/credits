@@ -21,7 +21,6 @@ from gui.h_confirm_dialog import Ui_Dialog
 # ---- Global Var ---- #
 THEMES = {
     "light": {
-        # "stylesheet": "light_theme.qss",
         "stylesheet": "light_theme.qss",
         "colors": {
             "NEW_COLOR": "#1dd1a1",
