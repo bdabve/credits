@@ -32,6 +32,8 @@ class DriverGraphWorker(QtCore.QThread):
 
             # 1) Load Excel (HEAVY)
             df = st.load_excel(self.file_path, self.month)
+            if isinstance(df, str):
+                return
 
             # 2) Compute retour
             les_retour, sum_retour = st.driver_retour(df)
