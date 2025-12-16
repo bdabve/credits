@@ -43,13 +43,14 @@ def show_day_details(clean_df, day, fields):
     :day: str or datetime [YYYY-MM-DD]
     :fields: list of fields to sum
     """
-    daily_driver = clean_df.groupby(["DATE", "LIVREUR"])[fields].sum()
+    daily_details = clean_df.groupby(["DATE", "LIVREUR"])[fields].sum()
+    daily_details = daily_details.sort_values(by="T.LOGICIEL", ascending=False)
 
     # Convert input to datetime
     day = pd.to_datetime(day).normalize()
 
-    if day in daily_driver.index.get_level_values("DATE"):
-        return daily_driver.loc[day].reset_index()
+    if day in daily_details.index.get_level_values("DATE"):
+        return daily_details.loc[day].reset_index()
     else:
         return "No data"
 
@@ -396,6 +397,30 @@ def reminder(file_name):
     print(divider)
 
 
+# ==========================================
+# --- The terminal logger
+# ==========================================
+def achat_mohamed(file_path, sheet_name):
+    """
+
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name, skiprows=2, usecols="A:I")
+    clean_df = df[~df["Prix achat"].astype(str).str.contains("TOTAL", na=False)]
+    clean_df = clean_df.dropna(subset=["Nom"])
+
+    for col in ["Qte Carton", "Collisage", "Qte (Pièce)", "Qte Global", "Prix achat", "Total", "REMISE 2%", "TOTAL AVEC REMISE"]:
+        clean_df[col] = pd.to_numeric(clean_df[col], errors="coerce")
+
+    cols_to_use = ["Nom", "Qte Global", "Prix achat"]
+    clean_df = clean_df.loc[:, cols_to_use]
+    recape = clean_df.groupby("Nom", as_index=False).agg({
+        "Qte Global": "sum",
+        "Prix achat": "first"
+    })
+    recape["Total Achat"] = recape["Qte Global"] * recape["Prix achat"]
+    return recape
+
+
 if __name__ == "__main__":
     # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
     file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
@@ -412,3 +437,11 @@ if __name__ == "__main__":
 
     # Reminder
     # reminder(file)
+    # ---------------------------------------------------
+    # ----------- Achat Mohamed ----------------
+    # ---------------------------------------------------
+    file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/ACHAT Mohamed/Achat_Mohamed_SidiRached.xlsx"
+    achat_mohamed = achat_mohamed(file_path, "DECEMBRE")
+    print(achat_mohamed.head(20))
+    print('-' * 30)
+    print(achat_mohamed.tail(20))

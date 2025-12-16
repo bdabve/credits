@@ -1929,13 +1929,15 @@ class Credit(QtWidgets.QMainWindow):
 
     def refresh_etat_table(self):
         if not self.excel_etat_file:
-            self.open_etat_excel_file()
+            self.open_etat_excel_file(from_btn=True)
+        else:
+            self.etats_livreur()
 
-    def open_etat_excel_file(self):
+    def open_etat_excel_file(self, from_btn=False):
         self.ui.buttonOpenEtatExcelFile.setText(" Loading...")
         self.ui.buttonOpenEtatExcelFile.setEnabled(False)
-        # Dialog to select file
 
+        # Dialog to select file
         open_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop" if os.name == "nt" else "/home/dabve/Desktop"
         options = QtWidgets.QFileDialog.Options()
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -1945,15 +1947,18 @@ class Credit(QtWidgets.QMainWindow):
             "Fichiers Excel (*.xlsx)",
             options=options
         )
-        self.excel_etat_file = file_path if file_path else None
-
         if not file_path:
             self.show_error_message("Annuler Par l'utilisateur", success=False)
             self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
             self.ui.buttonOpenEtatExcelFile.setEnabled(True)
             return
 
-        # Display etat
+        self.excel_etat_file = file_path if file_path else None
+        if from_btn:
+            self.etats_livreur()
+
+    def etats_livreur(self):
+        # -- Display etat
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
         self.etat_from_database(selected_month)
 
@@ -2002,6 +2007,9 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
             self.ui.buttonOpenEtatExcelFile.setEnabled(True)
             return
+
+        # --- Clear Widget
+        utils.remove_layout(self.ui.scrollAreaGraphContents)
 
         # --- Ploting ---
         layout = QtWidgets.QGridLayout()

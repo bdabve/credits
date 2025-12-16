@@ -2332,7 +2332,10 @@
              <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <property name="spacing">
@@ -2369,7 +2372,7 @@
                  <number>0</number>
                 </property>
                 <property name="leftMargin">
-                 <number>5</number>
+                 <number>10</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
@@ -3964,11 +3967,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
                       <attribute name="horizontalHeaderMinimumSectionSize">
                        <number>31</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -5064,7 +5067,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5118,9 +5121,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string>Tous</string>
+                               <string/>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6287,7 +6290,7 @@
                     <item>
                      <widget class="QTabWidget" name="tabWidget">
                       <property name="currentIndex">
-                       <number>3</number>
+                       <number>2</number>
                       </property>
                       <widget class="QWidget" name="tabeDetailsJournee">
                        <attribute name="title">
@@ -6599,8 +6602,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>963</width>
-                             <height>523</height>
+                             <width>969</width>
+                             <height>533</height>
                             </rect>
                            </property>
                           </widget>

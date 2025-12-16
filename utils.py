@@ -246,7 +246,7 @@ def setup_main_callbacks(root):
         # == Etats Page ==
         # ================
         (root.ui.buttonEtatPage, lambda: root.goto_page("etats")),
-        (root.ui.buttonOpenEtatExcelFile, root.open_etat_excel_file),
+        (root.ui.buttonOpenEtatExcelFile, lambda: root.open_etat_excel_file(from_btn=True)),
         (root.ui.buttonEtatDetailJournee, root.etat_detail_journe),
     ]
     for button, callback in buttons:
@@ -470,6 +470,38 @@ def clear_inputs(inputs: list) -> None:
     """
     for inp in inputs:
         inp.clear()
+
+
+def remove_layout(widget):
+    """
+    Remove layout from a QWidget
+    """
+    layout = widget.layout()
+    print(f"[+] Lyout: {layout}")
+    if layout is None:
+        return
+
+    while layout.count():
+        item = layout.takeAt(0)
+
+        if item.widget():
+            item.widget().deleteLater()
+        elif item.layout():
+            remove_layout_from_layout(item.layout())
+
+    layout.deleteLater()
+
+
+def remove_layout_from_layout(layout):
+    """
+    Remove a Layout from QLayout
+    """
+    while layout.count():
+        item = layout.takeAt(0)
+        if item.widget():
+            item.widget().deleteLater()
+        elif item.layout():
+            remove_layout_from_layout(item.layout())
 
 
 # ==================================
