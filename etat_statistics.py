@@ -12,21 +12,25 @@ def load_excel(file_path, sheet_name):
     """
     This will return converted numeric values
     """
-    import pandas as pd
-    dfs = pd.read_excel(file_path, sheet_name=None)
-    sheet = dfs[sheet_name]
-    # --- Clean DATE column ---
-    sheet["DATE"] = pd.to_datetime(sheet["DATE"], errors="coerce")
+    try:
+        dfs = pd.read_excel(file_path, sheet_name=None)
+        sheet = dfs[sheet_name]
+    except Exception as err:
+        # no data for selected month
+        return f"Error: {err}"
+    else:
+        # --- Clean DATE column ---
+        sheet["DATE"] = pd.to_datetime(sheet["DATE"], errors="coerce")
 
-    # --- Numeric columns ---
-    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF"]
+        # --- Numeric columns ---
+        fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF"]
 
-    for col in fields:
-        # to numeric
-        sheet[col] = pd.to_numeric(sheet[col], errors="coerce")
+        for col in fields:
+            # to numeric
+            sheet[col] = pd.to_numeric(sheet[col], errors="coerce")
 
-    clean_df = sheet[sheet["DATE"].notna()]     # clean by date to remove the SUBTOTAL rows
-    return clean_df
+        clean_df = sheet[sheet["DATE"].notna()]     # clean by date to remove the SUBTOTAL rows
+        return clean_df
 
 
 # ==========================================
@@ -88,7 +92,7 @@ def sum_by_driver(clean_df, fields):
 
 
 # ==========================================
-# --- Pliting LIVREUR Purentage
+# --- Ploting LIVREUR Purentage
 # ==========================================
 def plot_driver_percentages(canvas, clean_df, fields):
     import matplotlib.pyplot as plt
@@ -106,7 +110,6 @@ def plot_driver_percentages(canvas, clean_df, fields):
     df["LIVRAISON %"] = (df["VERSEMENT"] / total_livraison) * 100
 
     # Plot
-    # plt.figure(figsize=(10, 7))
     bars = plt.bar(df["LIVREUR"], df["LIVRAISON %"])
 
     # Increase bottom margin for money text
@@ -209,19 +212,19 @@ def driver_observations(clean_df):
     Generate observations for each driver based on their performance.
     :clean_df: DataFrame
     """
-    driver_obs = clean_df.groupby(["LIVREUR", "DATE"])["OBSERVATION"].sum()
+    driver_obs = clean_df.groupby(["LIVREUR"])["OBSERVATION"].sum()
     return driver_obs.reset_index()
 
 
 # ==========================================
 # --- Retour Livreur
 # ==========================================
-def driver_retour(df):
+def driver_retour(clean_df):
     """
     Calculate the difference between 'T. COMMANDE' and 'T.LOGICIEL'
     and return detailed rows + sum grouped by livreur.
     """
-    df = df.copy()
+    df = clean_df.copy()
     df["RETOUR"] = df["T. COMMANDE"] - df["T.LOGICIEL"]
 
     retour = df[["DATE", "LIVREUR", "T. COMMANDE", "T.LOGICIEL", "RETOUR"]].dropna().copy()
@@ -229,16 +232,16 @@ def driver_retour(df):
     retour["DATE"] = retour["DATE"].dt.strftime("%d/%m/%Y")
 
     # === TOTAL ROW ===
-    # total_row = {
-        # "DATE": "",
-        # "LIVREUR": "TOTAL",
-        # "T. COMMANDE": retour["T. COMMANDE"].sum(),
-        # "T. LOGICIEL": retour["T. LOGICIEL"].sum(),
-        # "RETOUR": retour["RETOUR"].sum(),
-    # }
+    total_row = {
+        "DATE": "",
+        "LIVREUR": "TOTAL",
+        "T. COMMANDE": retour["T. COMMANDE"].sum(),
+        "T.LOGICIEL": retour["T.LOGICIEL"].sum(),
+        "RETOUR": retour["RETOUR"].sum(),
+    }
 
     # Append total row
-    # retour = pd.concat([retour, pd.DataFrame([total_row])], ignore_index=True)
+    retour = pd.concat([retour, pd.DataFrame([total_row])], ignore_index=True)
 
     sum_retour_by_driver = (
         retour.groupby("LIVREUR")["RETOUR"]
@@ -249,11 +252,12 @@ def driver_retour(df):
     return retour, sum_retour_by_driver
 
 
-def plot_driver_retour_pyqt(canvas, df, allowed_livreur):
+def plot_driver_retour_pyqt(canvas, clean_df, allowed_livreur):
     ax = canvas.ax
     ax.clear()
 
     # Filter only allowed drivers
+    df = clean_df.copy()
     df = df[df["LIVREUR"].isin(allowed_livreur)].copy()
 
     # If empty → avoid crash
@@ -393,14 +397,13 @@ def reminder(file_name):
 
 
 if __name__ == "__main__":
-    file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
-    # file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+    # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
+    file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
     fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
     sheet_name = "DECEMBRE"
     sheet = load_excel(file, sheet_name)
     # terminal(sheet, fields)
-    # les_retour, sum_retour = driver_retour(sheet)
     # print(les_retour)
     # print(sum_retour)
     # driver_stats = sum_by_driver(sheet, fields)
@@ -408,4 +411,4 @@ if __name__ == "__main__":
     # plot_driver_percentages(sheet, fields)
 
     # Reminder
-    reminder(file)
+    # reminder(file)

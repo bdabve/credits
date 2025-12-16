@@ -1935,11 +1935,13 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.buttonOpenEtatExcelFile.setText(" Loading...")
         self.ui.buttonOpenEtatExcelFile.setEnabled(False)
         # Dialog to select file
+
+        open_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop" if os.name == "nt" else "/home/dabve/Desktop"
         options = QtWidgets.QFileDialog.Options()
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
             None,
             "Sélectionner le fichier Excel",
-            "C:\\Users\\ADMIN\\OneDrive\\Desktop",
+            open_path,
             "Fichiers Excel (*.xlsx)",
             options=options
         )
@@ -1969,7 +1971,11 @@ class Credit(QtWidgets.QMainWindow):
 
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
         df = st.load_excel(file_path, sheet_month)         # FIXME
+        if isinstance(df, str) and df.startswith("Error"):
+            self.show_error_message(f"Erreur de chargement du fichier: {df}", success=False)
+            return
 
+        # --- Debug Info ---
         logger.debug(
             f"Etat Journalier for month: {selected_month}\n"
             f"File Name: {file_path}"
@@ -1992,7 +1998,12 @@ class Credit(QtWidgets.QMainWindow):
 
     # -------- Ploting Thread Ready ------------
     def on_worker_finished(self, df, error):
-        # === Plot Pourcentage Livreur ===
+        if isinstance(df, str) or df is None:
+            self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
+            self.ui.buttonOpenEtatExcelFile.setEnabled(True)
+            return
+
+        # --- Ploting ---
         layout = QtWidgets.QGridLayout()
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setHorizontalSpacing(10)
@@ -2038,7 +2049,9 @@ class Credit(QtWidgets.QMainWindow):
 
     # === Etat De Journé Detailé ===
     def etat_detail_journe(self):
-        file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+        if not self.excel_etat_file:
+            self.show_error_message("Veuillez d'abord ouvrir le fichier Etat.", success=False)
+            return
 
         date = self.ui.dateEditEtatJournee.date().toString("yyyy-MM-dd")
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
@@ -2048,7 +2061,13 @@ class Credit(QtWidgets.QMainWindow):
             sheet_name = utils.MONTHS_FR[self.CURRENT_MONTH_TEXT]
 
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-        df = st.load_excel(file_path, sheet_name)
+        df = st.load_excel(self.excel_etat_file, sheet_name)
+
+        # Failed to load excel file
+        if isinstance(df, str):
+            self.show_error_message(f"Erreur de chargement du fichier: {df}", success=False)
+            return
+
         detail_journe = st.show_day_details(df, date, fields)               # unsorted
         if isinstance(detail_journe, str) and detail_journe.startswith("No data"):
             # Aucun detail pour cette date
