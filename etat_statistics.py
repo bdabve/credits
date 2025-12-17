@@ -401,14 +401,11 @@ def reminder(file_name):
 # --- Mohamed Functions
 # ==========================================
 def achat_mohamed(file_path, sheet_name):
-    """
-
-    """
     df = pd.read_excel(file_path, sheet_name=sheet_name, skiprows=2, usecols="A:I")
     clean_df = df[~df["Prix achat"].astype(str).str.contains("TOTAL", na=False)]
     clean_df = clean_df.dropna(subset=["Nom"])
-
-    for col in ["Qte Carton", "Collisage", "Qte (Pièce)", "Qte Global", "Prix achat", "Total", "REMISE 2%", "TOTAL AVEC REMISE"]:
+    cols = ["Qte Carton", "Collisage", "Qte (Pièce)", "Qte Global", "Prix achat", "Total", "REMISE 2%", "TOTAL AVEC REMISE"]
+    for col in cols:
         clean_df[col] = pd.to_numeric(clean_df[col], errors="coerce")
 
     cols_to_use = ["Nom", "Qte Global", "Prix achat"]
@@ -427,26 +424,19 @@ def categorize(des):
 
     # --- Linge 1.5L ---
     if d.startswith("linge 1.5l"):
-        if d.startswith("linge 1.5l bebe"):
-            return "Linge 1.5L Bebe"
-        elif d.startswith("linge 1.5l bicarbonate"):
-            return "Linge 1.5L Bicarbonate"
-        else:
-            return "Linge 1.5L"
+        if d.startswith("linge 1.5l bebe"): return "Linge 1.5L Bebe"
+        elif d.startswith("linge 1.5l bicarbonate"): return "Linge 1.5L Bicarbonate"
+        else: return "Linge 1.5L"
     # --- Linge 3L ---
     elif d.startswith("linge 3l"):
-        if d.startswith("linge 3l plus"):
-            return "Linge 3L Plus"
-        elif d.startswith("linge 3l noir"):
-            return "Linge 3L Noir"
-        elif d.startswith("linge 3l bebe"):
-            return "Linge 3L Bebe"
-        else:
-            return "Linge 3L"
-    # --- Linge 10L ---
-    elif d.startswith("linge 10l"): return "Linge 10L"
+        if d.startswith("linge 3l plus"): return "Linge 3L Plus"
+        elif d.startswith("linge 3l noir"): return "Linge 3L Noir"
+        elif d.startswith("linge 3l bebe"): return "Linge 3L Bebe"
+        else: return "Linge 3L"
     # --- Linge 4.5L ---
     elif d.startswith("linge 4.5l"): return "Linge 4.5L"
+    # --- Linge 10L ---
+    elif d.startswith("linge 10l"): return "Linge 10L"
     # --- Assouplissant ---
     elif d.startswith("assouplissant 1l"): return "Assouplissant 1L"
     elif d.startswith("assouplissant 3l"): return "Assouplissant 3L"
@@ -462,10 +452,9 @@ def categorize(des):
     elif d.startswith("javel 5l"): return "Javel 5L"
     # --- Diffusseur ---
     elif d.startswith("diffuseur"): return "Diffuseur de Parfum"
+    elif d.startswith("brume"): return "Brume"
+    elif d.startswith("gel douche"): return "Gel Douche"
     else: return des
-
-    # everything else stays as is
-    return des
 
 
 def recapepdf_to_text(pdf_file):
@@ -539,7 +528,8 @@ if __name__ == "__main__":
     # -------------------------------------------------
     # PDF RECAPE MOHAMED
     #
-    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-17.pdf"
+    # pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-17.pdf"
+    pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
     pdf_recape = recapepdf_to_text(pdf_file_path)
     print("Recape Journee Mohamed: ")
     print(pdf_recape)
