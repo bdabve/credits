@@ -398,7 +398,7 @@ def reminder(file_name):
 
 
 # ==========================================
-# --- The terminal logger
+# --- Mohamed Functions
 # ==========================================
 def achat_mohamed(file_path, sheet_name):
     """
@@ -415,19 +415,110 @@ def achat_mohamed(file_path, sheet_name):
     clean_df = clean_df.loc[:, cols_to_use]
     recape = clean_df.groupby("Nom", as_index=False).agg({
         "Qte Global": "sum",
-        "Prix achat": "first"
+        "Prix achat": "first",
     })
     recape["Total Achat"] = recape["Qte Global"] * recape["Prix achat"]
+    # TODO: Add Remise
     return recape
+
+
+def categorize(des):
+    d = des.lower()
+
+    # --- Linge 1.5L ---
+    if d.startswith("linge 1.5l"):
+        if d.startswith("linge 1.5l bebe"):
+            return "Linge 1.5L Bebe"
+        elif d.startswith("linge 1.5l bicarbonate"):
+            return "Linge 1.5L Bicarbonate"
+        else:
+            return "Linge 1.5L"
+    # --- Linge 3L ---
+    elif d.startswith("linge 3l"):
+        if d.startswith("linge 3l plus"):
+            return "Linge 3L Plus"
+        elif d.startswith("linge 3l noir"):
+            return "Linge 3L Noir"
+        elif d.startswith("linge 3l bebe"):
+            return "Linge 3L Bebe"
+        else:
+            return "Linge 3L"
+    # --- Linge 10L ---
+    elif d.startswith("linge 10l"): return "Linge 10L"
+    # --- Linge 4.5L ---
+    elif d.startswith("linge 4.5l"): return "Linge 4.5L"
+    # --- Assouplissant ---
+    elif d.startswith("assouplissant 1l"): return "Assouplissant 1L"
+    elif d.startswith("assouplissant 3l"): return "Assouplissant 3L"
+    # --- Lave-Sol ---
+    elif d.startswith("lave sol"): return "Lave Sole"
+    # --- Sanibon ---
+    elif d.startswith("désodorisant"): return "Sanibon"
+    # --- Lave-Main 2.5L ---
+    elif d.startswith("lave main 2.5l"): return "Lave main 2.5L"
+    # --- Lave-Main 400ML ---
+    elif d.startswith("lave main 400ml"): return "Lave main 400ML"
+    # --- Javel 5L ---
+    elif d.startswith("javel 5l"): return "Javel 5L"
+    # --- Diffusseur ---
+    elif d.startswith("diffuseur"): return "Diffuseur de Parfum"
+    else: return des
+
+    # everything else stays as is
+    return des
+
+
+def recapepdf_to_text(pdf_file):
+    import pdfplumber
+    # path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-17.pdf"
+
+    # ---- 1. Extract all tables from all pages ----
+    tables = []
+
+    with pdfplumber.open(pdf_file) as pdf:
+        for page in pdf.pages:
+            for t in page.extract_tables():
+                df = pd.DataFrame(t)
+                tables.append(df)
+
+    # ---- 2. Clean header for each table ----
+    clean_tables = []
+    for df in tables:
+        df.columns = df.iloc[0]   # first row = header
+        df = df[1:]               # remove header row
+        clean_tables.append(df)
+
+    # ---- 3. Merge all pages into one table ----
+    df = pd.concat(clean_tables, ignore_index=True)
+
+    # ---- 4. Clean quantities ----
+    df["Qnt_piece"] = (
+        df["Qnt pièce"]
+        .str.replace(",", ".", regex=False)
+    )
+
+    df = df[df["Qnt_piece"].str.match(r"^\d+(\.\d+)?$")]
+    df["Qnt_piece"] = df["Qnt_piece"].astype(float)
+
+    # --- GROUPING LOGIC ---
+    df["Category"] = df["Désignation"].apply(categorize)
+
+    # ---- 6. Final grouped result ----
+    result = (
+        df.groupby("Category", as_index=False)["Qnt_piece"]
+        .sum()
+        .sort_values("Category")
+    )
+    return result
 
 
 if __name__ == "__main__":
     # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
     file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
-    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-    sheet_name = "DECEMBRE"
-    sheet = load_excel(file, sheet_name)
+    # fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
+    # sheet_name = "DECEMBRE"
+    # sheet = load_excel(file, sheet_name)
     # terminal(sheet, fields)
     # print(les_retour)
     # print(sum_retour)
@@ -440,8 +531,16 @@ if __name__ == "__main__":
     # ---------------------------------------------------
     # ----------- Achat Mohamed ----------------
     # ---------------------------------------------------
-    file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/ACHAT Mohamed/Achat_Mohamed_SidiRached.xlsx"
-    achat_mohamed = achat_mohamed(file_path, "DECEMBRE")
-    print(achat_mohamed.head(20))
-    print('-' * 30)
-    print(achat_mohamed.tail(20))
+    # file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/ACHAT Mohamed/Achat_Mohamed_SidiRached.xlsx"
+    # achat_mohamed = achat_mohamed(file_path, "DECEMBRE")
+    # print(achat_mohamed.head(20))
+    # print('-' * 30)
+    # print(achat_mohamed.tail(20))
+    # -------------------------------------------------
+    # PDF RECAPE MOHAMED
+    #
+    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-17.pdf"
+    pdf_recape = recapepdf_to_text(pdf_file_path)
+    print("Recape Journee Mohamed: ")
+    print(pdf_recape)
+    print(f"\n==== Total Article: {len(pdf_recape)} =====")
