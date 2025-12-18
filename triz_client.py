@@ -18,7 +18,6 @@ def client():
         {
             "download.default_directory": DOWNLOAD_DIR,
             "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
             "safebrowsing.enabled": True,   # auto “Keep”
             "safebrowsing.disable_download_protection": True
         },
@@ -52,7 +51,7 @@ def login(driver, username: str, password: str, timeout: int = 20):
     :param timeout: wait timeout in seconds
     """
 
-    url = "http://51.255.79.241:8080/trizstock/faces/view/vente/listDetailProduitSortie.xhtml?datef=17-12-2025&dated=17-12-2025&type=camion"
+    url = "http://51.255.79.241:8080/trizstock/faces/login.xhtml"
     driver.get(url)
 
     wait = WebDriverWait(driver, timeout)
@@ -72,17 +71,60 @@ def login(driver, username: str, password: str, timeout: int = 20):
     pass_input.send_keys(password + Keys.ENTER)
 
 
+def parse_products_table(driver, product_list):
+    wait = WebDriverWait(driver, 20)
+    table = wait.until(
+        EC.presence_of_element_located((By.ID, "liste:j_idt613:dataTable2_data"))
+    )
+    trs = table.find_elements(By.TAG_NAME, 'tr')
+    for tr in trs:
+        tds = tr.find_elements(By.TAG_NAME, 'td')
+        item = {
+            "Famille": tds[0].text,
+            "S.Famille": tds[2].text,
+            "Produit": tds[3].text,
+            "Qte Global": tds[7].text,
+            "Total Valeur": tds[9].text
+        }
+        print(item)
+        print("-" * 30)
+        product_list.append(item)
+
+    print("[+] === The Hole Data ===")
+    print(product_list)
+    print(f"[+] Len Data: {len(product_list)}")
+
+    return product_list
+
+
 def get_prevendeur_vente(driver, dated, datef, camion):
     """
     datef = datefin
     dated = datedebut
     camion = 8442-0000005 -> WALID
     """
+    import time
     url = f"http://51.255.79.241:8080/trizstock/faces/view/vente/listDetailProduitSortie.xhtml?camion={camion}&datef={datef}&dated={dated}&type=camion"
 
+    wait = WebDriverWait(driver, 20)
     driver.get(url)
-    excel_btn = driver.find_element(By.ID, 'liste:j_idt613:j_idt618')
-    excel_btn.click()
+
+    paginator = driver.find_element(By.CLASS_NAME, "ui-paginator-pages")
+    pages = paginator.find_elements(By.TAG_NAME, 'span')
+    product_list = list()
+    parse_products_table(driver, product_list)  # first page
+    for page in pages[1:]:  # skip the first page
+        print(page.text)
+        page.click()
+        time.sleep(50)
+        parse_products_table(driver, product_list)
+
+    print(f"[+] === After second page Len (Products List) {len(products_list)}")
+    # print("\n==== [+] Finding Excel Button and click ====")
+    # excel_btn = driver.find_element(By.ID, 'liste:j_idt613:j_idt618')       # liste:j_idt613:j_idt618
+    # excel_btn.click()
+    input('\n[:] Press Any Key: \n')
+    driver.quit()
 
 
 if __name__ == '__main__':
