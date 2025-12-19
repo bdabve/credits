@@ -1,138 +1,202 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+import time
 import undetected_chromedriver as uc
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import os
+from selenium.common.exceptions import (
+    TimeoutException,
+    StaleElementReferenceException
+)
+
+# ======================================================
+# CONSTANTS
+# ======================================================
+BASE_URL = "http://51.255.79.241:8080/trizstock"
+LOGIN_URL = f"{BASE_URL}/faces/login.xhtml"
+VENTE_URL = f"{BASE_URL}/faces/view/vente/listDetailProduitSortie.xhtml"
+
+DEFAULT_TIMEOUT = 20
+DOWNLOAD_DIR = "triz_downloads"
 
 
-def client():
+# ======================================================
+# DRIVER
+# ======================================================
+def create_driver(headless: bool = False):
     options = uc.ChromeOptions()
-    DOWNLOAD_DIR = 'triz_downloads'
-    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-
-    options.add_experimental_option(
-        "prefs",
-        {
-            "download.default_directory": DOWNLOAD_DIR,
-            "download.prompt_for_download": False,
-            "safebrowsing.enabled": True,   # auto “Keep”
-            "safebrowsing.disable_download_protection": True
-        },
-    )
-
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-
-    client = uc.Chrome(
-        options=options,
-        headless=False,   # test visible first
-    )
-    client.execute_cdp_cmd(
-        "Page.setDownloadBehavior",
-        {
-            "behavior": "allow",
-            "downloadPath": DOWNLOAD_DIR,
-        },
-    )
-
-    return client
+    return uc.Chrome(options=options, headless=headless)
 
 
-def login(driver, username: str, password: str, timeout: int = 20):
-    """
-    Perform login using provided Selenium driver.
-
-    :param driver: Selenium / undetected_chromedriver instance
-    :param username: login username
-    :param password: login password
-    :param timeout: wait timeout in seconds
-    """
-
-    url = "http://51.255.79.241:8080/trizstock/faces/login.xhtml"
-    driver.get(url)
-
+# ---------- LOGIN ----------
+def login(driver, username: str, password: str, timeout: int = DEFAULT_TIMEOUT):
+    print("[+] Login...")
     wait = WebDriverWait(driver, timeout)
+    driver.get(LOGIN_URL)
 
-    # Wait for username field
-    user_input = wait.until(
-        EC.presence_of_element_located((By.ID, "j_username"))
-    )
+    user_input = wait.until(EC.presence_of_element_located((By.ID, "j_username")))
+    pass_input = wait.until(EC.presence_of_element_located((By.ID, "j_password")))
+
     user_input.clear()
     user_input.send_keys(username)
 
-    # Wait for password field
-    pass_input = wait.until(
-        EC.presence_of_element_located((By.ID, "j_password"))
-    )
     pass_input.clear()
     pass_input.send_keys(password + Keys.ENTER)
+    # Check for error message
+    try:
+        error_message = wait.until(EC.presence_of_element_located((By.ID, "errorMessages")))
+        print(f"[✗] Login failed: {error_message.text}")
+        return False
+    except TimeoutException:
+        print("[✓] Login successful.")
+        return True
 
 
-def parse_products_table(driver, product_list):
-    wait = WebDriverWait(driver, 20)
+# ---------- DATA PARSING ----------
+def parse_products_table(driver, product_list: list):
+    """
+    This parse the chargemen detail produit sortie
+    :product_list: The list to populate with records
+    """
+    wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
+
     table = wait.until(
         EC.presence_of_element_located((By.ID, "liste:j_idt613:dataTable2_data"))
     )
-    trs = table.find_elements(By.TAG_NAME, 'tr')
-    for tr in trs:
-        tds = tr.find_elements(By.TAG_NAME, 'td')
-        item = {
+
+    for tr in table.find_elements(By.TAG_NAME, "tr"):
+        tds = tr.find_elements(By.TAG_NAME, "td")
+
+        if len(tds) < 10:
+            continue
+
+        product_list.append({
             "Famille": tds[0].text,
             "S.Famille": tds[2].text,
             "Produit": tds[3].text,
             "Qte Global": tds[7].text,
             "Total Valeur": tds[9].text
-        }
-        print(item)
-        print("-" * 30)
-        product_list.append(item)
+        })
 
-    print("[+] === The Hole Data ===")
-    print(product_list)
-    print(f"[+] Len Data: {len(product_list)}")
+
+# ----------# Prevendeur Etat #---------- #
+def get_product_par_prevendeur(driver, dated, datef, camion):
+    """
+    Get Products List from Triz Chargement Page Detail Produit Sortie
+    :driver: chrome driver ( web client )
+    :dated: date debut
+    :datef: date de fin
+    :camion: camion du livreur
+             "8442-0000005"         # WALID
+             "8442-0000006"         # MOHAMED
+             "8442-0000007"         # FETHI
+             "8442-0000010"         # MM
+    """
+    wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
+    product_list = []
+
+    url = (
+        f"{VENTE_URL}"
+        f"?camion={camion}&datef={datef}&dated={dated}&type=camion"
+    )
+
+    driver.get(url)
+    wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+    # Page 1
+    parse_products_table(driver, product_list)
+    print(f"[+] Page 1 parsed → {len(product_list)} products")
+
+    # Pagination detection
+    try:
+        paginator = wait.until(
+            EC.presence_of_element_located((By.CLASS_NAME, "ui-paginator-pages"))
+        )
+        total_pages = len(paginator.find_elements(By.TAG_NAME, "span"))
+    except TimeoutException:
+        print("[!] Single page only")
+        return product_list
+
+    # Remaining pages
+    for page_index in range(1, total_pages):
+        print(f"[+] === Page {page_index + 1} ===")
+        # Re-locate paginator evry time
+        paginator = wait.until(
+            EC.presence_of_element_located((By.CLASS_NAME, "ui-paginator-pages"))
+        )
+        pages = paginator.find_elements(By.TAG_NAME, "span")
+
+        try:
+            driver.execute_script(
+                "arguments[0].click();", pages[page_index]
+            )
+
+            wait.until(EC.staleness_of(pages[0]))
+            time.sleep(0.5)
+
+            parse_products_table(driver, product_list)
+            print(f"[✓] Products so far: {len(product_list)}")
+
+        except StaleElementReferenceException:
+            print("[!] Stale detected, retrying page...")
+            continue
 
     return product_list
 
 
-def get_prevendeur_vente(driver, dated, datef, camion):
+# ----------# To Excel File #---------- #
+def prevendeur_to_excel(product_list, file_path):
+    import pandas as pd
+    df = pd.DataFrame(product_list)
+    # clean some data
+    df["Qte Global"] = (df["Qte Global"].str.replace(",", "", regex=False).astype(float, errors="ignore"))
+    df["Total Valeur"] = (df["Total Valeur"].str.replace(",", "", regex=False).astype(float, errors="ignore"))
+    # Grouping
+    grouped = df.groupby("Famille", as_index=False)[["Qte Global", "Total Valeur"]].sum()
+    grouped["Qte %"] = grouped["Qte Global"] / grouped["Qte Global"].sum() * 100
+    grouped["Valeur %"] = grouped["Total Valeur"] / grouped["Total Valeur"].sum() * 100
+    grouped[["Qte %", "Valeur %"]] = grouped[["Qte %", "Valeur %"]].round(2)
+    # Save to Excel
+    grouped.to_excel(file_path, index=False)
+    print(f"[✓] Excel saved → {file_path}")
+
+
+# ----------# MAIN Function of this Script #---------- #
+def etat_prevendeur(username, password, dated, datef, camion, file_path, headless=False):
     """
-    datef = datefin
-    dated = datedebut
-    camion = 8442-0000005 -> WALID
+    Etat Mensuel des prevendeur
+    This is the main function
+    :username: username
+    :password: password
     """
-    import time
-    url = f"http://51.255.79.241:8080/trizstock/faces/view/vente/listDetailProduitSortie.xhtml?camion={camion}&datef={datef}&dated={dated}&type=camion"
+    driver = create_driver(headless=headless)
 
-    wait = WebDriverWait(driver, 20)
-    driver.get(url)
-
-    paginator = driver.find_element(By.CLASS_NAME, "ui-paginator-pages")
-    pages = paginator.find_elements(By.TAG_NAME, 'span')
-    product_list = list()
-    parse_products_table(driver, product_list)  # first page
-    for page in pages[1:]:  # skip the first page
-        print(page.text)
-        page.click()
-        time.sleep(50)
-        parse_products_table(driver, product_list)
-
-    print(f"[+] === After second page Len (Products List) {len(products_list)}")
-    # print("\n==== [+] Finding Excel Button and click ====")
-    # excel_btn = driver.find_element(By.ID, 'liste:j_idt613:j_idt618')       # liste:j_idt613:j_idt618
-    # excel_btn.click()
-    input('\n[:] Press Any Key: \n')
-    driver.quit()
+    try:
+        print("[*] Opening page...")
+        if login(driver, username, password):
+            product_list = get_product_par_prevendeur(driver, dated, datef, camion)
+            prevendeur_to_excel(product_list, file_path)
+    finally:
+        print("\n[✓] Close Browser.")
+        driver.quit()
 
 
 if __name__ == '__main__':
-    client = client()
-    username = 'a.brahim'
-    passwd = '18111986'
-    login = login(client, username, passwd)
-    date_begin = "01-11-2025"
-    date_end = "30-11-2025"
-    camion = "8442-0000005"     # WALID
-    get_prevendeur_vente(client, date_begin, date_end, '')
+    import os
+    import dotenv
+    dotenv.load_dotenv(dotenv.find_dotenv())
+    username = os.getenv("triz_username")
+    passwd = os.getenv('triz_password')
+    date_debut = "01-11-2025"
+    date_fin = "30-11-2025"
+    # camion = (WALID="8442-0000005", MOHAMED = "8442-0000006", FETHI = "8442-0000007", MM = "8442-0000010")
+
+    camion = "8442-0000005"     # Walid
+    file_path = "/home/dabve/Desktop/etat_prevendeur_novembre.xlsx"
+    etat_prevendeur(username, passwd, date_debut, date_fin, camion, file_path)

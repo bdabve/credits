@@ -87,6 +87,7 @@ def sum_by_driver(clean_df, fields):
     fields: list of fields to sum
     """
     # --- TOTAL PAR LIVREUR SUMMARY ---
+    # driver_stats = clean_df.groupby("LIVREUR", as_index=False)[fields].sum()      # as_index=False == reset_index()
     driver_stats = clean_df.groupby("LIVREUR")[fields].sum()
     driver_stats = driver_stats.sort_values(by="T. COMMANDE", ascending=False)
     return driver_stats.reset_index()
