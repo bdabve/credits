@@ -334,17 +334,29 @@ class Credit(QtWidgets.QMainWindow):
         close_button = self.ui.buttonCloseMsgsFrame
 
         btn_ssheet = 'background: transparent; border-radius: 0; border-top-right-radius: 5px; border-bottom-right-radius: 5px'
-        label_ssheet = 'background: transparent; padding: 5px 7px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; '
+        label_ssheet = 'background: transparent; padding: 12px 10px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; '
         frame_ssheet = 'border-radius: 5px 7px; '
         if success:
             # Green for success
-            frame_ssheet += 'background-color: rgba(60, 184, 127, 47);'
-            label_ssheet += 'color: #44e37b'
-            close_button.setIcon(qta.icon('ph.x-light', color=utils.Success_COLOR))
+            if self.current_theme == "dark":
+                frame_ssheet += 'background-color: rgba(60, 184, 127, 47);'
+                label_ssheet += 'color: #44e37b'
+                btn_color = "#444"
+            else:
+                frame_ssheet += 'background-color: #2c9882;'
+                label_ssheet += 'color: #dfeeeb'
+                btn_color = "#444"
+
+            close_button.setIcon(qta.icon('ph.x-light', color=btn_color))
         else:
-            frame_ssheet += 'background: #3b3230;'
-            label_ssheet += 'color: #f77861'
-            close_button.setIcon(qta.icon('ph.x-light', color=utils.Error_COLOR))
+            if self.current_theme == "dark":
+                frame_ssheet += 'background: #3b3230;'
+                label_ssheet += 'color: #f77861'
+            else:
+                frame_ssheet += 'background: #f17256;'
+                label_ssheet += 'color: #fbfbfb'
+
+            close_button.setIcon(qta.icon('ph.x-light', color="#444"))
 
         # Apply StyleSheets
         self.ui.frameMsgs.setStyleSheet(frame_ssheet)

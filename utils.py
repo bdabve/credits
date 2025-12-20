@@ -69,8 +69,8 @@ OPERATIONS_HEADERS = ['ID', 'Date', "Operation", 'Employé', 'Montant', 'Motif']
 OPERATIONS_SUM_HEADERS = ["Employé", "T. Prime", "T. Retenu", "T. Avance"]
 
 CLIENTS_HEADERS = ["ID", "Nom", "Crédit", "Telephone", "Commune", "Observation"]
-CREDITS_HEADERS = ['ID', 'Date', 'Client', 'Motif', 'Montant Total', 'Versement', 'Reste', 'Statut']
-PAYMENTS_HEADERS = ['ID', 'Date', 'Client', 'Montant', 'Observation']
+CREDITS_HEADERS = ['ID', 'Date', 'Client', 'Par', 'Montant Total', 'Versement', 'Reste', 'Statut']
+PAYMENTS_HEADERS = ['ID', 'Date', 'Client', 'Montant', 'Récupérateur']
 
 CHARGE_HEADERS = ["ID", "Date", "Effectué par", "Montant", "Motif"]
 VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Récupérateur']

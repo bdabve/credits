@@ -51,7 +51,8 @@ def login(driver, username: str, password: str, timeout: int = DEFAULT_TIMEOUT):
     # Check for error message
     try:
         error_message = wait.until(EC.presence_of_element_located((By.ID, "errorMessages")))
-        print(f"[✗] Login failed: {error_message.text}")
+        error_message_text = error_message.find_element(By.CLASS_NAME, 'ui-messages-error-summary').text
+        print(f"[✗] Login failed: {error_message_text}")
         return False
     except TimeoutException:
         print("[✓] Login successful.")
@@ -168,7 +169,7 @@ def prevendeur_to_excel(product_list, file_path):
 
 
 # ----------# MAIN Function of this Script #---------- #
-def etat_prevendeur(username, password, dated, datef, camion, file_path, headless=False):
+def etat_prevendeur(username, password, dated, datef, camion, headless=False):
     """
     Etat Mensuel des prevendeur
     This is the main function
@@ -176,27 +177,36 @@ def etat_prevendeur(username, password, dated, datef, camion, file_path, headles
     :password: password
     """
     driver = create_driver(headless=headless)
-
+    filename = f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_{camion}_{dated}.xlsx"
+    if camion not in ['8442-0000005', '8442-0000006', '8442-0000007', '8442-0000010']:
+        print("[✗] Incorrect CAMION.")
+        return
     try:
         print("[*] Opening page...")
         if login(driver, username, password):
             product_list = get_product_par_prevendeur(driver, dated, datef, camion)
-            prevendeur_to_excel(product_list, file_path)
+            prevendeur_to_excel(product_list, filename)
     finally:
         print("\n[✓] Close Browser.")
         driver.quit()
 
 
 if __name__ == '__main__':
-    import os
-    import dotenv
-    dotenv.load_dotenv(dotenv.find_dotenv())
-    username = os.getenv("triz_username")
-    passwd = os.getenv('triz_password')
+    # import os
+    # import dotenv
+    # dotenv.load_dotenv(dotenv.find_dotenv())
+    # username = os.getenv("triz_username")
+    # passwd = os.getenv('triz_password')
+    from getpass import getpass
+    print('-' * 30)
+    username = input("[:] Triz Username: ")
+    passwd = getpass("[:] Triz Password: ")
+    print()
+    camion = input("[:] Camion WALID(8442-0000005), MOHAMED(8442-0000006), FETHI(8442-0000007), MM(8442-0000010): ")
+    #
     date_debut = "01-11-2025"
     date_fin = "30-11-2025"
     # camion = (WALID="8442-0000005", MOHAMED = "8442-0000006", FETHI = "8442-0000007", MM = "8442-0000010")
-
-    camion = "8442-0000005"     # Walid
-    file_path = "/home/dabve/Desktop/etat_prevendeur_novembre.xlsx"
-    etat_prevendeur(username, passwd, date_debut, date_fin, camion, file_path)
+    # file_path = "/home/dabve/Desktop/etat_prevendeur_novembre.xlsx"
+    # file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_novembre.xlsx"
+    etat_prevendeur(username, passwd, date_debut, date_fin, camion)
