@@ -216,7 +216,7 @@ QPushButton:!enabled {
 /* == Checked == */
 #topMenu .QPushButton:checked {
 	/*background-color: rgb(40, 44, 52);*/	
-	background-color: #EBEBEB;
+	background-color: #ffffff;
 	color: #1B8755;
 }
 
@@ -467,6 +467,15 @@ QTabBar::tab:selected {
 
 #contentTopBg {
     background-color: #f3f3f3;
+}
+
+/* ==================
+   == ExtraLeftBox
+   ================== */
+#extraLeftBox {
+	border: 2px solid #D9D9D9;
+    border-top: 0;
+    border-bottom: 0;
 }
 
 #extraTopBg{	
