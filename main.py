@@ -178,18 +178,26 @@ class Credit(QtWidgets.QMainWindow):
         populating the employee account combo box, and maximizing the window.
         """
         self.on_toggle_menu()
-        self.goto_page('credit')  # Default page
         self.ui.labelDate.setText(f"{self.CURRENT_DATE.date()}")
 
-        # TODO: fix populating the nedded comboBox and Edits
-        self.ui.cbBoxEtatByMonth.blockSignals(True)
-        self.ui.cbBoxEtatByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
-        self.ui.cbBoxEtatByMonth.blockSignals(False)
+        # Bloq Signals and Initial Populate
+        inputs = [
+            self.ui.cbBoxEtatByMonth,
+            self.ui.dateEditEtatJournee,
+            self.ui.cbBoxCreditByStatus,
+        ]
+        for inp in inputs:
+            inp.blockSignals(True)
 
-        self.ui.dateEditEtatJournee.blockSignals(True)
+        self.ui.cbBoxEtatByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
         self.ui.dateEditEtatJournee.setDate(self.CURRENT_DATE)
-        self.ui.dateEditEtatJournee.blockSignals(True)
-        #
+        self.ui.cbBoxCreditByStatus.setCurrentIndex(2)              # credit en cours
+        for inp in inputs:
+            inp.blockSignals(False)
+
+        utils.populate_comboBox(self.ui.cbBoxCreditByCommune, utils.COMMUNES_LIST)
+
+        self.goto_page('credit')  # Default page
         self.showMaximized()
 
     def refresh_icons(self):
@@ -1256,8 +1264,9 @@ class Credit(QtWidgets.QMainWindow):
         :client_id: If provided, it indicates that the credits are being displayed for a specific client.
         """
         if rows is None:
-            rows = self.db.dump_credits()
-            # self.ui.cbBoxCreditByStatus.setCurrentIndex(0)      # 'Tous'
+            status = self.ui.cbBoxCreditByStatus.currentText().strip().lower()
+            commune = self.ui.cbBoxCreditByCommune.currentText().strip().lower()
+            rows = self.db.dump_credits(status, commune)
 
         # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.creditTableWidget, rows, utils.CREDITS_HEADERS)
@@ -1265,13 +1274,13 @@ class Credit(QtWidgets.QMainWindow):
 
         # Total rows
         self.ui.labelCreditCount.setText(f"Total: {len(rows)}")
-
         # Calculate the total
         self.set_total_credits(rows, page="credits", client_id=client_id)
-        utils.populate_comboBox(self.ui.cbBoxCreditByCommune, utils.COMMUNES_LIST)
 
     def refresh_credit_table(self):
         logger.info('Refreshing credit table...')
+        self.ui.cbBoxCreditByCommune.setCurrentIndex(0)     # Tous
+        self.ui.cbBoxCreditByStatus.setCurrentIndex(2)
         self.display_credits()
 
     def filter_credits(self):
@@ -1280,44 +1289,30 @@ class Credit(QtWidgets.QMainWindow):
         """
         search_word = self.ui.editSearchItem.text()
         statut = self.ui.cbBoxCreditByStatus.currentText().strip().lower()
+        commune = self.ui.cbBoxCreditByCommune.currentText().strip().lower()
 
         if not search_word: return  # or show a message to the user that the search input is empty
         else: search_word = f"%{search_word}%"
 
-        rows = self.db.search_credits(search_word, statut)
+        rows = self.db.search_credits(search_word, statut, commune)
         self.display_credits(rows)
 
-    def filter_credit_by_status(self):
+    def filter_credit_by_status_commune(self, filter):
         """
         Filter credits by status selected in the comboBox.
         """
         status = self.ui.cbBoxCreditByStatus.currentText().strip().lower()
-        if status == 'tous':
-            self.display_credits()
-            return
-        else:
-            rows = self.db.credit_by_status(status)
-            if not rows:
-                self.show_error_message(f"Aucun crédit trouvé pour le statut '{status}'.", success=False)
-                return
-            logger.debug(f'Filter Credit By Status: {rows}')
-            self.display_credits(rows)
-
-    def filter_credits_by_commune(self):
-        """
-        Filter credits by commune selected in the comboBox.
-        """
         commune = self.ui.cbBoxCreditByCommune.currentText().strip().lower()
-        if commune == 'TOUS':
-            self.display_credits()
+        rows = self.db.dump_credits(status, commune)
+        if not rows:
+            if filter == "status":
+                message = f"Aucun crédit trouvé pour le status {status}"
+            elif filter == "commune":
+                message = f"Aucun crédit trouvé pour la commune {commune}"
+            self.show_error_message(message, success=False)
             return
-        else:
-            rows = self.db.credit_by_commune(commune)
-            if not rows:
-                self.show_error_message(f"Aucun crédit trouvé pour la commune '{commune}'.", success=False)
-                return
-            logger.debug(f'Filter Credit By Commune: {rows}')
-            self.display_credits(rows)
+        logger.debug(f'Filter Credit By {filter.upper()}: {rows}')
+        self.display_credits(rows)
 
     def ui_create_credit(self, client=False):
         """
@@ -1435,7 +1430,6 @@ class Credit(QtWidgets.QMainWindow):
             if result['success']:
                 self.show_error_message("Crédit supprimé avec succès.", success=True)
                 self.display_credits()
-                # self.goto_page('credit', title='Crédits')
             else:
                 self.show_error_message(f"{result['error']}", success=False)
 
@@ -1937,7 +1931,8 @@ class Credit(QtWidgets.QMainWindow):
     # == Statistics Page ==
     # =====================
     def display_etat(self):
-        pass
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        self.etat_from_database(selected_month)
 
     def refresh_etat_table(self):
         if not self.excel_etat_file:
@@ -1946,6 +1941,12 @@ class Credit(QtWidgets.QMainWindow):
             self.etats_livreur()
 
     def open_etat_excel_file(self, from_btn=False):
+        """
+        Docstring for open_etat_excel_file
+
+        :param self: This load the excel file
+        :param from_btn: if True display etat livreur else just load the file
+        """
         self.ui.buttonOpenEtatExcelFile.setText(" Loading...")
         self.ui.buttonOpenEtatExcelFile.setEnabled(False)
 
@@ -1987,9 +1988,11 @@ class Credit(QtWidgets.QMainWindow):
         logger.debug(f"Selected Month for Etat Journalier: {sheet_month}")
 
         fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-        df = st.load_excel(file_path, sheet_month)         # FIXME
-        if isinstance(df, str) and df.startswith("Error"):
-            self.show_error_message(f"Erreur de chargement du fichier: {df}", success=False)
+        df = st.load_excel(file_path, sheet_month)
+        if df is None:
+            self.show_error_message("Erreur lors de chargement du fichier.", success=False)
+            self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
+            self.ui.buttonOpenEtatExcelFile.setEnabled(True)
             return
 
         # --- Debug Info ---
@@ -2013,11 +2016,13 @@ class Credit(QtWidgets.QMainWindow):
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
 
+        # === ETATS ["ACCOMPTE", "CREDIT", "VERSEMENT CREDIT", "CHARGE"] ===
+        etat_excel_like_db = st.sum_by_driver(df, ["VERSEMENT"])
+        logger.debug(f"Etat Like Database: {etat_excel_like_db}")
+
     # -------- Ploting Thread Ready ------------
     def on_worker_finished(self, df, error):
-        if isinstance(df, str) or df is None:
-            self.ui.buttonOpenEtatExcelFile.setText(" Ouvrir fichier Etat")
-            self.ui.buttonOpenEtatExcelFile.setEnabled(True)
+        if df is None:
             return
 
         # --- Clear Widget

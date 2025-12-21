@@ -690,80 +690,88 @@ class Database:
     # =========================
     # === CREDITS METHODES ===
     # =========================
-    def dump_credits(self):
+    def dump_credits(self, status, commune):
         """
-        Retrieve all credits with associated persone names.
+        Retrieve all credits with associated person names.
         """
         with self.connect() as conn:
             cursor = conn.cursor()
+
             query = f"""
                 SELECT {', '.join(self.credit_fields)}
                 FROM credit cr
                 JOIN clients c ON cr.client_id = c.id
-                LEFT JOIN paiement v on v.credit_id = cr.id
+                LEFT JOIN paiement v ON v.credit_id = cr.id
+            """
+
+            conditions = []
+            params = []
+
+            if status != "tous":
+                conditions.append("cr.statut = ?")
+                params.append(status)
+
+            if commune != "tous":
+                conditions.append("c.commune = ?")
+                params.append(commune)
+
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+
+            query += """
                 GROUP BY cr.id
                 ORDER BY cr.date_credit DESC, c.nom DESC
             """
-            # WHERE cr.status = 'en cours'
-            cursor.execute(query)
+            # Execution
+            cursor.execute(query, params)
             return cursor.fetchall()
 
-    def search_credits(self, search_word, statut):
+    def search_credits(self, search_word, statut, commune):
         """
-        Search for credits by description or persone name.
+        Search for credits by description or person name,
+        with optional statut and commune filters.
         """
         with self.connect() as conn:
             cursor = conn.cursor()
+
             query = f"""
                 SELECT {', '.join(self.credit_fields)}
                 FROM credit cr
                 JOIN clients c ON cr.client_id = c.id
-                LEFT JOIN paiement v on v.credit_id = cr.id
-                WHERE (cr.motif LIKE ? OR c.nom LIKE ? OR cr.date_credit LIKE ? OR cr.montant LIKE ?)
+                LEFT JOIN paiement v ON v.credit_id = cr.id
             """
-            params = [search_word] * 4
+
+            conditions = []
+            params = []
+
+            # Search condition (always applied)
+            if search_word.strip():
+                conditions.append(
+                    "(cr.motif LIKE ? OR c.nom LIKE ? OR cr.date_credit LIKE ? OR cr.montant LIKE ?)"
+                )
+                like_value = f"%{search_word}%"
+                params.extend([like_value] * 4)
+
+            # Optional status filter
             if statut != "tous":
-                query += " AND cr.statut = ?"
+                conditions.append("cr.statut = ?")
                 params.append(statut)
-            query += " GROUP BY cr.id ORDER BY c.nom DESC"
-            cursor.execute(query, params)  # Search pattern for all three fields
-            return cursor.fetchall()
 
-    def credit_by_status(self, status):
-        """
-        Retrieve all credits grouped by their status.
-        """
-        with self.connect() as conn:
-            cursor = conn.cursor()
-            query = f"""
-            SELECT {', '.join(self.credit_fields)}
-            FROM credit cr
-            JOIN clients c ON cr.client_id = c.id
-            LEFT JOIN paiement v ON cr.id = v.credit_id
-            WHERE cr.statut = ?
-            GROUP BY cr.id
-            ORDER BY c.nom DESC
-            """
-            cursor.execute(query, (status,))
-            return cursor.fetchall()
+            # Optional commune filter
+            if commune != "tous":
+                conditions.append("c.commune = ?")
+                params.append(commune)
 
-    def credit_by_commune(self, commune):
-        """
-        Retrieve all credits for clients in a specific commune.
-        :commune: the commune name
-        """
-        with self.connect() as conn:
-            cursor = conn.cursor()
-            query = f"""
-                SELECT {', '.join(self.credit_fields)}
-                FROM credit cr
-                JOIN clients c ON cr.client_id = c.id
-                LEFT JOIN paiement v on v.credit_id = cr.id
-                WHERE c.commune = ?
+            # Apply WHERE only if needed
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+
+            query += """
                 GROUP BY cr.id
                 ORDER BY c.nom DESC
             """
-            cursor.execute(query, (commune,))
+
+            cursor.execute(query, params)
             return cursor.fetchall()
 
     def insert_new_credit(self, client, credit_date, montant, motif=''):

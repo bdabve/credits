@@ -6,31 +6,61 @@
 # desc          :
 # ----------------------------------------------------------------------------
 import pandas as pd
+from logger import logger
 
 
 def load_excel(file_path, sheet_name):
     """
-    This will return converted numeric values
+    Load an Excel sheet and clean its data.
+
+    The function:
+    - Reads all sheets from an Excel file
+    - Selects the requested sheet
+    - Converts the DATE column to datetime
+    - Converts numeric columns to proper numeric types
+    - Removes rows without a valid DATE (e.g. subtotal rows)
+
+    Parameters
+    ----------
+    file_path   : Path to the Excel file.
+    sheet_name  :  Name of the sheet to load.
+
+    Returns
+    -------
+    pandas.DataFrame: Cleaned DataFrame with valid dates and numeric values.
+    str             : Error message if the file or sheet cannot be loaded.
+    None            : If the DATE column cannot be processed.
     """
     try:
-        dfs = pd.read_excel(file_path, sheet_name=None)
-        sheet = dfs[sheet_name]
+        sheets = pd.read_excel(file_path, sheet_name=None)      # Load all sheets from the Excel file
+        df = sheets[sheet_name]     # Select the requested sheet
     except Exception as err:
-        # no data for selected month
-        return f"Error: {err}"
-    else:
-        # --- Clean DATE column ---
-        sheet["DATE"] = pd.to_datetime(sheet["DATE"], errors="coerce")
+        logger.error(f"Load Excel File: {err}")
+        return None
 
-        # --- Numeric columns ---
-        fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF"]
+    # --- Clean DATE column ---
+    try:
+        df["DATE"] = pd.to_datetime(df["DATE"], errors="coerce")
+    except Exception as err:
+        logger.error(f"Load Excel File: {err}")
+        return None
 
-        for col in fields:
-            # to numeric
-            sheet[col] = pd.to_numeric(sheet[col], errors="coerce")
+    # --- Convert numeric columns ---
+    numeric_columns = [
+        "T. COMMANDE",
+        "T.LOGICIEL",
+        "VERSEMENT",
+        "CHARGE",
+        "DIFF",
+    ]
 
-        clean_df = sheet[sheet["DATE"].notna()]     # clean by date to remove the SUBTOTAL rows
-        return clean_df
+    for col in numeric_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Remove rows without a valid DATE (e.g. subtotal / footer rows)
+    clean_df = df[df["DATE"].notna()]
+    return clean_df
 
 
 # ==========================================
@@ -65,7 +95,7 @@ def etat_journalier(clean_df, fields):
     :fields: list of fields to sum
     """
     # --- SUM By Date
-    daily_stats = clean_df.groupby("DATE")[fields[:-1]].sum()
+    daily_stats = clean_df.groupby("DATE")[fields[:-1]].sum()       # without observation
     daily_stats = daily_stats.sort_values(by="DATE", ascending=True)
     daily_stats.index = daily_stats.index.date  # Convert to date only
 
@@ -82,15 +112,36 @@ def etat_journalier(clean_df, fields):
 # ==========================================
 def sum_by_driver(clean_df, fields):
     """
-    Sum by driver
+    ETAT TOTAL BY LIVREUR
     clean_df: DataFrame
     fields: list of fields to sum
     """
     # --- TOTAL PAR LIVREUR SUMMARY ---
     # driver_stats = clean_df.groupby("LIVREUR", as_index=False)[fields].sum()      # as_index=False == reset_index()
     driver_stats = clean_df.groupby("LIVREUR")[fields].sum()
-    driver_stats = driver_stats.sort_values(by="T. COMMANDE", ascending=False)
+    driver_stats = driver_stats.sort_values(by="VERSEMENT", ascending=False)
     return driver_stats.reset_index()
+
+
+def etat_excel_like_db(clean_df):
+    """
+    this function return
+    ["ACCOMTE", "CREDIT", "VERSEMENT CREDIT", "CHARGE"] to display in QLabel Excel Etat
+    """
+    # --- Sum VERSEMENT by LIVREUR ---
+    versement_by_livreur = clean_df.groupby("LIVREUR", as_index=True)["VERSEMENT"].sum()
+    # Extract values safely
+    etat_excel = {
+        "ACCOMPTE": float(versement_by_livreur.get("ACCOMPTE", 0)),
+        "CREDIT": float(versement_by_livreur.get("CREDIT", 0)),
+        "VERS. CREDIT": float(versement_by_livreur.get("VERS. CREDIT", 0)),
+        # "TOTAL CHARGE": float(clean_df["CHARGE"].sum()),
+    }
+    charges = clean_df.groupby(["DATE"])[["CHARGE"]].sum()
+    # Create totals row
+    total_charge = pd.DataFrame(charges.sum()).T
+    etat_excel["CHARGES"] = float(total_charge.get("CHARGE", 0))
+    return etat_excel
 
 
 # ==========================================
@@ -503,12 +554,12 @@ def recapepdf_to_text(pdf_file):
 
 
 if __name__ == "__main__":
-    # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
-    file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+    file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
+    # file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
 
-    # fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-    # sheet_name = "DECEMBRE"
-    # sheet = load_excel(file, sheet_name)
+    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
+    sheet_name = "DECEMBRE"
+    df = load_excel(file, sheet_name)
     # terminal(sheet, fields)
     # print(les_retour)
     # print(sum_retour)
@@ -516,6 +567,8 @@ if __name__ == "__main__":
     # print(driver_stats)
     # plot_driver_percentages(sheet, fields)
 
+    # --- Etat Excel Like DB
+    etat_excel_like_db(df)
     # Reminder
     # reminder(file)
     # ---------------------------------------------------
@@ -530,8 +583,9 @@ if __name__ == "__main__":
     # PDF RECAPE MOHAMED
     #
     # pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-17.pdf"
-    pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
-    pdf_recape = recapepdf_to_text(pdf_file_path)
-    print("Recape Journee Mohamed: ")
-    print(pdf_recape)
-    print(f"\n==== Total Article: {len(pdf_recape)} =====")
+    # pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
+    # pdf_recape = recapepdf_to_text(pdf_file_path)
+    # print("Recape Journee Mohamed: ")
+    # print(pdf_recape)
+    # print(f"\n==== Total Article: {len(pdf_recape)} =====")
+    # --------------------------------------------------

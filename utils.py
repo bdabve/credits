@@ -278,8 +278,8 @@ def setup_main_callbacks(root):
 
     # === ComboBoxes ===
     cbBoxes = [
-        (root.ui.cbBoxCreditByStatus, root.filter_credit_by_status),
-        (root.ui.cbBoxCreditByCommune, root.filter_credits_by_commune),
+        (root.ui.cbBoxCreditByStatus, lambda: root.filter_credit_by_status_commune(filter="status")),
+        (root.ui.cbBoxCreditByCommune, lambda: root.filter_credit_by_status_commune(filter="commune")),
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
         (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
         (root.ui.cbBoxPaymentByMonth, root.payment_from_cbbox),
