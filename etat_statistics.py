@@ -128,19 +128,20 @@ def etat_excel_like_db(clean_df):
     this function return
     ["ACCOMTE", "CREDIT", "VERSEMENT CREDIT", "CHARGE"] to display in QLabel Excel Etat
     """
+    charges = clean_df.groupby(["DATE"])[["CHARGE"]].sum()
+    charges = charges["CHARGE"].sum()
+
     # --- Sum VERSEMENT by LIVREUR ---
-    versement_by_livreur = clean_df.groupby("LIVREUR", as_index=True)["VERSEMENT"].sum()
+    vers_by_livreur = clean_df.groupby("LIVREUR", as_index=False)["VERSEMENT"].sum()
+    livreur = vers_by_livreur[vers_by_livreur["LIVREUR"].isin(["ACCOMPTE", "CREDIT", "VERS. CREDIT"])]
+    livreur = livreur.set_index("LIVREUR")
     # Extract values safely
     etat_excel = {
-        "ACCOMPTE": float(versement_by_livreur.get("ACCOMPTE", 0)),
-        "CREDIT": float(versement_by_livreur.get("CREDIT", 0)),
-        "VERS. CREDIT": float(versement_by_livreur.get("VERS. CREDIT", 0)),
-        # "TOTAL CHARGE": float(clean_df["CHARGE"].sum()),
+        "ACCOMPTE": float(livreur["VERSEMENT"].get("ACCOMPTE", 0)),
+        "CREDIT": float(livreur["VERSEMENT"].get("CREDIT", 0)),
+        "VERS. CREDIT": float(livreur["VERSEMENT"].get("VERS. CREDIT", 0)),
+        "TOTAL CHARGE": float(charges),
     }
-    charges = clean_df.groupby(["DATE"])[["CHARGE"]].sum()
-    # Create totals row
-    total_charge = pd.DataFrame(charges.sum()).T
-    etat_excel["CHARGES"] = float(total_charge.get("CHARGE", 0))
     return etat_excel
 
 
@@ -554,8 +555,8 @@ def recapepdf_to_text(pdf_file):
 
 
 if __name__ == "__main__":
-    file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
-    # file = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/VERSEMENT_LIVREUR_AOUT.xlsx"
+    # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
+    file = "~/Desktop/ADMIN/VERSEMENT_LIVREUR.xlsx"
 
     fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
     sheet_name = "DECEMBRE"
@@ -568,7 +569,7 @@ if __name__ == "__main__":
     # plot_driver_percentages(sheet, fields)
 
     # --- Etat Excel Like DB
-    etat_excel_like_db(df)
+    print(etat_excel_like_db(df))
     # Reminder
     # reminder(file)
     # ---------------------------------------------------

@@ -2001,6 +2001,24 @@ class Credit(QtWidgets.QMainWindow):
             f"File Name: {file_path}"
         )
 
+        # --- Etat Excel DB Like ---
+        # === ETATS EXCEL DB Like ["ACCOMPTE", "CREDIT", "VERSEMENT CREDIT", "CHARGE"] ===
+        etat_excel = st.etat_excel_like_db(df)
+        # TODO:  Add excel icon to buttons
+        for btn in (
+            self.ui.btnEtatSumExcelAccompte,
+            self.ui.btnEtatSumExcelCredit,
+            self.ui.btnEtatSumExcelVersement,
+            self.ui.btnEtatSumExcelCharges
+        ):
+            btn.setIcon(qta.icon('mdi.calculator-variant', color="#3b3230;"))
+
+        self.ui.btnEtatSumExcelAccompte.setText("EX Accompte: " + str(etat_excel.get("ACCOMPTE", 0)))
+        self.ui.btnEtatSumExcelCredit.setText("EX Credit: " + str(etat_excel.get("CREDIT", 0)))
+        self.ui.btnEtatSumExcelVersement.setText("EX VERSEMENT: " + str(etat_excel.get("VERS. CREDIT", 0)))
+        self.ui.btnEtatSumExcelCharges.setText("EX Charge: " + str(etat_excel.get("CHARTGE", 0)))
+        print(etat_excel)
+
         # === Etat Journalier from file ===
         etat = st.etat_journalier(df, fields)
         rows = etat.values.tolist()
@@ -2015,10 +2033,6 @@ class Credit(QtWidgets.QMainWindow):
         rows = etat_par_livreur.values.tolist()
         utils.populate_table_widget(self.ui.etatParLivreurTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatParLivreurTableWidget, 300, 250, 250, 250, 200, 150)
-
-        # === ETATS ["ACCOMPTE", "CREDIT", "VERSEMENT CREDIT", "CHARGE"] ===
-        etat_excel_like_db = st.sum_by_driver(df, ["VERSEMENT"])
-        logger.debug(f"Etat Like Database: {etat_excel_like_db}")
 
     # -------- Ploting Thread Ready ------------
     def on_worker_finished(self, df, error):

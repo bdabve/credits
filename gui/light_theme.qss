@@ -528,6 +528,30 @@ QTabBar::tab:selected {
 	border-radius: 5px;
 }
 
+/* === QPushButton EXCEL ETAT === */
+
+#frameExcelEtatButtons .QPushButton
+{
+	font: 11pt "Lucida Casual";
+	background: #f17256;
+	color: #fbfbfb;
+	border-radius: 5px;
+    padding: 0;
+	padding-left: 5px;
+	max-height: 45px;
+	min-height: 45px;
+	text-align: left;
+	
+}
+
+#frameExcelEtatButtons #btnEtatSumExcelVersement {
+	font: 11pt "Lucida Casual";
+	background: #2c9882;
+	color: #dfeeeb;
+}
+
+/*----------------------------------------------*/
+
 /* == LABEL COUNTS === */
 #labelClientsCount,
 #labelCreditCount,
