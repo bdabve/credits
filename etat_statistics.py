@@ -76,6 +76,7 @@ def show_day_details(clean_df, day, fields):
     daily_details = clean_df.groupby(["DATE", "LIVREUR"])[fields].sum()
     daily_details = daily_details.sort_values(by="T.LOGICIEL", ascending=False)
 
+    daily_details["OBSERVATION"] = daily_details["OBSERVATION"].astype("string")
     # Convert input to datetime
     day = pd.to_datetime(day).normalize()
 

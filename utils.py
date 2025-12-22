@@ -276,6 +276,7 @@ def setup_main_callbacks(root):
     for table, callback in table_edits:
         table.editingFinished.connect(callback)
 
+    root.ui.etatJournalierDetailsTableWidget.itemSelectionChanged.connect(root.etat_observation)
     # === ComboBoxes ===
     cbBoxes = [
         (root.ui.cbBoxCreditByStatus, lambda: root.filter_credit_by_status_commune(filter="status")),

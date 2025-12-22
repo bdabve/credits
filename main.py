@@ -2117,8 +2117,22 @@ class Credit(QtWidgets.QMainWindow):
             return
         rows = detail_journe.values.tolist()
         headers = detail_journe.columns.tolist()
+
         utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
         utils.set_table_column_sizes(self.ui.etatJournalierDetailsTableWidget, 300, 250, 250, 250, 250, 250)
+
+    def etat_observation(self):
+        if utils.table_has_selection(self.ui.etatJournalierDetailsTableWidget):
+            row = self.ui.etatJournalierDetailsTableWidget.currentRow()
+            livreur = utils.get_column_value(self.ui.etatJournalierDetailsTableWidget, row, 0)
+            observation = utils.get_column_value(self.ui.etatJournalierDetailsTableWidget, row, 6)
+            observation = observation.replace("\n", "\n\n")
+            if observation == "0":
+                text = f"### Observation {livreur}\nRAS"
+            else:
+                text = f"### Observation {livreur}\n{observation}"
+            self.ui.editObservationByDate.setMarkdown(text)
+            self.ui.editObservationByDate.setStyleSheet("padding: 10px;")
 
     # === Etat From database ==
     def etat_from_database(self, selected_month):
