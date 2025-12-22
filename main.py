@@ -2001,7 +2001,6 @@ class Credit(QtWidgets.QMainWindow):
             f"File Name: {file_path}"
         )
 
-        # --- Etat Excel DB Like ---
         # === ETATS EXCEL DB Like ["ACCOMPTE", "CREDIT", "VERSEMENT CREDIT", "CHARGE"] ===
         etat_excel = st.etat_excel_like_db(df)
         # TODO:  Add excel icon to buttons
@@ -2011,13 +2010,17 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.btnEtatSumExcelVersement,
             self.ui.btnEtatSumExcelCharges
         ):
-            btn.setIcon(qta.icon('mdi.calculator-variant', color="#3b3230;"))
+            btn.setIcon(qta.icon('mdi6.microsoft-excel', color="#efefef"))
 
-        self.ui.btnEtatSumExcelAccompte.setText("EX Accompte: " + str(etat_excel.get("ACCOMPTE", 0)))
-        self.ui.btnEtatSumExcelCredit.setText("EX Credit: " + str(etat_excel.get("CREDIT", 0)))
-        self.ui.btnEtatSumExcelVersement.setText("EX VERSEMENT: " + str(etat_excel.get("VERS. CREDIT", 0)))
-        self.ui.btnEtatSumExcelCharges.setText("EX Charge: " + str(etat_excel.get("CHARTGE", 0)))
-        print(etat_excel)
+        ex_accompte = utils.format_money(etat_excel.get("ACCOMPTE", 0))
+        ex_credit = utils.format_money(etat_excel.get("CREDIT", 0))
+        ex_versement = utils.format_money(etat_excel.get("VERS. CREDIT", 0))
+        ex_charge = utils.format_money(etat_excel.get("CHARGES", 0))
+
+        self.ui.btnEtatSumExcelAccompte.setText(f"Accompte: {ex_accompte}")
+        self.ui.btnEtatSumExcelCredit.setText(f"Crédit: {ex_credit}")
+        self.ui.btnEtatSumExcelVersement.setText(f"Versement Crédit: {ex_versement}")
+        self.ui.btnEtatSumExcelCharges.setText(f"Charge: {ex_charge}")
 
         # === Etat Journalier from file ===
         etat = st.etat_journalier(df, fields)
@@ -2119,6 +2122,15 @@ class Credit(QtWidgets.QMainWindow):
 
     # === Etat From database ==
     def etat_from_database(self, selected_month):
+        # NOTE: The QPushButton for Etat Database is named as label
+        # FIXME: Icon must take color from theme
+        for btn in [
+            self.ui.labelEtatSumAccompte,
+            self.ui.labelEtatSumCredit, self.ui.labelEtatSumVerse,
+            self.ui.labelEtatSumCharge
+        ]:
+            btn.setIcon(qta.icon("mdi6.database", color="#ffffff"))
+
         month = self.CURRENT_MONTH if selected_month == "Mois" else f"{self.CURRENT_YEAR}-{selected_month}"
         rows = self.db.etat_journalier(month=month)
 

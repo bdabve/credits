@@ -510,15 +510,12 @@ QTabBar::tab:selected {
 }
 
 /* == SUM Labels ==*/
-#labelEtatSumCredit,
 #labelTotalCredits,
 #labelTotalCreditClients,
 #labelAddVersementMontant,
 
 #labelTotalCharge,
-#labelEtatSumCharge,
 
-#labelEtatSumAccompte,
 #labelTotalPayments
 {
 	font: 12pt "Lucida Casual";
@@ -530,22 +527,22 @@ QTabBar::tab:selected {
 
 /* === QPushButton EXCEL ETAT === */
 
-#frameExcelEtatButtons .QPushButton
+#frameExcelEtatButtons .QPushButton,
+#frameDBEtatButtons .QPushButton
 {
-	font: 11pt "Lucida Casual";
+	font: 12pt "Lucida Casual";
 	background: #f17256;
 	color: #fbfbfb;
 	border-radius: 5px;
     padding: 0;
-	padding-left: 5px;
-	max-height: 45px;
-	min-height: 45px;
-	text-align: left;
+	max-height: 50px;
+	min-height: 50px;
 	
 }
 
-#frameExcelEtatButtons #btnEtatSumExcelVersement {
-	font: 11pt "Lucida Casual";
+#frameExcelEtatButtons #btnEtatSumExcelVersement,
+#frameDBEtatButtons #labelEtatSumVerse {
+	font: 12pt "Lucida Casual";
 	background: #2c9882;
 	color: #dfeeeb;
 }
@@ -558,13 +555,12 @@ QTabBar::tab:selected {
 #labelEmployesCount,
 #labelAccompteCount,
 
-#labelEtatSumVerse,
 #labelVersementCount,
 
 #labelChargeCount,
 #labelPaymentsCount
 {
-	font: 10pt "Lucida Casual";
+	font: 12pt "Lucida Casual";
 	background-color: #2c9882;
 	color: #dfeeeb;
 	padding: 0px 10px;

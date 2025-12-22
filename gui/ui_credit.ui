@@ -3967,11 +3967,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderMinimumSectionSize">
-                       <number>31</number>
-                      </attribute>
                       <attribute name="horizontalHeaderDefaultSectionSize">
                        <number>150</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderMinimumSectionSize">
+                       <number>31</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -5067,7 +5067,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5121,9 +5121,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string/>
+                               <string>Tous</string>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6119,7 +6119,7 @@
                         <number>0</number>
                        </property>
                        <item>
-                        <widget class="QFrame" name="frame_11">
+                        <widget class="QFrame" name="frameDBEtatButtons">
                          <property name="frameShape">
                           <enum>QFrame::NoFrame</enum>
                          </property>
@@ -6140,30 +6140,66 @@
                            <number>0</number>
                           </property>
                           <item>
-                           <widget class="QLabel" name="labelEtatSumAccompte">
+                           <widget class="QPushButton" name="labelEtatSumAccompte">
                             <property name="text">
-                             <string>Sum Accompte</string>
+                             <string/>
+                            </property>
+                            <property name="iconSize">
+                             <size>
+                              <width>30</width>
+                              <height>30</height>
+                             </size>
+                            </property>
+                            <property name="flat">
+                             <bool>true</bool>
                             </property>
                            </widget>
                           </item>
                           <item>
-                           <widget class="QLabel" name="labelEtatSumCredit">
+                           <widget class="QPushButton" name="labelEtatSumCredit">
                             <property name="text">
-                             <string>Sum Crédit</string>
+                             <string/>
+                            </property>
+                            <property name="iconSize">
+                             <size>
+                              <width>30</width>
+                              <height>30</height>
+                             </size>
+                            </property>
+                            <property name="flat">
+                             <bool>true</bool>
                             </property>
                            </widget>
                           </item>
                           <item>
-                           <widget class="QLabel" name="labelEtatSumVerse">
+                           <widget class="QPushButton" name="labelEtatSumVerse">
                             <property name="text">
-                             <string>Sum Versement</string>
+                             <string/>
+                            </property>
+                            <property name="iconSize">
+                             <size>
+                              <width>30</width>
+                              <height>30</height>
+                             </size>
+                            </property>
+                            <property name="flat">
+                             <bool>true</bool>
                             </property>
                            </widget>
                           </item>
                           <item>
-                           <widget class="QLabel" name="labelEtatSumCharge">
+                           <widget class="QPushButton" name="labelEtatSumCharge">
                             <property name="text">
-                             <string>Sum Charge</string>
+                             <string/>
+                            </property>
+                            <property name="iconSize">
+                             <size>
+                              <width>30</width>
+                              <height>30</height>
+                             </size>
+                            </property>
+                            <property name="flat">
+                             <bool>true</bool>
                             </property>
                            </widget>
                           </item>
@@ -6206,12 +6242,12 @@
                              </size>
                             </property>
                             <property name="text">
-                             <string>Excel Accompte</string>
+                             <string/>
                             </property>
                             <property name="iconSize">
                              <size>
-                              <width>20</width>
-                              <height>20</height>
+                              <width>30</width>
+                              <height>30</height>
                              </size>
                             </property>
                             <property name="flat">
@@ -6222,12 +6258,12 @@
                           <item>
                            <widget class="QPushButton" name="btnEtatSumExcelCredit">
                             <property name="text">
-                             <string>Excel Credit</string>
+                             <string/>
                             </property>
                             <property name="iconSize">
                              <size>
-                              <width>20</width>
-                              <height>20</height>
+                              <width>30</width>
+                              <height>30</height>
                              </size>
                             </property>
                             <property name="flat">
@@ -6238,16 +6274,15 @@
                           <item>
                            <widget class="QPushButton" name="btnEtatSumExcelVersement">
                             <property name="styleSheet">
-                             <string notr="true">text-align: left;
-padding-left: 5px;</string>
+                             <string notr="true"/>
                             </property>
                             <property name="text">
-                             <string>Excel Versement</string>
+                             <string/>
                             </property>
                             <property name="iconSize">
                              <size>
-                              <width>20</width>
-                              <height>20</height>
+                              <width>30</width>
+                              <height>30</height>
                              </size>
                             </property>
                             <property name="flat">
@@ -6258,12 +6293,12 @@ padding-left: 5px;</string>
                           <item>
                            <widget class="QPushButton" name="btnEtatSumExcelCharges">
                             <property name="text">
-                             <string>Excel Charges</string>
+                             <string/>
                             </property>
                             <property name="iconSize">
                              <size>
-                              <width>20</width>
-                              <height>20</height>
+                              <width>30</width>
+                              <height>30</height>
                              </size>
                             </property>
                             <property name="flat">
@@ -6717,8 +6752,8 @@ padding-left: 5px;</string>
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>74</width>
-                             <height>16</height>
+                             <width>963</width>
+                             <height>480</height>
                             </rect>
                            </property>
                           </widget>

@@ -789,7 +789,23 @@ QTabBar::tab:selected {
 	padding: 0px 10px;
 	border-radius: 6px;
 }
-
+#frameExcelEtatButtons .QPushButton,
+#frameDBEtatButtons .QPushButton
+{
+	font: 12pt "Lucida Casual";
+	background: #f17256;
+	color: #fbfbfb;
+	border-radius: 5px;
+	max-height: 50px;
+	min-height: 50px;
+	
+}
+#frameExcelEtatButtons #btnEtatSumExcelVersement,
+#frameDBEtatButtons #labelEtatSumVerse {
+	font: 12pt "Lucida Casual";
+	background: #2c9882;
+	color: #dfeeeb;
+}
 /* == Accompte SUMS == */
 #frameSum,
 #frameSum_2,

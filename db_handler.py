@@ -768,7 +768,7 @@ class Database:
 
             query += """
                 GROUP BY cr.id
-                ORDER BY c.nom DESC
+                ORDER BY cr.date_credit DESC
             """
 
             cursor.execute(query, params)

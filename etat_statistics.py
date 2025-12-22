@@ -140,7 +140,7 @@ def etat_excel_like_db(clean_df):
         "ACCOMPTE": float(livreur["VERSEMENT"].get("ACCOMPTE", 0)),
         "CREDIT": float(livreur["VERSEMENT"].get("CREDIT", 0)),
         "VERS. CREDIT": float(livreur["VERSEMENT"].get("VERS. CREDIT", 0)),
-        "TOTAL CHARGE": float(charges),
+        "CHARGES": float(charges),
     }
     return etat_excel
 
