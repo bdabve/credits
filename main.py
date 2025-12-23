@@ -1570,22 +1570,9 @@ class Credit(QtWidgets.QMainWindow):
         """
         Set up the UI for creating a new versement (payment) on a credit.
         """
-        # Get remaining balance
-        reste = utils.get_column_value(
-            self.ui.creditTableWidget,
-            self.ui.creditTableWidget.currentRow(),
-            6
-        )
-
-        if reste == '0,00':
-            self.show_error_message(
-                "Ce crédit est déjà terminé. Aucun versement n'est nécessaire.",
-                success=False
-            )
-            return
 
         # Get credit and client info
-        credit_id = self.get_item_id(self.ui.creditTableWidget)
+        # credit_id = self.get_item_id(self.ui.creditTableWidget)   .....
         client_name = utils.get_column_value(
             self.ui.creditTableWidget,
             self.ui.creditTableWidget.currentRow(),
@@ -1593,28 +1580,35 @@ class Credit(QtWidgets.QMainWindow):
         )
         client_id = self.db.get_item_id('clients', 'nom', client_name.lower())
 
+        # Get SUM Reste from Database
+        reste_result = self.db.get_total_reste_by_client(client_id)
+        if reste_result["success"]:
+            reste = reste_result["total_reste"]
+        else:
+            self.show_error_message(f"Error: {reste['message']}", success=False)
+
+        if reste <= 0:
+            self.show_error_message(
+                f"Aucun crédit pour {client_name}. Aucun versement n'est nécessaire.",
+                success=False
+            )
+            return
+
         # Update hidden labels
-        self.ui.labelVersementCreditID.setText(str(credit_id))
+        # self.ui.labelVersementCreditID.setText(str(credit_id))    .....
         self.ui.labelVersementClientID.setText(str(client_id))
+
         for label in (self.ui.labelVersementCreditID, self.ui.labelVersementClientID):
             label.hide()
 
         # Show remaining amount (without "DA")
-        self.ui.labelAddVersementMontant.setText(reste)
+        self.ui.labelAddVersementMontant.setText(utils.format_money(reste))
         self.ui.dateEditVersementDate.setDate(self.CURRENT_DATE)
 
         # Restrict maximum input value
-        logger.info(
-            f"Add payment for Credit({credit_id}), "
-            f"ClientID({client_id}), reste({reste})"
-        )
-        reste_decimal = utils.format_to_decimal(reste)
-        if not reste_decimal['success']:
-            self.show_error_message(
-                f"Erreur: {reste_decimal['error']}", success=False
-            )
-            return
-        self.ui.editVersementMontant.setMaximum(reste_decimal['value'])
+        logger.info(f"INSERT New Versement into database for client({client_id})")
+        self.ui.editVersementMontant.setValue(0)
+        self.ui.editVersementMontant.setMaximum(reste)
 
         # Finalize UI
         self.setup_extraCenter_ui(
@@ -1625,23 +1619,16 @@ class Credit(QtWidgets.QMainWindow):
         """
         Save the new versement to the database.
         """
-        # collecting info
-        reste = self.ui.labelAddVersementMontant.text()
-        logger.debug(f'Reste: {reste}')
-        reste = utils.format_to_decimal(self.ui.labelAddVersementMontant.text())
-        if not reste['success']:
-            self.show_error_message(f"Erreur: {reste['error']}", success=False)
-            return
-        reste = reste['value']
-        credit_id = self.ui.labelVersementCreditID.text()
+        # credit_id = self.ui.labelVersementCreditID.text()
         client_id = self.ui.labelVersementClientID.text()
         date_vers = self.ui.dateEditVersementDate.date().toPyDate()
         montant = self.ui.editVersementMontant.value()
         description = self.ui.editVersementDescription.toPlainText().lower()
 
-        self.insert_versement_db(credit_id, client_id, date_vers, montant, reste, description)
+        # Send to inservet versement NOT DB function
+        self.insert_versement_db(client_id, date_vers, montant, description)
 
-    def insert_versement_db(self, credit_id, client_id, date_vers, montant, reste, description):
+    def insert_versement_db(self, client_id, date_vers, montant, description):
         """
         :rest: is just to check if the montant is less than or equal to reste.
         """
@@ -1649,15 +1636,15 @@ class Credit(QtWidgets.QMainWindow):
         if montant <= 0:
             self.show_error_message("Entré un chiffre pour le Montant.")
             return
-        elif montant > reste:
-            self.show_error_message("Le Montant depasse le reste.")
-            return
 
-        logger.debug(f"CreditID({credit_id}), ClientID({client_id}) Date({date_vers}), "
-                     f"Description({description}), Montant({montant})")
+        logger.debug(
+            "New Versement, "
+            f"ClientID({client_id}) Date({date_vers}), "
+            f"Description({description}), Montant({montant})"
+        )
 
         # Insert into DATABASE
-        result = self.db.insert_new_versement(credit_id, client_id, date_vers, montant, description)
+        result = self.db.insert_new_versement_gpt(client_id, date_vers, montant, description)
         logger.debug(result)
         if result['success']:
             self.show_error_message("Versement ajouté avec succès.", success=True)

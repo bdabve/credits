@@ -819,6 +819,26 @@ class Database:
             cursor.execute(query, (client_id,))
             return cursor.fetchall()
 
+    def get_total_reste_by_client(self, client_id):
+        """
+        Returns the total remaining credit amount for a specific client.
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    """
+                    SELECT COALESCE(SUM(reste), 0) FROM credit
+                    WHERE client_id = ? AND statut = 'en cours'
+                    """,
+                    (client_id,)
+                )
+                total_reste = cursor.fetchone()[0]
+                return {'success': True, 'total_reste': total_reste}
+
+            except sqlite3.Error as e:
+                return {'success': False, 'error': str(e)}
+
     def regle_credit(self, credit_id, client_id):
         """
         Settles a credit by marking it as fully paid.
@@ -1030,6 +1050,147 @@ class Database:
             cursor.execute(query, (month,))
             return cursor.fetchall()
 
+    def insert_new_versement(self, credit_id, client_id, date_versement, montant, observation=""):
+        """
+        Inserts a new versement (payment) record into the database for a given credit and client.
+
+        This method performs the following actions:
+        1. Inserts a new payment into the 'paiement' table.
+        2. Updates the remaining balance ('reste') in the 'credit' table by subtracting the payment amount.
+        3. If the remaining balance is less than or equal to zero, marks the credit as "terminé" (finished).
+        4. Commits the transaction if successful; rolls back if an error occurs.
+
+        Args:
+            credit_id (int): The ID of the credit to which the payment is associated.
+            client_id (int): The ID of the client making the payment.
+            date_versement (str): The date of the payment (format: 'YYYY-MM-DD').
+            montant (float): The amount of the payment.
+            observation (str, optional): Additional notes or observations about the payment. Defaults to "".
+
+        Returns:
+            dict: A dictionary containing:
+                - 'success' (bool): True if the operation was successful, False otherwise.
+                - 'versement_id' (int, optional): The ID of the newly inserted payment (if successful).
+                - 'error' (str, optional): Error message (if unsuccessful).
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO paiement(credit_id, client_id, date_versement, montant, observation)
+                    VALUES(?, ?, ?, ?, ?)
+                    """,
+                    (credit_id, client_id, date_versement, montant, observation)
+                )
+                # Update remaining balance
+                cursor.execute(
+                    "UPDATE credit SET reste = reste - ?  WHERE id = ?",
+                    (montant, credit_id)
+                )
+                # If reste <= 0 => mark as "terminé"
+                cursor.execute(
+                    "UPDATE credit SET statut = 'terminé' WHERE id = ? AND reste <= 0",
+                    (credit_id,)
+                )
+                conn.commit()
+                return {'success': True, 'versement_id': cursor.lastrowid}
+            except sqlite3.Error as e:
+                conn.rollback()
+                return {'success': False, 'error': str(e)}
+
+    def insert_new_versement_gpt(self, client_id, date_versement, montant, observation=""):
+        """
+        Inserts a new versement (payment) and automatically assigns it to the client's
+        active credits (FIFO: oldest credit first).
+
+        This method performs the following actions:
+        1. Finds all active credits ('en cours') for the given client.
+        2. Distributes the payment amount over credits (oldest first).
+        3. Inserts payment records into the 'paiement' table.
+        4. Updates the remaining balance ('reste') and status ('statut') of each credit.
+        5. Marks credits as 'terminé' when fully paid.
+        6. Commits the transaction if successful; rolls back if an error occurs.
+
+        Args:
+            client_id (int): The ID of the client making the payment.
+            date_versement (str): The date of the payment (format: 'YYYY-MM-DD').
+            montant (float): The total payment amount.
+            observation (str, optional): Additional notes or observations. Defaults to "".
+
+        Returns:
+            dict: A dictionary containing:
+                - 'success' (bool): True if the operation was successful, False otherwise.
+                - 'versement_ids' (list, optional): List of inserted payment IDs (if successful).
+                - 'error' (str, optional): Error message (if unsuccessful).
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            try:
+                if montant <= 0: return {"success": False, "message": "Montant invalide."}
+
+                conn.execute("BEGIN")
+
+                # 1️⃣ Get all active credits for client (oldest first)
+                cursor.execute(
+                    """
+                    SELECT id, reste FROM credit
+                    WHERE client_id = ? AND statut = 'en cours'
+                    ORDER BY date_credit ASC, id ASC
+                    """,
+                    (client_id,)
+                )
+
+                credits = cursor.fetchall()
+
+                if not credits:
+                    return {"success": False, "message": "Aucun crédit en cours pour ce client"}
+
+                reste_paiement = montant
+                versement_ids = []
+
+                # 2️⃣ Distribute payment over credits
+                for credit_id, reste_credit in credits:
+                    if reste_paiement <= 0:
+                        break
+
+                    montant_applique = min(reste_credit, reste_paiement)
+
+                    # Insert paiement
+                    cursor.execute(
+                        """
+                        INSERT INTO paiement (credit_id, client_id, date_versement, montant, observation)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                        (credit_id, client_id, date_versement, montant_applique, observation)
+                    )
+                    versement_ids.append(cursor.lastrowid)
+
+                    # Update credit
+                    nouveau_reste = reste_credit - montant_applique
+                    nouveau_statut = "terminé" if nouveau_reste <= 0 else "en cours"
+
+                    cursor.execute(
+                        "UPDATE credit SET reste = ?, statut = ? WHERE id = ?",
+                        (max(nouveau_reste, 0), nouveau_statut, credit_id)
+                    )
+
+                    reste_paiement -= montant_applique
+
+                # 3️⃣ If payment exceeds total remaining credit
+                if reste_paiement > 0:
+                    return {
+                        "success": False,
+                        "message": f"Versement supérieur au total des crédits (reste {reste_paiement})"
+                    }
+
+                conn.commit()
+                return {'success': True, 'versement_ids': versement_ids}
+
+            except Exception as e:
+                conn.rollback()
+                return {'success': False, 'error': str(e)}
+
     def update_payment(self, paiement_id, column, new_text):
         with self.connect() as conn:
             cursor = conn.cursor()
@@ -1121,55 +1282,6 @@ class Database:
                 (credit_id,)
             )
             return cursor.fetchall()
-
-    def insert_new_versement(self, credit_id, client_id, date_versement, montant, observation=""):
-        """
-        Inserts a new versement (payment) record into the database for a given credit and client.
-
-        This method performs the following actions:
-        1. Inserts a new payment into the 'paiement' table.
-        2. Updates the remaining balance ('reste') in the 'credit' table by subtracting the payment amount.
-        3. If the remaining balance is less than or equal to zero, marks the credit as "terminé" (finished).
-        4. Commits the transaction if successful; rolls back if an error occurs.
-
-        Args:
-            credit_id (int): The ID of the credit to which the payment is associated.
-            client_id (int): The ID of the client making the payment.
-            date_versement (str): The date of the payment (format: 'YYYY-MM-DD').
-            montant (float): The amount of the payment.
-            observation (str, optional): Additional notes or observations about the payment. Defaults to "".
-
-        Returns:
-            dict: A dictionary containing:
-                - 'success' (bool): True if the operation was successful, False otherwise.
-                - 'versement_id' (int, optional): The ID of the newly inserted payment (if successful).
-                - 'error' (str, optional): Error message (if unsuccessful).
-        """
-        with self.connect() as conn:
-            cursor = conn.cursor()
-            try:
-                cursor.execute(
-                    """
-                    INSERT INTO paiement(credit_id, client_id, date_versement, montant, observation)
-                    VALUES(?, ?, ?, ?, ?)
-                    """,
-                    (credit_id, client_id, date_versement, montant, observation)
-                )
-                # Update remaining balance
-                cursor.execute(
-                    "UPDATE credit SET reste = reste - ?  WHERE id = ?",
-                    (montant, credit_id)
-                )
-                # If reste <= 0 => mark as "terminé"
-                cursor.execute(
-                    "UPDATE credit SET statut = 'terminé' WHERE id = ? AND reste <= 0",
-                    (credit_id,)
-                )
-                conn.commit()
-                return {'success': True, 'versement_id': cursor.lastrowid}
-            except sqlite3.Error as e:
-                conn.rollback()
-                return {'success': False, 'error': str(e)}
 
     def delete_paiement(self, paiement_id):
         with self.connect() as conn:
