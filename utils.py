@@ -351,6 +351,7 @@ def setup_main_callbacks(root):
         ('N. Crédit', qta.icon('mdi6.cash-plus', color=NEW_COLOR), lambda: root.ui_create_credit(client=True)),
         ('L. Crédits', qta.icon('ph.list', color=ICON_COLOR), root.client_credit_list),
         ('L. Versement', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.client_versement_list),
+        ('A. Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
         ('separator', None, None),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_client),
     ]
@@ -508,7 +509,7 @@ def remove_layout_from_layout(layout):
 # ==================================
 # == Table Widget Functions
 # ==================================
-def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: list) -> None:
+def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: list, resize_to_content=False) -> None:
     """
     Populate a QTableWidget with rows and headers.
 
@@ -541,8 +542,9 @@ def populate_table_widget(table: QtWidgets.QTableWidget, rows: list, headers: li
             table.setItem(row_idx, col_idx, item)
 
     table.horizontalHeader().setStretchLastSection(True)
-    # table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
     table.setSortingEnabled(True)
+    if resize_to_content:
+        table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
 
 def table_has_selection(table: QtWidgets.QTableWidget) -> bool:

@@ -232,17 +232,17 @@ class Credit(QtWidgets.QMainWindow):
     #             e.accept()
 
     # def toggle_maximize_restore(self):
-        icon = QtGui.QIcon()
-        if self.isMaximized():
-            icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_maximize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.maximizeRestoreAppBtn.setIcon(icon)
-            self.ui.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
-            self.showNormal()
-        else:
-            icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_restore.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.maximizeRestoreAppBtn.setIcon(icon)
-            self.ui.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
-            self.showMaximized()
+        # icon = QtGui.QIcon()
+        # if self.isMaximized():
+        #     icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_maximize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        #     self.ui.maximizeRestoreAppBtn.setIcon(icon)
+        #     self.ui.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
+        #     self.showNormal()
+        # else:
+        #     icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_restore.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        #     self.ui.maximizeRestoreAppBtn.setIcon(icon)
+        #     self.ui.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
+        #     self.showMaximized()
 
     # ===================================
     # -- Toggle Left Menu and Left Box ==
@@ -1572,7 +1572,7 @@ class Credit(QtWidgets.QMainWindow):
         """
 
         # Get credit and client info
-        # credit_id = self.get_item_id(self.ui.creditTableWidget)   .....
+        credit_id = self.get_item_id(self.ui.creditTableWidget)   # .....
         client_name = utils.get_column_value(
             self.ui.creditTableWidget,
             self.ui.creditTableWidget.currentRow(),
@@ -1580,13 +1580,25 @@ class Credit(QtWidgets.QMainWindow):
         )
         client_id = self.db.get_item_id('clients', 'nom', client_name.lower())
 
-        # Get SUM Reste from Database
-        reste_result = self.db.get_total_reste_by_client(client_id)
-        if reste_result["success"]:
-            reste = reste_result["total_reste"]
-        else:
-            self.show_error_message(f"Error: {reste['message']}", success=False)
+        # Insert for a specific Credit
+        # if credit_id:
+        #     reste = utils.get_column_value(
+        #         self.ui.creditTableWidget,
+        #         self.ui.creditTableWidget.currentRow(),
+        #         0
+        #     )
 
+        if credit_id:
+            reste = 200
+        else:
+            # Get SUM Reste from Database
+            reste_result = self.db.get_total_reste_by_client(client_id)
+            if reste_result["success"]:
+                reste = reste_result["total_reste"]
+            else:
+                self.show_error_message(f"Error: {reste['message']}", success=False)
+
+        # Check for reste
         if reste <= 0:
             self.show_error_message(
                 f"Aucun crédit pour {client_name}. Aucun versement n'est nécessaire.",
@@ -1595,11 +1607,11 @@ class Credit(QtWidgets.QMainWindow):
             return
 
         # Update hidden labels
-        # self.ui.labelVersementCreditID.setText(str(credit_id))    .....
+        self.ui.labelVersementCreditID.setText(str(credit_id))    # .....
         self.ui.labelVersementClientID.setText(str(client_id))
 
-        for label in (self.ui.labelVersementCreditID, self.ui.labelVersementClientID):
-            label.hide()
+        # for label in (self.ui.labelVersementCreditID, self.ui.labelVersementClientID):
+        #     label.hide()
 
         # Show remaining amount (without "DA")
         self.ui.labelAddVersementMontant.setText(utils.format_money(reste))
@@ -1626,9 +1638,9 @@ class Credit(QtWidgets.QMainWindow):
         description = self.ui.editVersementDescription.toPlainText().lower()
 
         # Send to inservet versement NOT DB function
-        self.insert_versement_db(client_id, date_vers, montant, description)
+        self.insert_versement(client_id, date_vers, montant, description)
 
-    def insert_versement_db(self, client_id, date_vers, montant, description):
+    def insert_versement(self, client_id, date_vers, montant, description):
         """
         :rest: is just to check if the montant is less than or equal to reste.
         """
@@ -2105,8 +2117,12 @@ class Credit(QtWidgets.QMainWindow):
         rows = detail_journe.values.tolist()
         headers = detail_journe.columns.tolist()
 
-        utils.populate_table_widget(self.ui.etatJournalierDetailsTableWidget, rows, headers)
-        utils.set_table_column_sizes(self.ui.etatJournalierDetailsTableWidget, 300, 250, 250, 250, 250, 250)
+        utils.populate_table_widget(
+            self.ui.etatJournalierDetailsTableWidget,
+            rows, headers,
+            resize_to_content=True
+        )
+        # utils.set_table_column_sizes(self.ui.etatJournalierDetailsTableWidget, 300, 250, 250, 250, 250, 250)
 
     def etat_observation(self):
         if utils.table_has_selection(self.ui.etatJournalierDetailsTableWidget):
