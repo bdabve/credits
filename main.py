@@ -1572,13 +1572,24 @@ class Credit(QtWidgets.QMainWindow):
         """
 
         # Get credit and client info
-        credit_id = self.get_item_id(self.ui.creditTableWidget)   # .....
-        client_name = utils.get_column_value(
-            self.ui.creditTableWidget,
-            self.ui.creditTableWidget.currentRow(),
-            2
-        )
-        client_id = self.db.get_item_id('clients', 'nom', client_name.lower())
+        current_page = self.ui.stackedWidget.currentWidget().objectName()
+        if current_page == "CreditPage":
+            logger.info(f"Adding a new versement from {current_page} ...")
+            credit_id = self.get_item_id(self.ui.creditTableWidget)   # .....
+            client_name = utils.get_column_value(
+                self.ui.creditTableWidget,
+                self.ui.creditTableWidget.currentRow(),
+                2
+            )
+            client_id = self.db.get_item_id('clients', 'nom', client_name.lower())
+        elif current_page == "ClientsPage":
+            logger.info(f"Adding a new versement from {current_page}...")
+            credit_id = None
+            client_id = utils.get_column_value(
+                self.ui.clientsTableWidget,
+                self.ui.clientsTableWidget.currentRow(),
+                0
+            )
 
         # Insert for a specific Credit
         # if credit_id:
@@ -1587,9 +1598,15 @@ class Credit(QtWidgets.QMainWindow):
         #         self.ui.creditTableWidget.currentRow(),
         #         0
         #     )
-
-        if credit_id:
-            reste = 200
+        if current_page == "CreditPage":
+            reste = utils.get_column_value(
+                self.ui.creditTableWidget,
+                self.ui.creditTableWidget.currentRow(),
+                6
+            )
+            reste = utils.format_to_decimal(reste)
+            if reste['success']:
+                reste = reste['value']
         else:
             # Get SUM Reste from Database
             reste_result = self.db.get_total_reste_by_client(client_id)
@@ -1631,16 +1648,18 @@ class Credit(QtWidgets.QMainWindow):
         """
         Save the new versement to the database.
         """
-        # credit_id = self.ui.labelVersementCreditID.text()
+        credit_id = self.ui.labelVersementCreditID.text()
         client_id = self.ui.labelVersementClientID.text()
         date_vers = self.ui.dateEditVersementDate.date().toPyDate()
         montant = self.ui.editVersementMontant.value()
         description = self.ui.editVersementDescription.toPlainText().lower()
 
-        # Send to inservet versement NOT DB function
-        self.insert_versement(client_id, date_vers, montant, description)
+        logger.debug(f"Date: {date_vers}, Credit_ID: {credit_id}, Client ID: {client_id}, "
+                     f"Description: {description}, Montant: {montant}")
+        # Send to insert versement NOT DB function
+        self.insert_versement(credit_id, client_id, date_vers, montant, description)
 
-    def insert_versement(self, client_id, date_vers, montant, description):
+    def insert_versement(self, credit_id, client_id, date_vers, montant, description):
         """
         :rest: is just to check if the montant is less than or equal to reste.
         """
@@ -1651,12 +1670,18 @@ class Credit(QtWidgets.QMainWindow):
 
         logger.debug(
             "New Versement, "
-            f"ClientID({client_id}) Date({date_vers}), "
+            f"Credit_id({credit_id}), ClientID({client_id}) Date({date_vers}), "
             f"Description({description}), Montant({montant})"
         )
 
         # Insert into DATABASE
-        result = self.db.insert_new_versement_gpt(client_id, date_vers, montant, description)
+        if credit_id and credit_id != 'None':
+            logger.debug(f"Inserting versement for a specific credit {credit_id}...")
+            result = self.db.insert_versement_by_credit(credit_id, client_id, date_vers, montant, description)
+        else:
+            logger.debug(f"Inserting versement global for client_id {client_id}...")
+            result = self.db.insert_versement_by_client(client_id, date_vers, montant, description)
+
         logger.debug(result)
         if result['success']:
             self.show_error_message("Versement ajouté avec succès.", success=True)

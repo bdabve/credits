@@ -1050,7 +1050,7 @@ class Database:
             cursor.execute(query, (month,))
             return cursor.fetchall()
 
-    def insert_new_versement(self, credit_id, client_id, date_versement, montant, observation=""):
+    def insert_versement_by_credit(self, credit_id, client_id, date_versement, montant, observation=""):
         """
         Inserts a new versement (payment) record into the database for a given credit and client.
 
@@ -1099,7 +1099,7 @@ class Database:
                 conn.rollback()
                 return {'success': False, 'error': str(e)}
 
-    def insert_new_versement_gpt(self, client_id, date_versement, montant, observation=""):
+    def insert_versement_by_client(self, client_id, date_versement, montant, observation=""):
         """
         Inserts a new versement (payment) and automatically assigns it to the client's
         active credits (FIFO: oldest credit first).
