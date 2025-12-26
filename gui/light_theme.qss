@@ -138,15 +138,16 @@ QPushButton:!enabled {
 	padding: 0;
 }
 
-#frameSum QPushButton, 
-#frameSum_2 QPushButton, 
-#frameSum_3 QPushButton {
-	min-height: 80px;
-	min-width: 66px;
-	max-height: 80px;
-	max-width: 66px;
-	border-radius: 40px;
+/* ====== frameSum (avance, ...) Buttons =========*/
+#frameSum .QPushButton, 
+#frameSum_2 .QPushButton, 
+#frameSum_3 .QPushButton {	
 	background-color: #25d366;
+	min-width: 50px;
+	min-height: 50px;
+	max-width: 50px;
+	max-height: 50px;
+	padding: 0px;
 }
 /*
   == Close/Maximaze/Minimize QPushButtons ==
@@ -168,7 +169,7 @@ QPushButton:!enabled {
 	background-color: transparent; 
 	border: none;  
 	border-radius: 5px; 
-	min-height: 30px;
+	min-height: 40px;
 	min-width: 40px;
 	padding: 0;
 }
@@ -176,7 +177,7 @@ QPushButton:!enabled {
 /* == Hover == */
 #rightButtons QPushButton:hover,
 #extraCloseColumnBtn:hover  { 
-	background-color: #EFEFEF; 
+	background-color: #FFFFFF; 
 	border-style: solid; 
 	border-radius: 4px;
 }
@@ -184,7 +185,7 @@ QPushButton:!enabled {
 /* == Pressed == */
 #rightButtons QPushButton:pressed,
 #extraCloseColumnBtn:pressed { 
-	background-color: rgb(23, 26, 30); 
+	background-color: transparent; 
 	border-style: solid; 
 	border-radius: 4px; 
 }
@@ -277,7 +278,8 @@ QLineEdit:hover,
 QSpinBox:hover,
 QDoubleSpinBox:hover,
 QDateEdit:hover,
-QPlainTextEdit:hover {
+QPlainTextEdit:hover,
+QTextBrowser:hover{
     border: 2px solid #a0c4ff;
 }
 
@@ -285,14 +287,16 @@ QLineEdit:focus,
 QSpinBox:focus,
 QDoubleSpinBox:focus,
 QDateEdit:focus,
-QPlainTextEdit:focus {
+QPlainTextEdit:focus,
+QTextBrowser:focus{
     border: 2px solid #388bfd;    
 }
 
 /* ==================
    QPlainTextEdit
 ================== */
-QPlainTextEdit {
+QPlainTextEdit,
+QTextBrowser {
     background-color: #ffffff;
     border-radius: 5px;
     padding: 10px;
@@ -305,23 +309,86 @@ QPlainTextEdit {
    QScrollBar
 ================== */
 QScrollBar:horizontal {
+    border: none;
     background: #efefef;
     height: 8px;
+    margin: 0px 21px 0 21px;
+	border-radius: 0px;
 }
 
 QScrollBar::handle:horizontal {
     background: #bfbfbf;
+    min-width: 25px;
     border-radius: 4px;
 }
 
+QScrollBar::add-line:horizontal {
+    border: none;
+    background: #bfbfbf;
+    width: 20px;
+	border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: none;
+    background: #bfbfbf;
+    width: 20px;
+	border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
+{
+     background: none;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
+{
+     background: none;
+}
+/*------ Vertical QScrollBar -------*/
 QScrollBar:vertical {
+	border: none;
     background: #efefef;
     width: 8px;
+    margin: 21px 0 21px 0;
+	border-radius: 0px;
 }
 
 QScrollBar::handle:vertical {
     background: #bfbfbf;
+    min-height: 25px;
     border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical {
+    border: none;
+    background: #bfbfbf;
+    height: 20px;
+	border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
+	border: none;
+    background: #bfbfbf;
+    height: 20px;
+	border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+ }
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
 }
 
 /* ==================
@@ -535,11 +602,12 @@ QTabBar::tab:selected {
 	color: #fbfbfb;
 	border-radius: 5px;
     padding: 0;
+
 	max-height: 50px;
 	min-height: 50px;
-	
 }
 
+/*# TODO: change the name from label to btn because type (QPushButton)*/
 #frameExcelEtatButtons #btnEtatSumExcelVersement,
 #frameDBEtatButtons #labelEtatSumVerse {
 	font: 12pt "Lucida Casual";
@@ -572,13 +640,10 @@ QTabBar::tab:selected {
 #frameSum_2,
 #frameSum_3
 {
-	background-color: #1d1f1f;
-	border-radius: 15px;
+	background-color: #f3f3f3;
+	border-radius: 7px;
 }
 
-#frameSum QPushButton {
-	min-width: 78px;
-}
 #labelSumAvance,
 #labelSumRetenu,
 #labelSumPrime {
@@ -593,7 +658,14 @@ QTabBar::tab:selected {
 	font: 9pt "Lucida Sans";
 }
 
+
 /* Label */
+#labelDate,
+#labelHijri {
+	/* font: 14pt "Noto Sans Arabic";*/
+    padding: 0 15px;
+}
+
 #extraLabelTitle { color: #1B8755; }
 
 #widgetSalairePage QLabel {

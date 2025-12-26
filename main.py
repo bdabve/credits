@@ -387,7 +387,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         msgs_frame = self.ui.frameMsgs
         width = msgs_frame.maximumWidth()
-        new_width = 0 if close else 900
+        new_width = 0 if close else 1000
         # Create the animation object
         self.close_msgs_animation = QtCore.QPropertyAnimation(msgs_frame, b"maximumWidth")
         self.close_msgs_animation.setDuration(250)  # Duration in milliseconds
@@ -525,14 +525,18 @@ class Credit(QtWidgets.QMainWindow):
             self.server_thread = ServerThread()
             self.server_thread.start()
             self.server_running = True
-            self.ui.labelServerIsOn.setText("✅ Server running at http://127.0.0.1:8000")
+
+            self.show_error_message("✅ Server started successfully.", success=True)
+            self.ui.labelServerIsOn.setText("✅ Server is running...")
             self.close_label_server(close=False)
         else:
             # Stop server
             if self.server_thread and self.server_thread.is_alive():
                 self.server_thread.stop()
-                self.ui.labelServerIsOn.setText("⛔ Server stopping...")
+                self.show_error_message("⛔ Server stopped successfully.", success=False)
+
             self.server_running = False
+            self.close_label_server(close=True)
 
     def close_label_server(self, close=True):
         """
@@ -543,14 +547,14 @@ class Credit(QtWidgets.QMainWindow):
         width = label.maximumWidth()
         new_width = 0 if close else 300
         # Create the animation object
-        self.close_label_server = QtCore.QPropertyAnimation(label, b"maximumWidth")
-        self.close_label_server.setDuration(250)  # Duration in milliseconds
-        self.close_label_server.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-        self.close_label_server.setStartValue(width)
-        self.close_label_server.setEndValue(new_width)
+        self.close_server_label = QtCore.QPropertyAnimation(label, b"maximumWidth")
+        self.close_server_label.setDuration(250)  # Duration in milliseconds
+        self.close_server_label.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+        self.close_server_label.setStartValue(width)
+        self.close_server_label.setEndValue(new_width)
 
         # Start the animation
-        self.close_label_server.start()
+        self.close_server_label.start()
 
     # =======================
     # == Employe & Clients ==
@@ -2161,6 +2165,7 @@ class Credit(QtWidgets.QMainWindow):
                 text = f"### Observation {livreur}\n{observation}"
             self.ui.editObservationByDate.setMarkdown(text)
             self.ui.editObservationByDate.setStyleSheet("padding: 10px;")
+            self.ui.editObservationByDate.setFocus(True)
 
     # === Etat From database ==
     def etat_from_database(self, selected_month):

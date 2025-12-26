@@ -153,15 +153,17 @@ QPushButton::menu-indicator {
 	padding: 0;
 }
 
+/* ====== frameSum (avance, ...) Buttons =========*/
 #frameSum QPushButton, 
 #frameSum_2 QPushButton, 
 #frameSum_3 QPushButton {
-	min-height: 80px;
-	min-width: 66px;
-	max-height: 80px;
-	max-width: 66px;
-	border-radius: 40px;
 	background-color: #25d366;
+	/*border-radius: 40px;*/
+	min-width: 50px;
+	min-height: 50px;
+	max-width: 50px;
+	max-height: 50px;
+	padding: 0px;
 }
 
 QGroupBox .QPushButton {
@@ -194,7 +196,7 @@ QGroupBox .QPushButton:pressed {
 	background-color: transparent; 
 	border: none;  
 	border-radius: 5px; 
-	min-height: 30px;
+	min-height: 40px;
 	min-width: 40px;
 	padding: 0;
 }
@@ -359,23 +361,28 @@ QGroupBox QLineEdit:focus {
 /* ============================
    == QPlainText ==
    ============================ */
-QPlainTextEdit {
+QPlainTextEdit,
+QTextBrowser{
 	background-color: #202020;
 	border-radius: 5px;
 	padding: 10px;
 	selection-color: rgb(255, 255, 255);
 	selection-background-color: rgb(255, 121, 198);
 }
-QPlainTextEdit  QScrollBar:vertical {
+QPlainTextEdit QScrollBar:vertical,
+QTextBrowser QScrollBar:vertical{
     width: 8px;
  }
-QPlainTextEdit  QScrollBar:horizontal {
+QPlainTextEdit QScrollBar:horizontal,
+QTextBrowser QScrollBar:horizontal{
     height: 8px;
  }
-QPlainTextEdit:hover {
+QPlainTextEdit:hover,
+QTextBrowser:hover{
 	border: 2px solid #1a5b25;
 }
-QPlainTextEdit:focus {
+QPlainTextEdit:focus,
+QTextBrowser:focus {
 	border: 2px solid rgb(33, 112, 46);
 }
 
@@ -420,7 +427,8 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
 {
      background: none;
 }
- QScrollBar:vertical {
+/*----- Vertical QScrollBar -----------*/
+QScrollBar:vertical {
 	border: none;
     background: rgb(52, 59, 72);
     width: 8px;
@@ -432,31 +440,33 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
     min-height: 25px;
 	border-radius: 4px
  }
- QScrollBar::add-line:vertical {
-     border: none;
+
+QScrollBar::add-line:vertical {
+    border: none;
     background: rgb(55, 63, 77);
-     height: 20px;
+    height: 20px;
 	border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-     subcontrol-position: bottom;
-     subcontrol-origin: margin;
- }
- QScrollBar::sub-line:vertical {
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
 	border: none;
     background: rgb(55, 63, 77);
-     height: 20px;
+    height: 20px;
 	border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-     subcontrol-position: top;
-     subcontrol-origin: margin;
- }
- QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-     background: none;
- }
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
 
- QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-     background: none;
- }
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
 
 /* ============================
    == QCheckBox ==
@@ -649,7 +659,7 @@ QCommandLinkButton:pressed {
 #labelDate,
 #labelHijri {
 	/* font: 14pt "Noto Sans Arabic";*/
-	padding-right: 10px;
+    padding: 0 15px;
 }
 
 /* ------------------------------
@@ -796,28 +806,28 @@ QTabBar::tab:selected {
 	background: #f17256;
 	color: #fbfbfb;
 	border-radius: 5px;
+    padding: 0;
+
 	max-height: 50px;
 	min-height: 50px;
-	
 }
+/*# TODO: change the name from label to btn because type (QPushButton)*/
 #frameExcelEtatButtons #btnEtatSumExcelVersement,
 #frameDBEtatButtons #labelEtatSumVerse {
 	font: 12pt "Lucida Casual";
 	background: #2c9882;
 	color: #dfeeeb;
 }
+
 /* == Accompte SUMS == */
 #frameSum,
 #frameSum_2,
 #frameSum_3
 {
 	background-color: #1d1f1f;
-	border-radius: 15px;
+	border-radius: 7px;
 }
 
-#frameSum QPushButton {
-	min-width: 78px;
-}
 #labelSumAvance,
 #labelSumRetenu,
 #labelSumPrime {
@@ -835,8 +845,9 @@ QTabBar::tab:selected {
 /* =============
 	== LINES
    ============= */
+
 #line, #line_2, #line_3, #line_4, #line_5, #line_6, #line_7, #line_8, #line_9, #line_10, #line_11, #line_12 {
-	background-color: #4a4a4a;
+    background-color: hsla(0, 0%, 100%, 0.06);
 }
 
 /* ==================

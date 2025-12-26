@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1247</width>
+    <width>1011</width>
     <height>790</height>
    </rect>
   </property>
@@ -313,7 +313,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>44</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="font">
@@ -475,7 +475,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>53</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="font">
@@ -715,8 +715,8 @@
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>30</width>
-                   <height>30</height>
+                   <width>0</width>
+                   <height>0</height>
                   </size>
                  </property>
                  <property name="text">
@@ -747,8 +747,8 @@
                 <widget class="QPushButton" name="extraCloseColumnBtn">
                  <property name="minimumSize">
                   <size>
-                   <width>40</width>
-                   <height>30</height>
+                   <width>0</width>
+                   <height>0</height>
                   </size>
                  </property>
                  <property name="maximumSize">
@@ -1500,8 +1500,8 @@
                            </property>
                            <property name="minimumSize">
                             <size>
-                             <width>52</width>
-                             <height>52</height>
+                             <width>0</width>
+                             <height>0</height>
                             </size>
                            </property>
                            <property name="font">
@@ -1748,7 +1748,7 @@
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>58</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="cursor">
@@ -1854,7 +1854,7 @@
                         <property name="minimumSize">
                          <size>
                           <width>98</width>
-                          <height>54</height>
+                          <height>0</height>
                          </size>
                         </property>
                         <item>
@@ -2224,7 +2224,7 @@
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
-                          <height>58</height>
+                          <height>0</height>
                          </size>
                         </property>
                         <property name="cursor">
@@ -2348,7 +2348,7 @@
               <number>0</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>15</number>
              </property>
              <property name="bottomMargin">
               <number>0</number>
@@ -2482,15 +2482,15 @@
                 <item>
                  <widget class="QPushButton" name="buttonSettings">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>40</width>
-                    <height>30</height>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2523,7 +2523,7 @@
                 <item>
                  <widget class="QPushButton" name="toggleThemeBtn">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -2542,7 +2542,7 @@
                 <item>
                  <widget class="QPushButton" name="plusButtonShurtcut">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -2571,41 +2571,6 @@
                   </property>
                  </widget>
                 </item>
-                <item>
-                 <widget class="QPushButton" name="closeAppBtn">
-                  <property name="minimumSize">
-                   <size>
-                    <width>40</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="toolTip">
-                   <string>Close</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../resources.qrc">
-                    <normaloff>:/icons/images/icons/icon_close.png</normaloff>:/icons/images/icons/icon_close.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>25</width>
-                    <height>25</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
@@ -2620,11 +2585,14 @@
                  <bold>false</bold>
                 </font>
                </property>
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
                <property name="text">
                 <string>milady date</string>
                </property>
                <property name="margin">
-                <number>15</number>
+                <number>0</number>
                </property>
               </widget>
              </item>
@@ -2754,8 +2722,8 @@
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>40</width>
-                       <height>30</height>
+                       <width>0</width>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -2820,7 +2788,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>54</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -2863,7 +2831,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>58</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="cursor">
@@ -2905,7 +2873,7 @@
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>6</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -2971,7 +2939,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3012,7 +2980,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>108</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3050,7 +3018,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>108</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3078,7 +3046,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="text">
@@ -3103,7 +3071,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="layoutDirection">
@@ -3140,8 +3108,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>52</width>
-                           <height>52</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3439,7 +3407,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3477,7 +3445,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3515,7 +3483,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3553,7 +3521,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3595,7 +3563,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="layoutDirection">
@@ -3625,8 +3593,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>52</width>
-                           <height>52</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -3767,7 +3735,7 @@
                             <property name="minimumSize">
                              <size>
                               <width>0</width>
-                              <height>54</height>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="currentIndex">
@@ -3900,11 +3868,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
                       <attribute name="horizontalHeaderMinimumSectionSize">
                        <number>31</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -4048,7 +4016,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>96</width>
-                           <height>54</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="buttonSymbols">
@@ -4072,8 +4040,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>52</width>
-                           <height>52</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -4122,7 +4090,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4163,7 +4131,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4204,7 +4172,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4245,7 +4213,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -4283,7 +4251,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="toolTip">
@@ -4333,8 +4301,8 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>52</width>
-                           <height>52</height>
+                           <width>0</width>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4570,53 +4538,56 @@
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_23">
                        <property name="spacing">
-                        <number>30</number>
+                        <number>12</number>
                        </property>
                        <property name="leftMargin">
-                        <number>10</number>
+                        <number>5</number>
                        </property>
                        <property name="topMargin">
-                        <number>10</number>
+                        <number>5</number>
                        </property>
                        <property name="rightMargin">
-                        <number>10</number>
+                        <number>5</number>
                        </property>
                        <property name="bottomMargin">
-                        <number>10</number>
+                        <number>5</number>
                        </property>
                        <item>
                         <widget class="QFrame" name="frameSum">
                          <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
+                          <enum>QFrame::NoFrame</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
                          <layout class="QHBoxLayout" name="horizontalLayout_28">
+                          <property name="spacing">
+                           <number>10</number>
+                          </property>
                           <property name="topMargin">
-                           <number>15</number>
+                           <number>9</number>
                           </property>
                           <property name="bottomMargin">
-                           <number>15</number>
+                           <number>9</number>
                           </property>
                           <item>
                            <widget class="QPushButton" name="buttonIconSumPrime">
                             <property name="sizePolicy">
-                             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                               <horstretch>0</horstretch>
                               <verstretch>0</verstretch>
                              </sizepolicy>
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>110</width>
-                              <height>88</height>
+                              <width>0</width>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>98</width>
-                              <height>88</height>
+                              <width>16777215</width>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -4633,7 +4604,7 @@
                           <item>
                            <layout class="QVBoxLayout" name="verticalLayout_33">
                             <property name="leftMargin">
-                             <number>15</number>
+                             <number>0</number>
                             </property>
                             <property name="topMargin">
                              <number>0</number>
@@ -4651,7 +4622,7 @@
                             <item>
                              <widget class="QLabel" name="labelTitleSumPrime">
                               <property name="text">
-                               <string>Total des Prime</string>
+                               <string>Sum Prime</string>
                               </property>
                               <property name="alignment">
                                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -4666,36 +4637,39 @@
                        <item>
                         <widget class="QFrame" name="frameSum_2">
                          <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
+                          <enum>QFrame::NoFrame</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
                          <layout class="QHBoxLayout" name="horizontalLayout_27">
+                          <property name="spacing">
+                           <number>10</number>
+                          </property>
                           <property name="topMargin">
-                           <number>15</number>
+                           <number>9</number>
                           </property>
                           <property name="bottomMargin">
-                           <number>15</number>
+                           <number>9</number>
                           </property>
                           <item>
                            <widget class="QPushButton" name="buttonIconSumAvance">
                             <property name="sizePolicy">
-                             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                               <horstretch>0</horstretch>
                               <verstretch>0</verstretch>
                              </sizepolicy>
                             </property>
                             <property name="minimumSize">
                              <size>
-                              <width>98</width>
-                              <height>88</height>
+                              <width>0</width>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>98</width>
-                              <height>88</height>
+                              <width>16777215</width>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -4712,7 +4686,7 @@
                           <item>
                            <layout class="QVBoxLayout" name="verticalLayout_35">
                             <property name="leftMargin">
-                             <number>15</number>
+                             <number>0</number>
                             </property>
                             <property name="topMargin">
                              <number>0</number>
@@ -4730,7 +4704,7 @@
                             <item>
                              <widget class="QLabel" name="labelTitleSumAvance">
                               <property name="text">
-                               <string>Total des Avance</string>
+                               <string>Sum Avance</string>
                               </property>
                               <property name="alignment">
                                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -4745,30 +4719,39 @@
                        <item>
                         <widget class="QFrame" name="frameSum_3">
                          <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
+                          <enum>QFrame::NoFrame</enum>
                          </property>
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
                          <layout class="QHBoxLayout" name="horizontalLayout_26">
+                          <property name="spacing">
+                           <number>10</number>
+                          </property>
                           <property name="topMargin">
-                           <number>15</number>
+                           <number>9</number>
                           </property>
                           <property name="bottomMargin">
-                           <number>15</number>
+                           <number>9</number>
                           </property>
                           <item>
                            <widget class="QPushButton" name="buttonIconSumRetenu">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
                             <property name="minimumSize">
                              <size>
-                              <width>98</width>
-                              <height>88</height>
+                              <width>0</width>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>98</width>
-                              <height>88</height>
+                              <width>16777215</width>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -4785,7 +4768,7 @@
                           <item>
                            <layout class="QVBoxLayout" name="verticalLayout_34">
                             <property name="leftMargin">
-                             <number>10</number>
+                             <number>0</number>
                             </property>
                             <item>
                              <widget class="QLabel" name="labelSumRetenu">
@@ -4800,7 +4783,7 @@
                             <item>
                              <widget class="QLabel" name="labelTitleSumRetenu">
                               <property name="text">
-                               <string>Total des Retenu</string>
+                               <string>Sum Retenu</string>
                               </property>
                               <property name="alignment">
                                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -4818,19 +4801,21 @@
                     <item>
                      <widget class="QGroupBox" name="groupBox">
                       <property name="title">
-                       <string>Filtré</string>
+                       <string/>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_25">
-                       <property name="topMargin">
-                        <number>10</number>
+                       <property name="leftMargin">
+                        <number>5</number>
                        </property>
-                       <item>
-                        <widget class="QLabel" name="labelAccompteEmpID">
-                         <property name="text">
-                          <string/>
-                         </property>
-                        </widget>
-                       </item>
+                       <property name="topMargin">
+                        <number>5</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>5</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>5</number>
+                       </property>
                        <item>
                         <widget class="QPushButton" name="buttonRefreshAccompteTable">
                          <property name="sizePolicy">
@@ -4842,7 +4827,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>50</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4876,7 +4861,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>50</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -4908,6 +4893,13 @@
                         </widget>
                        </item>
                        <item>
+                        <widget class="QLabel" name="labelAccompteEmpID">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
                         <widget class="QLabel" name="labelAccompteEdit">
                          <property name="text">
                           <string/>
@@ -4933,19 +4925,6 @@
                            <number>0</number>
                           </property>
                           <item>
-                           <spacer name="horizontalSpacer_8">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>40</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item>
                            <layout class="QVBoxLayout" name="verticalLayout_20">
                             <property name="spacing">
                              <number>0</number>
@@ -4965,7 +4944,7 @@
                               <property name="minimumSize">
                                <size>
                                 <width>220</width>
-                                <height>54</height>
+                                <height>0</height>
                                </size>
                               </property>
                               <item>
@@ -4997,10 +4976,10 @@
                               <property name="minimumSize">
                                <size>
                                 <width>160</width>
-                                <height>54</height>
+                                <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5050,13 +5029,13 @@
                               <property name="minimumSize">
                                <size>
                                 <width>110</width>
-                                <height>54</height>
+                                <height>0</height>
                                </size>
                               </property>
                               <property name="currentText">
-                               <string>Tous</string>
+                               <string/>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5140,7 +5119,7 @@
                           </size>
                          </property>
                          <property name="text">
-                          <string>TextLabel</string>
+                          <string>Count</string>
                          </property>
                         </widget>
                        </item>
@@ -5288,6 +5267,95 @@
                         <number>9</number>
                        </property>
                        <item>
+                        <widget class="QPushButton" name="buttonNewCharge">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="cursor">
+                          <cursorShape>PointingHandCursor</cursorShape>
+                         </property>
+                         <property name="toolTip">
+                          <string>Ajouter une Charge</string>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true"/>
+                         </property>
+                         <property name="text">
+                          <string>Charge</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../resources.qrc">
+                           <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>28</width>
+                           <height>28</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="buttonDeleteCharge">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="cursor">
+                          <cursorShape>PointingHandCursor</cursorShape>
+                         </property>
+                         <property name="toolTip">
+                          <string>Suprimer</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset>
+                           <normaloff>:/icons/icons/scissors--minus.png</normaloff>:/icons/icons/scissors--minus.png</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_11">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_32">
                          <property name="rightMargin">
                           <number>0</number>
@@ -5304,7 +5372,7 @@
                            <property name="minimumSize">
                             <size>
                              <width>141</width>
-                             <height>54</height>
+                             <height>0</height>
                             </size>
                            </property>
                            <item>
@@ -5375,102 +5443,6 @@
                           </widget>
                          </item>
                         </layout>
-                       </item>
-                       <item>
-                        <widget class="Line" name="line_6">
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonNewCharge">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>58</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Ajouter une Charge</string>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true"/>
-                         </property>
-                         <property name="text">
-                          <string>Charge</string>
-                         </property>
-                         <property name="icon">
-                          <iconset resource="../resources.qrc">
-                           <normaloff>:/icons/images/icons/cil-plus.png</normaloff>:/icons/images/icons/cil-plus.png</iconset>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>28</width>
-                           <height>28</height>
-                          </size>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="buttonDeleteCharge">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>52</width>
-                           <height>52</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="toolTip">
-                          <string>Suprimer</string>
-                         </property>
-                         <property name="text">
-                          <string/>
-                         </property>
-                         <property name="icon">
-                          <iconset>
-                           <normaloff>:/icons/icons/scissors--minus.png</normaloff>:/icons/icons/scissors--minus.png</iconset>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>30</width>
-                           <height>30</height>
-                          </size>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <spacer name="horizontalSpacer_11">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
                        </item>
                       </layout>
                      </widget>
@@ -5712,7 +5684,7 @@
                            <property name="minimumSize">
                             <size>
                              <width>141</width>
-                             <height>54</height>
+                             <height>0</height>
                             </size>
                            </property>
                            <item>
@@ -5815,7 +5787,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>0</width>
-                           <height>58</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <property name="cursor">
@@ -6165,13 +6137,13 @@
                             <property name="minimumSize">
                              <size>
                               <width>0</width>
-                              <height>52</height>
+                              <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
                               <width>16777215</width>
-                              <height>52</height>
+                              <height>16777215</height>
                              </size>
                             </property>
                             <property name="text">
@@ -6297,7 +6269,7 @@
                          <property name="minimumSize">
                           <size>
                            <width>110</width>
-                           <height>54</height>
+                           <height>0</height>
                           </size>
                          </property>
                          <item>
@@ -6719,8 +6691,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>963</width>
-                             <height>377</height>
+                             <width>733</width>
+                             <height>475</height>
                             </rect>
                            </property>
                           </widget>
@@ -6748,6 +6720,16 @@
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1011</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
@@ -6773,7 +6755,6 @@
   <tabstop>buttonSaveVersement</tabstop>
   <tabstop>buttonDeleteVersement</tabstop>
   <tabstop>versementTableWidget</tabstop>
-  <tabstop>closeAppBtn</tabstop>
   <tabstop>buttonCloseMsgsFrame</tabstop>
   <tabstop>buttonNewEmploye</tabstop>
   <tabstop>buttonEmployeNewAvance</tabstop>
