@@ -557,11 +557,11 @@ def recapepdf_to_text(pdf_file):
 
 if __name__ == "__main__":
     # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
-    file = "~/Desktop/ADMIN/VERSEMENT_LIVREUR.xlsx"
+    # file = "~/Desktop/ADMIN/VERSEMENT_LIVREUR.xlsx"
 
-    fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
-    sheet_name = "DECEMBRE"
-    df = load_excel(file, sheet_name)
+    # fields = ["T. COMMANDE", "T.LOGICIEL", "VERSEMENT", "CHARGE", "DIFF", "OBSERVATION"]
+    # sheet_name = "DECEMBRE"
+    # df = load_excel(file, sheet_name)
     # terminal(sheet, fields)
     # print(les_retour)
     # print(sum_retour)
@@ -570,7 +570,7 @@ if __name__ == "__main__":
     # plot_driver_percentages(sheet, fields)
 
     # --- Etat Excel Like DB
-    print(etat_excel_like_db(df))
+    # print(etat_excel_like_db(df))
     # Reminder
     # reminder(file)
     # ---------------------------------------------------
@@ -584,10 +584,10 @@ if __name__ == "__main__":
     # -------------------------------------------------
     # PDF RECAPE MOHAMED
     #
-    # pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-17.pdf"
+    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-27-12-2025.pdf"
     # pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
-    # pdf_recape = recapepdf_to_text(pdf_file_path)
-    # print("Recape Journee Mohamed: ")
-    # print(pdf_recape)
-    # print(f"\n==== Total Article: {len(pdf_recape)} =====")
+    pdf_recape = recapepdf_to_text(pdf_file_path)
+    print("Recape Journee Mohamed: ")
+    print(pdf_recape)
+    print(f"\n==== Total Article: {len(pdf_recape)} =====")
     # --------------------------------------------------
