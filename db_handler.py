@@ -24,7 +24,8 @@ class Database:
         ]
 
         self.operation_fields = [
-            'ope.id', 'strftime("%d-%m-%Y", ope.date)', 'ope.operation', 'emp.nom', 'ope.montant', 'ope.motif'
+            'ope.id', 'strftime("%d-%m-%Y", ope.date)', 'title(ope.operation)',
+            'title(emp.nom)', 'ope.montant', 'ope.motif'
         ]
         self.operation_sum_fileds = [
             "e.nom",
@@ -49,9 +50,10 @@ class Database:
         # Charge
         self.charge_fields = [
             'ch.id', 'strftime("%d-%m-%Y", ch.date_charge)',
-            'emp.nom', 'ch.montant', 'ch.motif'
+            'title(emp.nom)', 'ch.montant', 'ch.motif'
         ]
-        self.payments_fields = ["p.id", "p.date_versement", "c.nom", "p.montant", "p.observation"]
+
+        self.payments_fields = ["p.id", "p.date_versement", "title(c.nom)", "p.montant", "p.observation"]
 
     def connect(self):
         conn = sqlite3.connect(self.db_name)
@@ -421,11 +423,7 @@ class Database:
                 query += " WHERE strftime('%Y-%m', o.date) = ?"
                 params = (month,)
 
-            query += """
-                GROUP BY e.id
-                ORDER BY e.nom ASC;
-            """
-
+            query += " GROUP BY e.id ORDER BY o.date DESC, e.nom ASC"
             cursor.execute(query, params)
             return cursor.fetchall()
 
@@ -459,10 +457,7 @@ class Database:
                 query += " AND strftime('%Y-%m', ope.date) = ?"
                 params.append(selected_month)
 
-            query += " ORDER BY emp.nom"
-            # logger.debug(query)
-            # logger.debug(params)
-
+            query += " ORDER BY ope.date DESC, emp.nom ASC"
             cursor.execute(query, params)
             return cursor.fetchall()
 
@@ -636,7 +631,7 @@ class Database:
         """
         with self.connect() as conn:
             cursor = conn.cursor()
-            cursor.execute(f'SELECT nom FROM {table_name}')
+            cursor.execute(f'SELECT title(nom) FROM {table_name}')
             return [row[0] for row in cursor.fetchall()]
 
     def search_clients(self, search_word):

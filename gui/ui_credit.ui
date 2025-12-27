@@ -819,7 +819,7 @@
                 <enum>QFrame::Raised</enum>
                </property>
                <property name="currentIndex">
-                <number>5</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="AddPersonePage">
                 <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -2873,7 +2873,7 @@
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>1</number>
+                <number>3</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3868,11 +3868,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderMinimumSectionSize">
-                       <number>31</number>
-                      </attribute>
                       <attribute name="horizontalHeaderDefaultSectionSize">
                        <number>150</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderMinimumSectionSize">
+                       <number>31</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -4907,6 +4907,19 @@
                         </widget>
                        </item>
                        <item>
+                        <spacer name="horizontalSpacer_4">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
                         <widget class="QFrame" name="frameToolBar_4">
                          <layout class="QHBoxLayout" name="horizontalLayout_17">
                           <property name="spacing">
@@ -4979,7 +4992,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5033,9 +5046,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string/>
+                               <string>Tous</string>
                               </property>
-                              <property name="placeholderText">
+                              <property name="placeholderText" stdset="0">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -6691,8 +6704,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>733</width>
-                             <height>475</height>
+                             <width>100</width>
+                             <height>30</height>
                             </rect>
                            </property>
                           </widget>
@@ -6719,16 +6732,6 @@
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1011</width>
-     <height>22</height>
-    </rect>
-   </property>
   </widget>
  </widget>
  <customwidgets>

@@ -804,7 +804,7 @@ class Credit(QtWidgets.QMainWindow):
         This Global function works with comboBoxes for date, and operationtype
         """
 
-        employe = self.ui.cbBoxEmployeOperationByName.currentText()
+        employe = self.ui.cbBoxEmployeOperationByName.currentText().lower()
         emp_id = self.db.get_item_id('employes', 'nom', employe)
         self.ui.labelAccompteEmpID.setText(str(emp_id)) if emp_id else self.ui.labelAccompteEmpID.setText('')
         self.ui.labelAccompteEmpID.hide()
@@ -828,7 +828,6 @@ class Credit(QtWidgets.QMainWindow):
         """
         if not emp_id:
             emp_id = self.get_item_id(self.ui.employesTableWidget)
-
             emp_name = utils.get_column_value(
                 self.ui.employesTableWidget,
                 self.ui.employesTableWidget.currentRow(),
@@ -987,7 +986,7 @@ class Credit(QtWidgets.QMainWindow):
 
         emp_id = self.ui.labelAccompteEmpID.text()
         accompte_id = self.get_item_id(self.ui.accompteTableWidget)
-        logger.info(f"Edit Accompte({accompte_id}) at Row({row}), Column({col}), New Text({text})")
+        logger.info(f"Edit Accompte({accompte_id}) EMP_ID({emp_id}) at Row({row}), Column({col}), New Text({text})")
         # Validating
         if col == 1:    # verify date format
             if not utils.is_date(text):
@@ -1012,7 +1011,7 @@ class Credit(QtWidgets.QMainWindow):
             self.show_error_message(f"Erreur: {result['error']}", success=False)
 
         # refresh table
-        self.accompte_by_employee(emp_id, month=month)
+        self.filter_accomptes() if emp_id == '' else self.accompte_by_employee(emp_id, month=month)
 
     def export_accomptes_details(self):
         month_number = self.ui.spinBoxExportAccpmptMonth.value()
@@ -1595,13 +1594,6 @@ class Credit(QtWidgets.QMainWindow):
                 0
             )
 
-        # Insert for a specific Credit
-        # if credit_id:
-        #     reste = utils.get_column_value(
-        #         self.ui.creditTableWidget,
-        #         self.ui.creditTableWidget.currentRow(),
-        #         0
-        #     )
         if current_page == "CreditPage":
             reste = utils.get_column_value(
                 self.ui.creditTableWidget,
@@ -1631,8 +1623,8 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.labelVersementCreditID.setText(str(credit_id))    # .....
         self.ui.labelVersementClientID.setText(str(client_id))
 
-        # for label in (self.ui.labelVersementCreditID, self.ui.labelVersementClientID):
-        #     label.hide()
+        for label in (self.ui.labelVersementCreditID, self.ui.labelVersementClientID):
+            label.hide()
 
         # Show remaining amount (without "DA")
         self.ui.labelAddVersementMontant.setText(utils.format_money(reste))
@@ -1822,7 +1814,7 @@ class Credit(QtWidgets.QMainWindow):
         If `edit` is True, populates the UI fields with the data of the selected charge for editing.
         Otherwise, clears the input fields and sets default values for creating a new charge.
         Args:
-            edit (bool): If True, the UI is set up for editing an existing charge. If False, for creating a new charge.
+            edit (bool): If True, the UI is set up for editing an existing charge. If False, New charge.
         Side Effects:
             - Populates the charge-by combo box with employee names.
             - Sets up the UI fields with either existing charge data or default values.
@@ -1832,14 +1824,14 @@ class Credit(QtWidgets.QMainWindow):
 
         employees = self.db.get_names('employes')
         utils.populate_comboBox(self.ui.cbBoxChargeBy, employees)
+        self.ui.labelChargeEditEnabled.hide()
         if edit:
             logger.info("Editing an existing charge...")
             charge_id = self.get_item_id(self.ui.chargeTableWidget)
             self.ui.labelChargeID.setText(charge_id)
             self.ui.labelChargeID.hide()
             self.ui.labelChargeEditEnabled.setText('True')
-            self.ui.labelChargeEditEnabled.hide()
-
+            # Get charge data from database
             charge = self.db.get_charge_by_id(charge_id)
             if not charge:
                 self.show_error_message("Erreur: Charge introuvable.", success=False)
@@ -1886,9 +1878,9 @@ class Credit(QtWidgets.QMainWindow):
 
         # Get values from UI
         date = self.ui.dateEditChargeDate.date().toPyDate()
-        par = self.ui.cbBoxChargeBy.currentText()
+        par = self.ui.cbBoxChargeBy.currentText().lower()
         montant = self.ui.editChargeMontant.value()
-        motif = self.ui.editChargeMotif.toPlainText()
+        motif = self.ui.editChargeMotif.toPlainText().lower()
 
         # Procedure to database
         editable = self.ui.labelChargeEditEnabled.text()
