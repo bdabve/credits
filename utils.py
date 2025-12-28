@@ -63,7 +63,7 @@ SKYPE_COLOR = "#00AFF0"
 Error_COLOR = "#f77861"
 Success_COLOR = "#44e37b"
 
-# Icons
+
 EMPLOYES_HEADERS = ['ID', 'Nom', 'Phone', 'P. Travaille', 'Salaire', 'Date Embauche', 'Observation']
 OPERATIONS_HEADERS = ['ID', 'Date', "Operation", 'Employé', 'Montant', 'Motif']
 OPERATIONS_SUM_HEADERS = ["Employé", "T. Prime", "T. Retenu", "T. Avance"]
@@ -349,7 +349,7 @@ def setup_main_callbacks(root):
 
     client_table_actions = [
         ('N. Crédit', qta.icon('mdi6.cash-plus', color=NEW_COLOR), lambda: root.ui_create_credit(client=True)),
-        ('L. Crédits', qta.icon('ph.list', color=ICON_COLOR), root.client_credit_list),
+        ('L. Crédits', qta.icon('ph.list-bullets', color=ICON_COLOR), root.client_credit_list),
         ('L. Versement', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.client_versement_list),
         ('A. Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
         ('separator', None, None),
@@ -381,13 +381,12 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     TRASH_ICON = theme_manager.icon('msc.trashcan', "TRASH_COLOR")
     REFRESH_ICON = theme_manager.icon("mdi6.refresh", "ICON_COLOR")
     # EDIT_ICON       = theme_manager.icon('ph.pencil-line-light', "EDIT_COLOR")
-    LIST_ICON = theme_manager.icon('ph.list', "ICON_COLOR")
+    LIST_ICON = theme_manager.icon('ph.list-bullets', "ICON_COLOR")
+    EXCEL_ICON = theme_manager.icon('mdi6.microsoft-excel', "NEW_COLOR")
+    CASH_MINUS = theme_manager.icon('mdi6.cash-minus', "TRASH_COLOR")
+    VERSEMENT_ICON = theme_manager.icon('fa6s.hand-holding-dollar', "NEW_COLOR")
 
     # --- Main Window Buttons
-    # root.ui.closeAppBtn.setIcon(theme_manager.icon("ph.x", "MENU_COLOR"))
-    # root.ui.minimizeAppBtn.setIcon(theme_manager.icon("mdi.window-minimize", "MENU_COLOR"))
-    # root.ui.maximizeRestoreAppBtn.setIcon(theme_manager.icon("mdi.window-restore", "MENU_COLOR"))
-
     root.ui.toggleMenuButton.setIcon(theme_manager.icon("ri.menu-fold-fill", "ICON_COLOR"))
     root.ui.extraCloseColumnBtn.setIcon(theme_manager.icon("ph.x", "ICON_COLOR"))
 
@@ -401,10 +400,10 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonDeleteCredit.setIcon(TRASH_ICON)
 
     # --- Versements
-    root.ui.buttonPaymentsPage.setIcon(theme_manager.icon("fa6s.hand-holding-dollar", "NEW_COLOR"))
+    root.ui.buttonPaymentsPage.setIcon(VERSEMENT_ICON)
     root.ui.buttonDeletePayment.setIcon(TRASH_ICON)
 
-    root.ui.buttonCreditAddVersement.setIcon(theme_manager.icon('fa6s.hand-holding-dollar', "NEW_COLOR"))
+    root.ui.buttonCreditAddVersement.setIcon(VERSEMENT_ICON)
     root.ui.buttonSaveVersement.setIcon(SAVE_ICON)
     root.ui.buttonRegleCredit.setIcon(qta.icon('mdi6.cash-check', color=NEW_COLOR))
     root.ui.buttonDeleteVersement.setIcon(TRASH_ICON)
@@ -415,7 +414,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonClientNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonClientCreditList.setIcon(LIST_ICON)
     root.ui.buttonDeleteClient.setIcon(TRASH_ICON)
-    root.ui.buttonClientSituation.setIcon(theme_manager.icon('ri.file-excel-2-fill', "NEW_COLOR"))
+    root.ui.buttonClientSituation.setIcon(EXCEL_ICON)
 
     # --- Employés
     root.ui.buttonEmployesPage.setIcon(theme_manager.icon('mdi.account-hard-hat', "MENU_COLOR"))
@@ -426,15 +425,15 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonAccomptePage.setIcon(theme_manager.icon('fa6s.file-invoice-dollar', "MENU_COLOR"))
     root.ui.buttonEmployeNewAvance.setIcon(CASH_PLUS_ICON)
     root.ui.buttonEmployeNewPrime.setIcon(CASH_PLUS_ICON)
-    root.ui.buttonEmployeNewRetenu.setIcon(qta.icon('mdi6.cash-minus', color=TRASH_COLOR))
+    root.ui.buttonEmployeNewRetenu.setIcon(CASH_MINUS)
     root.ui.buttonCalculateSalaire.setIcon(theme_manager.icon('mdi.calculator-variant', "ICON_COLOR"))
     root.ui.buttonEmployeSaveOperation.setIcon(SAVE_ICON)
     root.ui.buttonRefreshAccompteTable.setIcon(REFRESH_ICON)
     root.ui.buttonDeleteAccompte.setIcon(TRASH_ICON)
-    root.ui.buttonExportAccomptDetails.setIcon(theme_manager.icon('mdi6.microsoft-excel', "NEW_COLOR"))
+    root.ui.buttonExportAccomptDetails.setIcon(EXCEL_ICON)
 
     # --- Charges
-    root.ui.buttonChargePage.setIcon(theme_manager.icon('mdi6.cash-minus', "EDIT_COLOR"))
+    root.ui.buttonChargePage.setIcon(CASH_MINUS)
     root.ui.buttonNewCharge.setIcon(PLUS_ICON)
     root.ui.buttonSaveCharge.setIcon(SAVE_ICON)
     root.ui.buttonDeleteCharge.setIcon(TRASH_ICON)
@@ -442,7 +441,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     # --- Etats
     # ph.chart-line-up
     root.ui.buttonEtatPage.setIcon(theme_manager.icon('ph.presentation-chart-thin', "ICON_COLOR"))
-    root.ui.buttonOpenEtatExcelFile.setIcon(theme_manager.icon('mdi6.microsoft-excel', "NEW_COLOR"))
+    root.ui.buttonOpenEtatExcelFile.setIcon(EXCEL_ICON)
 
     # --- Standalone Icons
     root.ui.buttonIconSumPrime.setIcon(qta.icon('fa5s.comment-dollar', color=ICON_COLOR))

@@ -213,37 +213,6 @@ class Credit(QtWidgets.QMainWindow):
         self.refresh_icons()
         utils.refresh_main_icons(self, self.theme_manager)
 
-    # -- Window UPBAR Controls --
-    # def mousePressEvent(self, event):
-    #     """
-    #     Handles the mouse press event by storing the global position of the mouse click.
-
-    #     Args:
-    #         event (QMouseEvent): The mouse event containing information about the click.
-    #     """
-    #     self.clickPosition = event.globalPos()
-
-    # def move_window(self, e):
-    #     """Move the window from upBar"""
-    #     if not self.isMaximized():
-    #         if e.buttons() == QtCore.Qt.LeftButton:
-    #             self.move(self.pos() + e.globalPos() - self.clickPosition)
-    #             self.clickPosition = e.globalPos()
-    #             e.accept()
-
-    # def toggle_maximize_restore(self):
-        # icon = QtGui.QIcon()
-        # if self.isMaximized():
-        #     icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_maximize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #     self.ui.maximizeRestoreAppBtn.setIcon(icon)
-        #     self.ui.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
-        #     self.showNormal()
-        # else:
-        #     icon.addPixmap(QtGui.QPixmap(":/icons/images/icons/icon_restore.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #     self.ui.maximizeRestoreAppBtn.setIcon(icon)
-        #     self.ui.maximizeRestoreAppBtn.setIconSize(QtCore.QSize(20, 20))
-        #     self.showMaximized()
-
     # ===================================
     # -- Toggle Left Menu and Left Box ==
     # ===================================
@@ -781,6 +750,7 @@ class Credit(QtWidgets.QMainWindow):
         for cbbox in cbboxes: cbbox.blockSignals(True)
 
         if headers_type == 'all':
+            column_sizes = [300, 300, 300, 300]        # [EMP, T.PRIME, T.RETENU, T.AVANCE]
             # setup the comboBoxes
             self.populate_cbBoxEmployeAccompte()
             self.ui.cbBoxEmployeOperationByName.setCurrentText('Tous')
@@ -788,6 +758,7 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxEmployeOperationByType.setCurrentText('Tous')
             self.ui.labelAccompteEdit.setText('False')  # Disable Edit or Delete
         elif headers_type == 'one':
+            column_sizes = [100, 220, 220, 320, 250]        # [ID, DATE, OPE, EMP, MONTANT]
             self.ui.cbBoxEmployeOperationByName.setCurrentText(kwargs.get("employee"))
             self.ui.cbBoxEmployeOperationByDate.setCurrentText(kwargs.get("month"))
             self.ui.labelAccompteEdit.setText('True')   # Enable Edit or Delete
@@ -796,7 +767,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # Display Result in QTableWidget
         utils.populate_table_widget(self.ui.accompteTableWidget, rows, headers)
-        utils.set_table_column_sizes(self.ui.accompteTableWidget, 220, 170, 170, 170, 200)
+        utils.set_table_column_sizes(self.ui.accompteTableWidget, *column_sizes)
         self.ui.labelAccompteCount.setText(f"Total: {len(rows)}")
 
     def filter_accomptes(self):
@@ -811,7 +782,7 @@ class Credit(QtWidgets.QMainWindow):
 
         operation = self.ui.cbBoxEmployeOperationByType.currentText().lower()
         month_text = self.ui.cbBoxEmployeOperationByDate.currentText()
-        month = f"{self.CURRENT_YEAR}-{month_text}" if month_text != 'Tous' else 'Tous'
+        month = f"{self.CURRENT_YEAR}-{month_text}" if month_text != 'tous' else 'tous'
 
         logger.info(f"Filter Operation: Operation({operation}), Month({month}), Employee({employe})")
 

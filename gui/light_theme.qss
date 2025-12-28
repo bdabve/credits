@@ -115,33 +115,34 @@ QPushButton:!enabled {
 }
 
 /* === Buttons Just Icons == */
-#buttonRefreshClientsTable,
+#buttonRefreshTableWidget,
+
+#buttonClientActions,
 #buttonDeleteClient,
 
-#buttonRefreshEmpolyeTable,
+#buttonCreditActions,
+#buttonDeleteCredit,
+
+#buttonDeletePayment,
+
+#buttonExportAccomptDetails,
 #buttonDeleteEmploye,
 
-#buttonRefreshEmpolyeOperationTable,
-#buttonDeleteEmployeOperation,
-#buttonExportAccomptDetails,
+#buttonRefreshAccompteTable,
+#buttonDeleteAccompte,
 
-#buttonRefreshCreditTable,
-#buttonRefreshChargeTable,
+#buttonDeleteCharge
 
-#buttonDeleteCredit,
-#buttonDeleteVersement,
-#buttonDeleteCharge,
-#buttonRefreshChargeTable
 {
-	min-width: 50;
-	min-height: 50;
-	padding: 0;
+	min-width: 50px;
+	min-height: 50px;
+	padding: 3px 3px;
 }
 
 /* ====== frameSum (avance, ...) Buttons =========*/
-#frameSum .QPushButton, 
-#frameSum_2 .QPushButton, 
-#frameSum_3 .QPushButton {	
+#frameSum .QPushButton,
+#frameSum_2 .QPushButton,
+#frameSum_3 .QPushButton {
 	background-color: #25d366;
 	min-width: 50px;
 	min-height: 50px;
@@ -154,9 +155,9 @@ QPushButton:!enabled {
   == Btn Close ExtraLeftContent ==
 */
 #extraIconPlus {
-	background-color: transparent; 
-	border: none;  
-	border-radius: 5px; 
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
 	min-height: 30px;
 	min-width: 30px;
 	padding: 0;
@@ -165,10 +166,10 @@ QPushButton:!enabled {
 #rightButtons QPushButton,
 #extraCloseColumnBtn,
 #buttonCloseMsgsFrame
- { 
-	background-color: transparent; 
-	border: none;  
-	border-radius: 5px; 
+ {
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
 	min-height: 40px;
 	min-width: 40px;
 	padding: 0;
@@ -176,18 +177,18 @@ QPushButton:!enabled {
 
 /* == Hover == */
 #rightButtons QPushButton:hover,
-#extraCloseColumnBtn:hover  { 
-	background-color: #FFFFFF; 
-	border-style: solid; 
+#extraCloseColumnBtn:hover  {
+	background-color: #FFFFFF;
+	border-style: solid;
 	border-radius: 4px;
 }
 
 /* == Pressed == */
 #rightButtons QPushButton:pressed,
-#extraCloseColumnBtn:pressed { 
-	background-color: transparent; 
-	border-style: solid; 
-	border-radius: 4px; 
+#extraCloseColumnBtn:pressed {
+	background-color: transparent;
+	border-style: solid;
+	border-radius: 4px;
 }
 
 #rightButtons #closeAppBtn:hover,
@@ -196,7 +197,7 @@ QPushButton:!enabled {
 }
 
 /* == LEFT MENU Buttons == */
-#topMenu .QPushButton {	
+#topMenu .QPushButton {
 	font: 13pt "Lucida Casual";
 	border-radius: 7px;
 	background-color: transparent;
@@ -209,14 +210,14 @@ QPushButton:!enabled {
 }
 
 /* == Pressed == */
-#topMenu .QPushButton:pressed {	
+#topMenu .QPushButton:pressed {
 	background-color: transparent;
 	color: #1B8755;
 }
 
 /* == Checked == */
 #topMenu .QPushButton:checked {
-	/*background-color: rgb(40, 44, 52);*/	
+	/*background-color: rgb(40, 44, 52);*/
 	background-color: #ffffff;
 	color: #1B8755;
 }
@@ -289,7 +290,7 @@ QDoubleSpinBox:focus,
 QDateEdit:focus,
 QPlainTextEdit:focus,
 QTextBrowser:focus{
-    border: 2px solid #388bfd;    
+    border: 2px solid #388bfd;
 }
 
 /* ==================
@@ -423,19 +424,19 @@ QComboBox {
 QComboBox::drop-down {
 	subcontrol-origin: padding;
 	subcontrol-position: top right;
-	width: 25px; 
+	width: 25px;
 	border-left-width: 3px;
 	border-left-color: #D9D9D9;
 	border-left-style: solid;
 	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;	
+	border-bottom-right-radius: 3px;
 	background-image: url(:/icons/images/icons/cil-arrow-bottom.png);
 	background-position: center;
-	background-repeat: no-reperat;    
+	background-repeat: no-reperat;
  }
 
 QComboBox:hover {
-    border: 2px solid #a0c4ff;    
+    border: 2px solid #a0c4ff;
 }
 
 QComboBox QAbstractItemView {
@@ -545,7 +546,7 @@ QTabBar::tab:selected {
     border-bottom: 0;
 }
 
-#extraTopBg{	
+#extraTopBg{
 	border: 2px solid #D9D9D9;
     border-top: 0;
     border-left: 0;
@@ -571,8 +572,8 @@ QTabBar::tab:selected {
 	== QLabels
 ===============================*/
 /* == Etat Labels ==*/
-#etatLabelTitle, #etatLabelTitle_2, #etatLabelTitle_3 {		
-	color: rgb(248, 206, 150);	
+#etatLabelTitle, #etatLabelTitle_2, #etatLabelTitle_3 {
+	color: rgb(248, 206, 150);
 	font: 75 15pt "Lucida Sans";
 }
 

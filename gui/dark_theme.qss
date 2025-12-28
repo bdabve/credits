@@ -15,7 +15,7 @@ checkedbutton: #454545
 BorderColor:#303030;
 */
 
-* {	
+* {
 	font: 13pt "Lucida Casual";
 }
 
@@ -82,7 +82,7 @@ QToolTip {
 	border: 1px solid #696969;
 	text-align: left;
 	margin: 0px;
-	padding: 3px;	
+	padding: 3px;
 	font: 9pt "Lucida Casual";
 	border-radius: 5px;
 }
@@ -120,7 +120,7 @@ QPushButton:hover {
 	background-color: #383838;
 }
 /* == Pressed == */
-QPushButton:pressed {	
+QPushButton:pressed {
 	background-color: transparent;
 	border: 2px solid #303030;
 }
@@ -135,27 +135,33 @@ QPushButton::menu-indicator {
 	image: none;
 }
 
-/* === Buttons Just Icons == */
-#buttonRefreshTableWidget,		/* One button refresh table widgets */
-#buttonDeleteClient,
+#buttonRefreshTableWidget,
+
 #buttonClientActions,
-#buttonDeleteEmploye,
-#buttonDeleteEmployeOperation,
-#buttonExportAccomptDetails,
-#buttonDeleteCredit,
+#buttonDeleteClient,
+
 #buttonCreditActions,
-#buttonDeleteVersement,
-#buttonDeleteCharge,
-#buttonDeletePayment
+#buttonDeleteCredit,
+
+#buttonDeletePayment,
+
+#buttonExportAccomptDetails,
+#buttonDeleteEmploye,
+
+#buttonRefreshAccompteTable,
+#buttonDeleteAccompte,
+
+#buttonDeleteCharge
+
 {
-	min-width: 58;
-	min-height: 58;
-	padding: 0;
+	min-width: 50px;
+	min-height: 50px;
+	padding: 3px 3px;
 }
 
 /* ====== frameSum (avance, ...) Buttons =========*/
-#frameSum QPushButton, 
-#frameSum_2 QPushButton, 
+#frameSum QPushButton,
+#frameSum_2 QPushButton,
 #frameSum_3 QPushButton {
 	background-color: #25d366;
 	/*border-radius: 40px;*/
@@ -169,10 +175,10 @@ QPushButton::menu-indicator {
 QGroupBox .QPushButton {
 	background: rgba(56, 56, 56, 109);
 }
-QGroupBox .QPushButton:hover {		
+QGroupBox .QPushButton:hover {
 	background-color: rgba(56, 56, 56, 167);
 }
-QGroupBox .QPushButton:pressed {	
+QGroupBox .QPushButton:pressed {
 	background-color: transparent;
 }
 
@@ -181,9 +187,9 @@ QGroupBox .QPushButton:pressed {
   == Btn Close ExtraLeftContent ==
 */
 #extraIconPlus {
-	background-color: transparent; 
-	border: none;  
-	border-radius: 5px; 
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
 	min-height: 30px;
 	min-width: 30px;
 	padding: 0;
@@ -192,10 +198,10 @@ QGroupBox .QPushButton:pressed {
 #rightButtons QPushButton,
 #extraCloseColumnBtn,
 #buttonCloseMsgsFrame
- { 
-	background-color: transparent; 
-	border: none;  
-	border-radius: 5px; 
+ {
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
 	min-height: 40px;
 	min-width: 40px;
 	padding: 0;
@@ -203,18 +209,18 @@ QGroupBox .QPushButton:pressed {
 
 /* == Hover == */
 #rightButtons QPushButton:hover,
-#extraCloseColumnBtn:hover  { 
-	background-color: #3d3d3d; 
-	border-style: solid; 
+#extraCloseColumnBtn:hover  {
+	background-color: #3d3d3d;
+	border-style: solid;
 	border-radius: 4px;
 }
 
 /* == Pressed == */
 #rightButtons QPushButton:pressed,
-#extraCloseColumnBtn:pressed { 
-	background-color: rgb(23, 26, 30); 
-	border-style: solid; 
-	border-radius: 4px; 
+#extraCloseColumnBtn:pressed {
+	background-color: rgb(23, 26, 30);
+	border-style: solid;
+	border-radius: 4px;
 }
 
 #rightButtons #closeAppBtn:hover,
@@ -223,7 +229,7 @@ QGroupBox .QPushButton:pressed {
 }
 
 /* == LEFT MENU Buttons == */
-#topMenu .QPushButton {	
+#topMenu .QPushButton {
 	font: 13pt "Lucida Casual";
 	border-radius: 7px;
 	background-color: transparent;
@@ -236,7 +242,7 @@ QGroupBox .QPushButton:pressed {
 }
 
 /* == Pressed == */
-#topMenu .QPushButton:pressed {	
+#topMenu .QPushButton:pressed {
 	background-color: transparent;
 	color: rgb(255, 255, 255);
 }
@@ -244,7 +250,7 @@ QGroupBox .QPushButton:pressed {
 /* == Checked == */
 #topMenu .QPushButton:checked,
 #buttonPaiementsEtatJournalier:checked {
-	/*background-color: rgb(40, 44, 52);*/	
+	/*background-color: rgb(40, 44, 52);*/
 	background-color: #454545;
 	color: rgb(255, 255, 255);
 }
@@ -267,12 +273,12 @@ QGroupBox .QPushButton:pressed {
 /* ==================
 	== QTableWidget
    ================== */
-QTableWidget {	
+QTableWidget {
 	background-color: transparent;
 	padding: 5px 0px;
 	border-radius: 5px;
 	gridline-color: rgb(52, 59, 72);
-	border-bottom: 1px solid rgb(44, 49, 60);	
+	border-bottom: 1px solid rgb(44, 49, 60);
 }
 QTableWidget::item{
 	border-color: #303030;
@@ -291,7 +297,7 @@ QHeaderView::section{
     border-bottom: 1px solid rgb(44, 49, 60);
     border-right: 1px solid #303030;
 }
-QTableWidget::horizontalHeader {	
+QTableWidget::horizontalHeader {
 	background-color: rgb(33, 37, 43);
 }
 QHeaderView::section:horizontal
@@ -303,9 +309,9 @@ QHeaderView::section:horizontal
 /* ==================================================
 	== QLineEdit, QSpinBox, QDoubleSpinbox, QDateEdit
    ================================================== */
-QLineEdit, 
-QSpinBox, 
-QDoubleSpinBox, 
+QLineEdit,
+QSpinBox,
+QDoubleSpinBox,
 QDateEdit
 {
 	background-color: #202020;
@@ -435,7 +441,7 @@ QScrollBar:vertical {
     margin: 21px 0 21px 0;
 	border-radius: 0px;
  }
- QScrollBar::handle:vertical {	
+ QScrollBar::handle:vertical {
 	background: #1dd1a1;
     min-height: 25px;
 	border-radius: 4px
@@ -483,7 +489,7 @@ QCheckBox::indicator:hover {
 }
 QCheckBox::indicator:checked {
     background: 3px solid rgb(52, 59, 72);
-	border: 3px solid rgb(52, 59, 72);	
+	border: 3px solid rgb(52, 59, 72);
 	background-image: url(:/icons/images/icons/cil-check-alt.png);
 }
 
@@ -502,7 +508,7 @@ QRadioButton::indicator:hover {
 }
 QRadioButton::indicator:checked {
     background: 3px solid rgb(94, 106, 130);
-	border: 3px solid rgb(52, 59, 72);	
+	border: 3px solid rgb(52, 59, 72);
 }
 
 /* ============================
@@ -522,18 +528,18 @@ QComboBox:hover{
 QComboBox::drop-down {
 	subcontrol-origin: padding;
 	subcontrol-position: top right;
-	width: 25px; 
+	width: 25px;
 	border-left-width: 3px;
 	border-left-color: #303030;
 	border-left-style: solid;
 	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;	
+	border-bottom-right-radius: 3px;
 	background-image: url(:/icons/images/icons/cil-arrow-bottom.png);
 	background-position: center;
-	background-repeat: no-reperat;    
+	background-repeat: no-reperat;
  }
 QComboBox QAbstractItemView {
-	color: #1dd1a1;	
+	color: #1dd1a1;
 	background-color: #18191c;
 	border: 1px solid hsla(0, 0%, 100%, 0.3);
 	padding: 8px 10px;
@@ -597,17 +603,17 @@ QSlider::handle:vertical:pressed {
 /* ============================
    == QCommandLinkButton ==
    ============================ */
-QCommandLinkButton {	
+QCommandLinkButton {
 	color: rgb(255, 121, 198);
 	border-radius: 5px;
 	padding: 5px;
 	color: rgb(255, 170, 255);
 }
-QCommandLinkButton:hover {	
+QCommandLinkButton:hover {
 	color: rgb(255, 170, 255);
 	background-color: rgb(44, 49, 60);
 }
-QCommandLinkButton:pressed {	
+QCommandLinkButton:pressed {
 	color: rgb(189, 147, 249);
 	background-color: rgb(52, 58, 71);
 }
@@ -720,7 +726,7 @@ QTabBar::tab:selected {
 
 #etatParLivreurTableWidget QHeaderView:section,
 #tabeDetailsJournee QHeaderView:section,
-#etatJournalierTableWidget QHeaderView:section {	
+#etatJournalierTableWidget QHeaderView:section {
 	background-color: rgb(60, 62, 65);
 }
 /* ============================
@@ -759,8 +765,8 @@ QTabBar::tab:selected {
 ===============================*/
 
 /* == Etat Labels ==*/
-#etatLabelTitle, #etatLabelTitle_2, #etatLabelTitle_3 {		
-	color: rgb(248, 206, 150);	
+#etatLabelTitle, #etatLabelTitle_2, #etatLabelTitle_3 {
+	color: rgb(248, 206, 150);
 	font: 75 15pt "Lucida Sans";
 }
 /* == SUM Labels ==*/
@@ -865,10 +871,10 @@ QTabBar::tab:selected {
 #AddEmpOperationPage,
 #salairePage,
 #addChargePage
-{	
+{
 	background-color: #272727;
 }
-#extraTopBg{	
+#extraTopBg{
 	background-color: #202020;
 }
 
@@ -910,7 +916,7 @@ background-position: left center;
 #extraTopMenu .QPushButton:hover {
 	background-color: rgb(40, 44, 52);
 }
-#extraTopMenu .QPushButton:pressed {	
+#extraTopMenu .QPushButton:pressed {
 	background-color: rgb(189, 147, 249);
 	color: rgb(255, 255, 255);
 }
@@ -918,7 +924,7 @@ background-position: left center;
 /* =================
    == UPBAR
    ================= */
-#contentTopBg{	
+#contentTopBg{
 	background-color: #202020;
 }
 
@@ -942,7 +948,7 @@ background-position: left center;
 	background: transparent;
 	border: none;
 	border-radius: 0;
-	border-top-right-radius: 5px;	
+	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
 #frameMsgs QPushButton:hover {

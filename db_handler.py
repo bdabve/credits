@@ -444,7 +444,7 @@ class Database:
             """
             params = []
 
-            if employe != 'Tous':
+            if employe != 'tous':
                 emp_id = self.get_item_id('employes', 'nom', employe)
                 query += " AND emp.id = ?"
                 params.append(emp_id)
@@ -453,7 +453,7 @@ class Database:
                 query += " AND ope.operation = ?"
                 params.append(selected_operation)
 
-            if selected_month != 'Tous':
+            if selected_month != 'tous':
                 query += " AND strftime('%Y-%m', ope.date) = ?"
                 params.append(selected_month)
 
