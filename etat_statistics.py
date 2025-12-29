@@ -486,6 +486,7 @@ def categorize(des):
         if d.startswith("linge 3l plus"): return "Linge 3L Plus"
         elif d.startswith("linge 3l noir"): return "Linge 3L Noir"
         elif d.startswith("linge 3l bebe"): return "Linge 3L Bebe"
+        elif d.startswith("linge 3l anti - bacterien"): return "Linge 3L Anti-Bacterien"
         else: return "Linge 3L"
     # --- Linge 4.5L ---
     elif d.startswith("linge 4.5l"): return "Linge 4.5L"
@@ -517,12 +518,15 @@ def recapepdf_to_text(pdf_file):
 
     # ---- 1. Extract all tables from all pages ----
     tables = []
-
-    with pdfplumber.open(pdf_file) as pdf:
-        for page in pdf.pages:
-            for t in page.extract_tables():
-                df = pd.DataFrame(t)
-                tables.append(df)
+    try:
+        with pdfplumber.open(pdf_file) as pdf:
+            for page in pdf.pages:
+                for t in page.extract_tables():
+                    df = pd.DataFrame(t)
+                    tables.append(df)
+    except FileNotFoundError:
+        logger.error(f"PDF File not found: {pdf_file}")
+        return None
 
     # ---- 2. Clean header for each table ----
     clean_tables = []
@@ -584,10 +588,11 @@ if __name__ == "__main__":
     # -------------------------------------------------
     # PDF RECAPE MOHAMED
     #
-    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-27-12-2025.pdf"
+    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-29-12-2025.pdf"
     # pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
     pdf_recape = recapepdf_to_text(pdf_file_path)
-    print("Recape Journee Mohamed: ")
-    print(pdf_recape)
-    print(f"\n==== Total Article: {len(pdf_recape)} =====")
-    # --------------------------------------------------
+    if pdf_recape is not None:
+        print("Recape Journee Mohamed: ")
+        print(pdf_recape)
+        print(f"\n==== Total Article: {len(pdf_recape)} =====")
+        # --------------------------------------------------

@@ -175,6 +175,9 @@ def etat_prevendeur(username, password, dated, datef, camion, headless=False):
     This is the main function
     :username: username
     :password: password
+    :dated: date debut
+    :datef: date de fin
+    :camion: camion du livreur
     """
     driver = create_driver(headless=headless)
     filename = f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_{camion}_{dated}.xlsx"
@@ -202,11 +205,10 @@ if __name__ == '__main__':
     username = input("[:] Triz Username: ")
     passwd = getpass("[:] Triz Password: ")
     print()
+    # camion = (WALID="8442-0000005", MOHAMED = "8442-0000006", FETHI = "8442-0000007", MM = "8442-0000010")
     camion = input("[:] Camion WALID(8442-0000005), MOHAMED(8442-0000006), FETHI(8442-0000007), MM(8442-0000010): ")
     #
-    date_debut = "01-11-2025"
-    date_fin = "30-11-2025"
-    # camion = (WALID="8442-0000005", MOHAMED = "8442-0000006", FETHI = "8442-0000007", MM = "8442-0000010")
-    # file_path = "/home/dabve/Desktop/etat_prevendeur_novembre.xlsx"
-    # file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_novembre.xlsx"
+    date_debut = input("[:] Date Début (dd-mm-yyyy): ")
+    date_fin = input("[:] Date Fin (dd-mm-yyyy): ")
+    # file_path = input("[:] Excel File Path (e.g., C:\\path\\to\\file.xlsx): ")
     etat_prevendeur(username, passwd, date_debut, date_fin, camion)
