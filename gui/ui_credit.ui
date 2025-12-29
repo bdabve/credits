@@ -920,41 +920,58 @@
                         </widget>
                        </item>
                        <item row="2" column="0">
+                        <widget class="QLabel" name="labelNewPersonDNaissance">
+                         <property name="text">
+                          <string>D. Naissance</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QDateEdit" name="dateEditNewPersonDNaissance">
+                         <property name="buttonSymbols">
+                          <enum>QAbstractSpinBox::NoButtons</enum>
+                         </property>
+                         <property name="calendarPopup">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="0">
                         <widget class="QLabel" name="labelNewPersonJobText">
                          <property name="text">
                           <string>P. Travaille</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="1">
+                       <item row="3" column="1">
                         <widget class="QLineEdit" name="editNewPersonJob">
                          <property name="placeholderText">
                           <string>Poste de travaille</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="3" column="0">
+                       <item row="5" column="0">
                         <widget class="QLabel" name="label_10">
                          <property name="text">
                           <string>Téléphone</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="3" column="1">
+                       <item row="5" column="1">
                         <widget class="QLineEdit" name="editNewPersonPhone">
                          <property name="placeholderText">
                           <string>Numéro Portable</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="0">
+                       <item row="6" column="0">
                         <widget class="QLabel" name="labelNewPersonSalaire">
                          <property name="text">
                           <string>Salaire</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="1">
+                       <item row="6" column="1">
                         <widget class="QDoubleSpinBox" name="editNewPersonSalaire">
                          <property name="buttonSymbols">
                           <enum>QAbstractSpinBox::NoButtons</enum>
@@ -964,21 +981,38 @@
                          </property>
                         </widget>
                        </item>
-                       <item row="6" column="0">
+                       <item row="7" column="0">
+                        <widget class="QLabel" name="labelNewPersonDateEmbauche">
+                         <property name="text">
+                          <string>D. Embauche</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="1">
+                        <widget class="QDateEdit" name="editNewPersonDateEmbauche">
+                         <property name="toolTip">
+                          <string>Date D'Embauche</string>
+                         </property>
+                         <property name="buttonSymbols">
+                          <enum>QAbstractSpinBox::NoButtons</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="0">
                         <widget class="QLabel" name="labelNewPersonObs">
                          <property name="text">
                           <string>Observation</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="6" column="1">
+                       <item row="8" column="1">
                         <widget class="QPlainTextEdit" name="editNewPersonObs">
                          <property name="placeholderText">
                           <string>Observation</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="7" column="1">
+                       <item row="9" column="1">
                         <widget class="QPushButton" name="buttonSaveNewPerson">
                          <property name="text">
                           <string>Enregistrer</string>
@@ -991,22 +1025,15 @@
                          </property>
                         </widget>
                        </item>
-                       <item row="5" column="1">
-                        <widget class="QDateEdit" name="editNewPersonDateEmbauche">
-                         <property name="toolTip">
-                          <string>Date D'Embauche</string>
-                         </property>
-                         <property name="buttonSymbols">
-                          <enum>QAbstractSpinBox::NoButtons</enum>
+                       <item row="4" column="0">
+                        <widget class="QLabel" name="labelNewPersonCommune">
+                         <property name="text">
+                          <string>Commune</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="5" column="0">
-                        <widget class="QLabel" name="labelNewPersonDateEmbauche">
-                         <property name="text">
-                          <string>D. Embauche</string>
-                         </property>
-                        </widget>
+                       <item row="4" column="1">
+                        <widget class="QComboBox" name="cbBoxNewPersonCommune"/>
                        </item>
                       </layout>
                      </widget>
@@ -2873,7 +2900,7 @@
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>5</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="ClientsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -3151,6 +3178,25 @@
                           </size>
                          </property>
                         </spacer>
+                       </item>
+                       <item>
+                        <widget class="QComboBox" name="cbBoxClientCreditByStatus">
+                         <item>
+                          <property name="text">
+                           <string>Tous</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Terminé</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>En Cours</string>
+                          </property>
+                         </item>
+                        </widget>
                        </item>
                       </layout>
                      </widget>
@@ -3874,11 +3920,11 @@
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>150</number>
-                      </attribute>
                       <attribute name="horizontalHeaderMinimumSectionSize">
                        <number>31</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
                       </attribute>
                       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                        <bool>true</bool>
@@ -4998,7 +5044,7 @@
                                 <height>0</height>
                                </size>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>
@@ -5052,9 +5098,9 @@
                                </size>
                               </property>
                               <property name="currentText">
-                               <string>Tous</string>
+                               <string/>
                               </property>
-                              <property name="placeholderText" stdset="0">
+                              <property name="placeholderText">
                                <string>Tous</string>
                               </property>
                               <item>

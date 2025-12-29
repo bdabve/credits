@@ -608,7 +608,7 @@ class Database:
         except sqlite3.Error as err:
             return {'success': False, 'error': str(err)}
 
-    def dump_clients(self):
+    def dump_clients(self, status):
         """
         Retrieve all personnes from the database.
         """
@@ -618,10 +618,18 @@ class Database:
                 SELECT {", ".join(self.clients_fields)}
                 FROM clients c
                 LEFT JOIN credit cr ON c.id = cr.client_id
-                GROUP BY c.id
-                ORDER BY c.nom
             """
-            cursor.execute(query)
+            conditions = []
+            params = []
+            if status != "tous":
+                conditions.append("cr.statut = ?")
+                params.append(status)
+
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+            query += " GROUP BY c.id ORDER BY c.nom"
+
+            cursor.execute(query, params)
             return cursor.fetchall()
 
     def get_names(self, table_name):
@@ -713,10 +721,7 @@ class Database:
             if conditions:
                 query += " WHERE " + " AND ".join(conditions)
 
-            query += """
-                GROUP BY cr.id
-                ORDER BY cr.date_credit DESC, c.nom DESC
-            """
+            query += " GROUP BY cr.id ORDER BY cr.date_credit DESC, c.nom DESC"
             # Execution
             cursor.execute(query, params)
             return cursor.fetchall()

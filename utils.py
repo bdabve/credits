@@ -279,6 +279,7 @@ def setup_main_callbacks(root):
     root.ui.etatJournalierDetailsTableWidget.itemSelectionChanged.connect(root.etat_observation)
     # === ComboBoxes ===
     cbBoxes = [
+        (root.ui.cbBoxClientCreditByStatus, lambda: root.display_clients()),
         (root.ui.cbBoxCreditByStatus, lambda: root.filter_credit_by_status_commune(filter="status")),
         (root.ui.cbBoxCreditByCommune, lambda: root.filter_credit_by_status_commune(filter="commune")),
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),

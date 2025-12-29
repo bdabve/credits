@@ -185,13 +185,15 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxEtatByMonth,
             self.ui.dateEditEtatJournee,
             self.ui.cbBoxCreditByStatus,
+            self.ui.cbBoxClientCreditByStatus
         ]
         for inp in inputs:
             inp.blockSignals(True)
 
         self.ui.cbBoxEtatByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
         self.ui.dateEditEtatJournee.setDate(self.CURRENT_DATE)
-        self.ui.cbBoxCreditByStatus.setCurrentIndex(2)              # credit en cours
+        self.ui.cbBoxCreditByStatus.setCurrentIndex(2)          # credit status 'en cours'
+        self.ui.cbBoxClientCreditByStatus.setCurrentIndex(2)    # client credit status 'en cours'
         for inp in inputs:
             inp.blockSignals(False)
 
@@ -559,34 +561,30 @@ class Credit(QtWidgets.QMainWindow):
         logger.info(f"Creating a new {persone_type}...")
         self.ui.labelNewPersonType.setText(persone_type)
         self.ui.labelNewPersonType.hide()
+        utils.populate_comboBox(self.ui.cbBoxNewPersonCommune, utils.COMMUNES_LIST)
         # TODO:
-        # ---- Add combobox for commune
-        # ---- add search with commune list
-        # ---- Add A versement Page
         # Remove and show lineEdits based on type( client | employe )
         employe_edits = [
-            # self.ui.labelNewPersonJobText, # self.ui.editNewPersonJob,
+            self.ui.labelNewPersonJobText, self.ui.editNewPersonJob,
             self.ui.labelNewPersonSalaire, self.ui.editNewPersonSalaire,
-            self.ui.labelNewPersonDateEmbauche, self.ui.editNewPersonDateEmbauche
+            self.ui.labelNewPersonDateEmbauche, self.ui.editNewPersonDateEmbauche,
+            self.ui.labelNewPersonDNaissance, self.ui.dateEditNewPersonDNaissance,
         ]
-        # client_edits = [self.ui.labelNewPersonObs, self.ui.editNewPersonObs]
+        client_edits = [self.ui.labelNewPersonCommune, self.ui.cbBoxNewPersonCommune]
 
         # Clear the inputs and setFucus to name edit
         self.ui.editNewPersonName.setFocus()
         self.ui.editNewPersonDateEmbauche.setDate(self.CURRENT_DATE)
+        self.ui.dateEditNewPersonDNaissance.setDate(self.CURRENT_DATE)
 
         # Hide inused inputs
         if persone_type == 'client':
-            # for edit in client_edits: edit.show()     # Clients
+            for edit in client_edits: edit.show()     # Clients
             for edit in employe_edits: edit.hide()      # Employe
-            self.ui.labelNewPersonJobText.setText('Commune')
-            self.ui.editNewPersonJob.setPlaceholderText('Commune')
 
         elif persone_type == 'employe':
-            # for edit in client_edits: edit.hide()     # Clients
+            for edit in client_edits: edit.hide()     # Clients
             for edit in employe_edits: edit.show()      # Employe
-            self.ui.labelNewPersonJobText.setText('Poste')
-            self.ui.editNewPersonJob.setPlaceholderText('Poste de Travaille')
 
         self.setup_extraCenter_ui(f"Nouveau {persone_type.title()}", self.ui.AddPersonePage)
 
@@ -598,23 +596,28 @@ class Credit(QtWidgets.QMainWindow):
         logger.info(f"Saving the new {person_type}...")
 
         # Get values from UI
+        # TODO: D.Naissance for employée not implimented yet
         name = self.ui.editNewPersonName.text().lower()
-        phone = self.ui.editNewPersonPhone.text()
+        d_naissance = self.ui.dateEditNewPersonDNaissance.date().toPyDate()     # DNaissance for emp
         job = self.ui.editNewPersonJob.text().lower()
+        phone = self.ui.editNewPersonPhone.text()
         salaire = self.ui.editNewPersonSalaire.value()
         date_embauche = self.ui.editNewPersonDateEmbauche.date().toPyDate()
-        commune = self.ui.editNewPersonJob.text().lower()        # FIXME This work with lineEditJob
+        commune = self.ui.cbBoxNewPersonCommune.currentText().lower()
         obs = self.ui.editNewPersonObs.toPlainText().lower()
 
         logger.info(f"Saving new {person_type} with Values: ")
         if person_type == 'client':
-            logger.debug(f"Name: {name}, Phone: {phone}, Observations: {obs}")
+            logger.debug(f"Name: {name}, Commune: {commune}, Phone: {phone}, Observations: {obs}")
+            return
             result = self.db.insert_new_client(name, phone, commune, obs)
         else:
             logger.info(
-                f"Name: {name}, Phone: {phone}, P. Travaille: {job}, Salaire: {salaire}, "
-                f"Date Embauche: {date_embauche}"
+                f"Name: {name}, DateNaiss: {d_naissance}, Job: {job}, "
+                f"Phone: {phone}, Salaire: {salaire}, Date Embauche: {date_embauche}, "
+                f"Observation: {obs}"
             )
+            return
             result = self.db.insert_new_employe(name, job, phone, salaire, date_embauche, obs)
 
         logger.debug(result)
@@ -1079,10 +1082,11 @@ class Credit(QtWidgets.QMainWindow):
     # =============
     def display_clients(self, rows=None):
         """
-        Display all personnes in the table widget.
+        Display all Clients in the table widget.
         """
         if rows is None:
-            rows = self.db.dump_clients()
+            credit_status = self.ui.cbBoxClientCreditByStatus.currentText().strip().lower()
+            rows = self.db.dump_clients(credit_status)
         utils.populate_table_widget(self.ui.clientsTableWidget, rows, utils.CLIENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.clientsTableWidget, 80, 320, 270, 200, 300)
         self.ui.labelClientsCount.setText(f"Total: {len(rows)}")
