@@ -8,11 +8,13 @@
 import uuid
 import hashlib
 import subprocess
-
-from strg import save_machine_id, load_machine_id
+import strg as storage
 
 
 def get_machine_id():
+    """
+    Generate a unique machine ID based on hardware information.
+    """
     try:
         cmd = "wmic csproduct get uuid"
         uuid_str = subprocess.check_output(cmd, shell=True).decode().split("\n")[1].strip()
@@ -24,13 +26,19 @@ def get_machine_id():
 
 
 def init_machine():
-    saved = load_machine_id()
+    """
+    Initialize machine ID. Load from storage or generate and save if not found.
+    This must be called once at the start of the application.
+    """
+    saved = storage.load_machine_id()
 
     if saved:
+        print("Loaded existing machine ID.")
         return saved
 
     mid = get_machine_id()
-    save_machine_id(mid)
+    print("Generated new machine ID.")
+    storage.save_machine_id(mid)
     return mid
 
 

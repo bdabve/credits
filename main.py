@@ -2161,16 +2161,17 @@ class Credit(QtWidgets.QMainWindow):
         sum_charges = f"Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
         self.ui.labelEtatSumCharge.setText(sum_charges)
 
-        # # Display in Table
-        # headers = ['Date', 'Accomptes', 'Credits', 'Versements', 'Charges']
-        # utils.populate_table_widget(self.ui.etatJournalierTableWidget, rows, headers)
-        # utils.set_table_column_sizes(self.ui.etatJournalierTableWidget, 300, 300, 300, 300, 300)
-
 
 if __name__ == '__main__':
+    import src.gasoil as gsl
     app = QtWidgets.QApplication(sys.argv)
 
     theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
+    result = gsl.check_license()
+    if not result['success']:
+        logger.error("License check failed. Exiting application.")
+        logger.error(f"License Error: {result['message']}")
+        sys.exit(1)
     dialog = Credit(theme_manager)
     dialog.show()
     sys.exit(app.exec_())

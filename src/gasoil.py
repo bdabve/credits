@@ -4,19 +4,19 @@
 
 import json, os, datetime
 from platformdirs import user_data_dir
-from strg import load_machine_id
+from src.strg import load_machine_id
 
 APP_NAME = "soldes"
 
 
 def license_path():
-    return os.path.join(
-        user_data_dir(APP_NAME),
-        "license.json"
-    )
+    return os.path.join(user_data_dir(APP_NAME), "license.json")
 
 
 def load_license():
+    """
+    Load the license data from storage. Return None if not found.
+    """
     if not os.path.exists(license_path()):
         return None
 
@@ -25,13 +25,15 @@ def load_license():
 
 
 def check_license():
+    """
+    Check if the license is valid for this machine and not expired.
+    Return a dict with success status and message.
+    """
     lic = load_license()
     if not lic:
         return {"success": False, "message": "License not found"}
 
     if lic["machine_id"] != load_machine_id():
-        print("[+] LIC MACHINE ID: ", lic["machine_id"])
-        print("[+] LOADED MACHINE ID: ", load_machine_id())
         return {"success": False, "message": "License not for this machine"}
 
     today = datetime.date.today()

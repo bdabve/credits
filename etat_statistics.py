@@ -588,7 +588,7 @@ if __name__ == "__main__":
     # -------------------------------------------------
     # PDF RECAPE MOHAMED
     #
-    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-29-12-2025.pdf"
+    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-30-12-2025.pdf"
     # pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
     pdf_recape = recapepdf_to_text(pdf_file_path)
     if pdf_recape is not None:
