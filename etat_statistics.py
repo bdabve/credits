@@ -32,7 +32,7 @@ def load_excel(file_path, sheet_name):
     None            : If the DATE column cannot be processed.
     """
     try:
-        sheets = pd.read_excel(file_path, sheet_name=None)      # Load all sheets from the Excel file
+        sheets = pd.read_excel(file_path, sheet_name=None)
         df = sheets[sheet_name]     # Select the requested sheet
     except Exception as err:
         logger.error(f"Load Excel File: {err}")
@@ -462,14 +462,19 @@ def achat_mohamed(file_path, sheet_name):
     for col in cols:
         clean_df[col] = pd.to_numeric(clean_df[col], errors="coerce")
 
-    cols_to_use = ["Nom", "Qte Global", "Prix achat"]
+    cols_to_use = ["Nom", "Qte Global", "Prix achat", "Total"]
     clean_df = clean_df.loc[:, cols_to_use]
     recape = clean_df.groupby("Nom", as_index=False).agg({
         "Qte Global": "sum",
         "Prix achat": "first",
+        "Total": "sum",
     })
-    recape["Total Achat"] = recape["Qte Global"] * recape["Prix achat"]
+    # recape["Total Achat"] = recape["Qte Global"] * recape["Prix achat"]
     # TODO: Add Remise
+    # Save to Excel
+    output_file = f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\achat_mohamed_recape_{sheet_name}.xlsx"
+    recape.to_excel(output_file, index=False)
+    print(f"Saving Achat Mohamed recap to: {output_file}")
     return recape
 
 
@@ -580,19 +585,18 @@ if __name__ == "__main__":
     # ---------------------------------------------------
     # ----------- Achat Mohamed ----------------
     # ---------------------------------------------------
-    # file_path = "~/Desktop/OneDrive_1_12-4-2025/ADMIN/ACHAT Mohamed/Achat_Mohamed_SidiRached.xlsx"
-    # achat_mohamed = achat_mohamed(file_path, "DECEMBRE")
-    # print(achat_mohamed.head(20))
-    # print('-' * 30)
-    # print(achat_mohamed.tail(20))
+    file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\ACHAT_MOHAMED_2025.xlsx"
+    achat_mohamed = achat_mohamed(file_path, "DECEMBRE")
+    print(achat_mohamed.head(20))
+    print('-' * 30)
+    print(achat_mohamed.tail(20))
     # -------------------------------------------------
-    # PDF RECAPE MOHAMED
-    #
-    pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-30-12-2025.pdf"
-    # pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
-    pdf_recape = recapepdf_to_text(pdf_file_path)
-    if pdf_recape is not None:
-        print("Recape Journee Mohamed: ")
-        print(pdf_recape)
-        print(f"\n==== Total Article: {len(pdf_recape)} =====")
-        # --------------------------------------------------
+    # PDF CHARGEMENT RECAPE MOHAMED
+    # -----------------------------
+    # pdf_file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\FICHE CHARGEMEN\\12-DECEMBRE\\MOH-31.pdf"
+    # # pdf_file_path = "/home/dabve/Desktop/FICHE_CHARGEMENT_18-12-2025.pdf"
+    # pdf_recape = recapepdf_to_text(pdf_file_path)
+    # if pdf_recape is not None:
+    #     print("Recape Journee Mohamed: ")
+    #     print(pdf_recape)
+    #     print(f"\n==== Total Article: {len(pdf_recape)} =====")

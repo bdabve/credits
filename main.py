@@ -609,7 +609,6 @@ class Credit(QtWidgets.QMainWindow):
         logger.info(f"Saving new {person_type} with Values: ")
         if person_type == 'client':
             logger.debug(f"Name: {name}, Commune: {commune}, Phone: {phone}, Observations: {obs}")
-            return
             result = self.db.insert_new_client(name, phone, commune, obs)
         else:
             logger.info(
@@ -617,7 +616,6 @@ class Credit(QtWidgets.QMainWindow):
                 f"Phone: {phone}, Salaire: {salaire}, Date Embauche: {date_embauche}, "
                 f"Observation: {obs}"
             )
-            return
             result = self.db.insert_new_employe(name, job, phone, salaire, date_embauche, obs)
 
         logger.debug(result)
