@@ -32,7 +32,8 @@ def load_excel(file_path, sheet_name):
     None            : If the DATE column cannot be processed.
     """
     try:
-        sheets = pd.read_excel(file_path, sheet_name=None)
+        # sheets = pd.read_excel(file_path, sheet_name=None, usecols="A:H", nrows=243)
+        sheets = pd.read_excel(file_path, sheet_name=None, nrows=243)
         df = sheets[sheet_name]     # Select the requested sheet
     except Exception as err:
         logger.error(f"Load Excel File: {err}")
