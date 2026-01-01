@@ -743,7 +743,7 @@ def create_menu(root, menu_button, icon_name, actions, icon_color=NEW_COLOR, wit
 
 
 # == Excel functions
-def export_salary_report_openpyxl(rows, file_path):
+def export_accompte_excel(rows, file_path):
     """
     Create a nicely formatted Excel report from rows using openpyxl.
     All tables are placed in one sheet.

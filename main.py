@@ -185,7 +185,15 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxEtatByMonth,
             self.ui.dateEditEtatJournee,
             self.ui.cbBoxCreditByStatus,
-            self.ui.cbBoxClientCreditByStatus
+            self.ui.cbBoxClientCreditByStatus,
+
+            # Export Accompte
+            self.ui.cbBoxExportAccompteYear,
+            self.ui.cbBoxExportAccompteMonth,
+
+            # Etat Year CBBox
+            self.ui.cbBoxEtatByYear,
+            self.ui.cbBoxChargeByMonth,
         ]
         for inp in inputs:
             inp.blockSignals(True)
@@ -194,6 +202,14 @@ class Credit(QtWidgets.QMainWindow):
         self.ui.dateEditEtatJournee.setDate(self.CURRENT_DATE)
         self.ui.cbBoxCreditByStatus.setCurrentIndex(2)          # credit status 'en cours'
         self.ui.cbBoxClientCreditByStatus.setCurrentIndex(2)    # client credit status 'en cours'
+
+        # Charge
+        self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+
+        # Accompte
+        self.ui.cbBoxExportAccompteYear.setCurrentText(self.CURRENT_YEAR)
+        self.ui.cbBoxExportAccompteMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+
         for inp in inputs:
             inp.blockSignals(False)
 
@@ -535,8 +551,6 @@ class Credit(QtWidgets.QMainWindow):
         Display all personnes in the table widget.
         """
         if rows is None: rows = self.db.dump_employes()
-        logger.debug(f"Set SpinBox Month to Current Month({self.CURRENT_MONTH_TEXT})")
-        self.ui.spinBoxExportAccpmptMonth.setValue(self.CURRENT_DATE.month)
         utils.populate_table_widget(self.ui.employesTableWidget, rows, utils.EMPLOYES_HEADERS)
         utils.set_table_column_sizes(self.ui.employesTableWidget, 80, 300, 120, 250, 190, 200)
         self.ui.labelEmployesCount.setText(f"Total: {len(rows)}")
@@ -986,8 +1000,9 @@ class Credit(QtWidgets.QMainWindow):
         self.filter_accomptes() if emp_id == '' else self.accompte_by_employee(emp_id, month=month)
 
     def export_accomptes_details(self):
-        month_number = self.ui.spinBoxExportAccpmptMonth.value()
-        month = f"{self.CURRENT_YEAR}-{month_number:02d}"
+        month_number = self.ui.cbBoxExportAccompteMonth.currentText()
+        year = self.ui.cbBoxExportAccompteYear.currentText()
+        month = f"{year}-{month_number}"
         logger.info(f"Exporting Accompte Details for Month({month})...")
         rows = self.db.accompte_details(month)
         if not rows:
@@ -1005,7 +1020,7 @@ class Credit(QtWidgets.QMainWindow):
         if not file_path:
             self.show_error_message("Exportation annulée par l'utilisateur.", success=False)
             return
-        result = utils.export_salary_report_openpyxl(rows, file_path)
+        result = utils.export_accompte_excel(rows, file_path)
         self.show_error_message(result, success=True)
 
     # =========================================
@@ -1434,11 +1449,12 @@ class Credit(QtWidgets.QMainWindow):
         :param rows: Description
         """
         month = self.ui.cbBoxPaymentByMonth.currentText()
+        year = self.ui.cbBoxPaymentByYear.currentText()
         if month == 'Mois':
-            month = f"{self.CURRENT_YEAR}-{self.CURRENT_MONTH_TEXT}"
+            month = f"{year}-{self.CURRENT_MONTH_TEXT}"
             self.ui.cbBoxPaymentByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
         else:
-            month = f"{self.CURRENT_YEAR}-{month}"
+            month = f"{year}-{month}"
             self.ui.cbBoxPaymentByMonth.setCurrentText(month)
 
         if rows is None:
@@ -1747,18 +1763,19 @@ class Credit(QtWidgets.QMainWindow):
         month_name = MONTHS_FR.get(month_text, "")
 
         # Fetch rows depending on input
+        year = self.ui.cbBoxChargeByYear.currentText()
         if rows is None:
-            month = self.CURRENT_MONTH
+            month_text = self.ui.cbBoxChargeByMonth.currentText()
+            month = f"{year}-{month_text}"
             rows = self.db.dump_charges(month)
-            self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
         else:
             month = (
                 self.CURRENT_MONTH
                 if month_text == "Mois"
-                else f"{self.CURRENT_YEAR}-{month_text}"
+                else f"{year}-{month_text}"
             )
 
-        logger.debug(f"Display Charge Records for {month_text}")
+        logger.debug(f"Display Charge Records for {month}")
 
         # Calculate and display totals
         total_charges = sum(r[3] for r in rows)  # Assuming 'montant' is at index 3
@@ -1777,7 +1794,8 @@ class Credit(QtWidgets.QMainWindow):
         """
         search_text = self.ui.editSearchItem.text()
         month_text = self.ui.cbBoxChargeByMonth.currentText()
-        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{self.CURRENT_YEAR}-{month_text}"
+        year = self.ui.cbBoxChargeByYear.currentText()
+        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{year}-{month_text}"
         rows = self.db.search_charge(search_text, month)
         self.display_charge(rows, month_text)
 
@@ -1924,8 +1942,7 @@ class Credit(QtWidgets.QMainWindow):
     # == Statistics Page ==
     # =====================
     def display_etat(self):
-        selected_month = self.ui.cbBoxEtatByMonth.currentText()
-        self.etat_from_database(selected_month)
+        self.etat_from_database()
 
     def refresh_etat_table(self):
         if not self.excel_etat_file:
@@ -1965,9 +1982,8 @@ class Credit(QtWidgets.QMainWindow):
 
     def etats_livreur(self):
         # -- Display etat
-        selected_month = self.ui.cbBoxEtatByMonth.currentText()
-        self.etat_from_database(selected_month)
-
+        # selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        self.etat_from_database()
         self.display_etat_journalier(self.excel_etat_file)
 
         # --- Ploting Graphs in Thread ---
@@ -2133,9 +2149,12 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.editObservationByDate.setFocus(True)
 
     # === Etat From database ==
-    def etat_from_database(self, selected_month):
+    def etat_from_database(self):
         # NOTE: The QPushButton for Etat Database is named as label
         # FIXME: Icon must take color from theme
+        selected_month = self.ui.cbBoxEtatByMonth.currentText()
+        year = self.ui.cbBoxEtatByYear.currentText()
+        logger.debug(f"Selected Month for Etat from Database: {selected_month}")
         for btn in [
             self.ui.labelEtatSumAccompte,
             self.ui.labelEtatSumCredit, self.ui.labelEtatSumVerse,
@@ -2143,7 +2162,7 @@ class Credit(QtWidgets.QMainWindow):
         ]:
             btn.setIcon(qta.icon("mdi6.database", color="#ffffff"))
 
-        month = self.CURRENT_MONTH if selected_month == "Mois" else f"{self.CURRENT_YEAR}-{selected_month}"
+        month = f"{year}-{selected_month}" if selected_month != "Mois" else f"{year}-{self.CURRENT_MONTH}"
         rows = self.db.etat_journalier(month=month)
 
         # Sums
