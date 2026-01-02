@@ -182,39 +182,57 @@ class Credit(QtWidgets.QMainWindow):
 
         # Bloq Signals and Initial Populate
         inputs = [
-            self.ui.cbBoxEtatByMonth,
-            self.ui.dateEditEtatJournee,
+            # CREDITS AND CLIENTS
             self.ui.cbBoxCreditByStatus,
             self.ui.cbBoxClientCreditByStatus,
 
-            # Export Accompte
+            # ACCOMPTES
             self.ui.cbBoxExportAccompteYear,
             self.ui.cbBoxExportAccompteMonth,
+            self.ui.cbBoxEmployeOperationByYear,
 
-            # Etat Year CBBox
+            # ETATS CB-BOXES
             self.ui.cbBoxEtatByYear,
+            self.ui.cbBoxEtatByMonth,
+            self.ui.dateEditEtatJournee,
+
+            # CHARGES
             self.ui.cbBoxChargeByMonth,
+            self.ui.cbBoxChargeByYear,
         ]
-        for inp in inputs:
-            inp.blockSignals(True)
+        # Block Signals
+        for inp in inputs: inp.blockSignals(True)
 
-        self.ui.cbBoxEtatByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
-        self.ui.dateEditEtatJournee.setDate(self.CURRENT_DATE)
-        self.ui.cbBoxCreditByStatus.setCurrentIndex(2)          # credit status 'en cours'
+        # Initial VALUES first Run
+        # == CREDITS
         self.ui.cbBoxClientCreditByStatus.setCurrentIndex(2)    # client credit status 'en cours'
+        self.ui.cbBoxCreditByStatus.setCurrentIndex(2)          # credit status 'en cours'
 
-        # Charge
+        # == EMPLOYEES
+        self.ui.cbBoxEmployeOperationByYear.setCurrentText(self.CURRENT_YEAR)
+
+        # == CHARGES
         self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+        self.ui.cbBoxChargeByYear.setCurrentText(self.CURRENT_YEAR)
 
-        # Accompte
+        # == ACCOMPTE
         self.ui.cbBoxExportAccompteYear.setCurrentText(self.CURRENT_YEAR)
         self.ui.cbBoxExportAccompteMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
 
-        for inp in inputs:
-            inp.blockSignals(False)
+        # == ETATS
+        self.ui.cbBoxEtatByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+        self.ui.dateEditEtatJournee.setDate(self.CURRENT_DATE)
 
+        # UNBLOCK Signals
+        for inp in inputs: inp.blockSignals(False)
+
+        # ComboBox EmployeOperationByName
+        employes = self.db.get_names('employes')
+        employes.insert(0, 'Tous')
+        utils.populate_comboBox(self.ui.cbBoxEmployeOperationByName, employes)
+
+        # ComboBox Commune List
         utils.populate_comboBox(self.ui.cbBoxCreditByCommune, utils.COMMUNES_LIST)
-
         self.goto_page('credit')  # Default page
         self.showMaximized()
 
@@ -489,7 +507,17 @@ class Credit(QtWidgets.QMainWindow):
         elif page == "CreditPage":
             self.refresh_credit_table()
         elif page == "ChargePage":
-            self.display_charge(rows=None, month_text=None)
+            cbBoxes = [self.ui.cbBoxChargeByMonth, self.ui.cbBoxChargeByYear]
+            # Block Signals
+            for cbBox in cbBoxes: cbBox.blockSignals(True)
+            # Return to initial and display charges
+            self.ui.cbBoxChargeByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+            self.ui.cbBoxChargeByYear.setCurrentText(self.CURRENT_YEAR)
+            self.display_charge()
+
+            # Unblock Signals
+            for cbBox in cbBoxes: cbBox.blockSignals(False)
+
         elif page == "PaymentsPage":
             self.display_payments()
         elif page == "EtatPage":
@@ -749,25 +777,26 @@ class Credit(QtWidgets.QMainWindow):
         :param headers_type: Type of headers to display, "all" for all operations or "one" for one employe.
         """
         if rows is None:
-            month = self.CURRENT_MONTH
+            # month = self.CURRENT_MONTH
             month_text = self.CURRENT_MONTH_TEXT
-            rows = self.db.dump_operations(month)
-            self.display_accompte_totals(month)  # Display total sums of operations
+            year = self.ui.cbBoxEmployeOperationByYear.currentText()
+            date = f"{year}-{month_text}"
+            rows = self.db.dump_operations(date)
+            self.display_accompte_totals(date)  # Display total sums of operations
 
         headers = utils.OPERATIONS_SUM_HEADERS if headers_type == "all" else utils.OPERATIONS_HEADERS
 
         cbboxes = [
             self.ui.cbBoxEmployeOperationByName,
             self.ui.cbBoxEmployeOperationByType,
-            self.ui.cbBoxEmployeOperationByDate
+            self.ui.cbBoxEmployeOperationByDate,
+            self.ui.cbBoxEmployeOperationByYear,
         ]
         # Block CBBoxes Signals
         for cbbox in cbboxes: cbbox.blockSignals(True)
 
         if headers_type == 'all':
             column_sizes = [300, 300, 300, 300]        # [EMP, T.PRIME, T.RETENU, T.AVANCE]
-            # setup the comboBoxes
-            self.populate_cbBoxEmployeAccompte()
             self.ui.cbBoxEmployeOperationByName.setCurrentText('Tous')
             self.ui.cbBoxEmployeOperationByDate.setCurrentText(month_text)
             self.ui.cbBoxEmployeOperationByType.setCurrentText('Tous')
@@ -777,7 +806,9 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxEmployeOperationByName.setCurrentText(kwargs.get("employee"))
             self.ui.cbBoxEmployeOperationByDate.setCurrentText(kwargs.get("month"))
             self.ui.labelAccompteEdit.setText('True')   # Enable Edit or Delete
+
         self.ui.labelAccompteEdit.hide()
+
         for cbbox in cbboxes: cbbox.blockSignals(False)     # Unblock signals
 
         # Display Result in QTableWidget
@@ -797,7 +828,8 @@ class Credit(QtWidgets.QMainWindow):
 
         operation = self.ui.cbBoxEmployeOperationByType.currentText().lower()
         month_text = self.ui.cbBoxEmployeOperationByDate.currentText()
-        month = f"{self.CURRENT_YEAR}-{month_text}" if month_text != 'tous' else 'tous'
+        year = self.ui.cbBoxEmployeOperationByYear.currentText()
+        month = f"{year}-{month_text}" if month_text != 'tous' else 'tous'
 
         logger.info(f"Filter Operation: Operation({operation}), Month({month}), Employee({employe})")
 
@@ -828,16 +860,11 @@ class Credit(QtWidgets.QMainWindow):
 
         # Here the date for displaying result
         # the month to display in ComboBox
-        date = f"{self.CURRENT_MONTH}" if not month else f"{self.CURRENT_YEAR}-{month}"
+        year = self.ui.cbBoxEmployeOperationByYear.currentText()
+        date = f"{year}-{month}" if not month else f"{year}-{month}"
         rows = self.db.employee_accompts(emp_id, date)
         self.display_accomptes(rows, headers_type="one", employee=emp_name, month=month)
         self.goto_page(page='operations', from_btn=False)
-
-    def populate_cbBoxEmployeAccompte(self):
-        # Populate EmployeOperationByName ComboBox
-        employes = self.db.get_names('employes')
-        employes.insert(0, 'Tous')  # Add 'Tous' option for all employes
-        utils.populate_comboBox(self.ui.cbBoxEmployeOperationByName, employes)
 
     def ui_employe_opration(self, operation):
         """"""
@@ -984,7 +1011,7 @@ class Credit(QtWidgets.QMainWindow):
             text = utils.format_to_decimal(text)
             if not text['success']:
                 self.show_error_message(f"Erreur: {text['error']}", success=False)
-                self.display_credits()      # refresh tablhu
+                self.accompte_by_employee(emp_id)      # refresh tablhu
                 return
             else:
                 text = text['value']
@@ -1010,10 +1037,12 @@ class Credit(QtWidgets.QMainWindow):
             return
         # Open the QFileDialog to select save location
         options = QtWidgets.QFileDialog.Options()
+        f_name = f"Accompte_details_{month}-{year}.xlsx"
+        open_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\" if os.name == "nt" else "/home/dabve/Desktop/"
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             None,
             "Enregistrer fichier Excel",
-            f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\Accompte_{month}.xlsx",
+            f"{open_path}{f_name}",
             "Fichiers Excel (*.xlsx)",
             options=options
         )
@@ -1441,6 +1470,20 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Payments(Versement) Functions ==
     # ===================================
+    def payment_from_cbbox(self):
+        """
+        This function work with
+        :cbBoxPaymentByYear:
+        :cbBoxPaymentByMonth:
+        .currentIndexChanged
+        """
+        journalier_button = self.ui.buttonPaiementsEtatJournalier.isChecked()
+        if journalier_button:
+            self.paiements_etat_journalier()
+            return
+        else:
+            self.display_payments()
+
     def display_payments(self, rows=None):
         """
         Docstring for display_payments
@@ -1491,14 +1534,6 @@ class Credit(QtWidgets.QMainWindow):
         else:
             self.show_error_message(f"Erreur: {result['error']}", success=False)
 
-    def payment_from_cbbox(self):
-        journalier_button = self.ui.buttonPaiementsEtatJournalier.isChecked()
-        if journalier_button:
-            self.paiements_etat_journalier()
-            return
-        else:
-            self.display_payments()
-
     def filter_payments(self):
         """
         Search Payments
@@ -1530,8 +1565,10 @@ class Credit(QtWidgets.QMainWindow):
 
     def paiements_etat_journalier(self):
         month = self.ui.cbBoxPaymentByMonth.currentText()
-        month = self.CURRENT_MONTH_TEXT if month == 'Mois' else f"{self.CURRENT_YEAR}-{month}"
+        year = self.ui.cbBoxPaymentByYear.currentText()
+        month = f"{year}-{self.CURRENT_MONTH_TEXT}" if month == 'Mois' else f"{year}-{month}"
 
+        logger.debug(f"Display Payments Etat Journalier for {month}")
         rows = self.db.dump_payments(month, journalier=True)
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, ['Date', 'Versement'])
         utils.set_table_column_sizes(self.ui.paymentsTableWidget, 300, 300)
@@ -1745,37 +1782,20 @@ class Credit(QtWidgets.QMainWindow):
     # =================================================================================
     # == Charge Page ==
     # =================
-    def display_charge(self, rows=None, month_text=None):
+    def display_charge(self, rows=None):
         """
         Display all versements (charges) in the table widget.
         """
-        MONTHS_FR = {
-            "01": "janvier", "02": "février", "03": "mars", "04": "avril",
-            "05": "mai", "06": "juin", "07": "juillet", "08": "août",
-            "09": "septembre", "10": "octobre", "11": "novembre", "12": "décembre"
-        }
-
-        # Normalize month_text
-        if not month_text or month_text == "Mois":
-            month_text = self.CURRENT_MONTH_TEXT
-
-        # Resolve month name
-        month_name = MONTHS_FR.get(month_text, "")
-
         # Fetch rows depending on input
+        month_text = self.ui.cbBoxChargeByMonth.currentText()
         year = self.ui.cbBoxChargeByYear.currentText()
+        month_name = utils.MONTHS_FR.get(month_text, "")        # just for the logger
+
         if rows is None:
-            month_text = self.ui.cbBoxChargeByMonth.currentText()
             month = f"{year}-{month_text}"
             rows = self.db.dump_charges(month)
-        else:
-            month = (
-                self.CURRENT_MONTH
-                if month_text == "Mois"
-                else f"{year}-{month_text}"
-            )
 
-        logger.debug(f"Display Charge Records for {month}")
+        logger.debug(f"Display Charge Records for {month_name}/{year}")
 
         # Calculate and display totals
         total_charges = sum(r[3] for r in rows)  # Assuming 'montant' is at index 3
@@ -1795,9 +1815,10 @@ class Credit(QtWidgets.QMainWindow):
         search_text = self.ui.editSearchItem.text()
         month_text = self.ui.cbBoxChargeByMonth.currentText()
         year = self.ui.cbBoxChargeByYear.currentText()
-        month = self.CURRENT_MONTH if month_text == 'Mois' else f"{year}-{month_text}"
+
+        month = f"{year}-{month_text}"
         rows = self.db.search_charge(search_text, month)
-        self.display_charge(rows, month_text)
+        self.display_charge(rows)
 
     def ui_create_charge(self, edit=False):
         """
@@ -1911,7 +1932,7 @@ class Credit(QtWidgets.QMainWindow):
             text = utils.format_to_decimal(text)
             if not text['success']:
                 self.show_error_message(f"Erreur: {text['error']}", success=False)
-                self.display_charge()      # refresh tablhu
+                self.display_charge()      # refresh table
                 return
             else:
                 text = text['value']
@@ -1919,7 +1940,7 @@ class Credit(QtWidgets.QMainWindow):
         result = self.db.update_charge(charge_id, col, text)
         if result['success']:
             self.show_error_message(result['message'], success=True)
-            self.display_employes()
+            self.display_charge()
         else:
             self.show_error_message(f"Erreur: {result['error']}", success=False)
 

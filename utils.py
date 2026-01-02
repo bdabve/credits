@@ -25,7 +25,7 @@ THEMES = {
         "colors": {
             "NEW_COLOR": "#1dd1a1",
             "MENU_COLOR": "#34495e",
-            "ICON_COLOR": "black",
+            "ICON_COLOR": "#000000",
             "EDIT_COLOR": "#e67e22",
             "TRASH_COLOR": "#e74c3c",
             "BLUE_COLOR": "#3498db",
@@ -38,7 +38,7 @@ THEMES = {
         "colors": {
             "NEW_COLOR": "#1dd1a1",
             "MENU_COLOR": "#ecf0f1",
-            "ICON_COLOR": "white",
+            "ICON_COLOR": "#ffffff",
             "EDIT_COLOR": "#d35400",
             "TRASH_COLOR": "#c0392b",
             "BLUE_COLOR": "#2980b9",
@@ -163,9 +163,6 @@ def is_date(value: str, fmt="%Y-%m-%d") -> bool:
 # === 1) Setup callbacks/signals/menus (run once at startup) ===
 def setup_main_callbacks(root):
     # --- Button callbacks (no icons here!)
-    # root.ui.closeAppBtn.clicked.connect(root.close),
-    # root.ui.minimizeAppBtn.clicked.connect(root.showMinimized),
-    # root.ui.maximizeRestoreAppBtn.clicked.connect(root.toggle_maximize_restore),
     root.ui.toggleMenuButton.clicked.connect(root.on_toggle_menu),
     root.ui.extraCloseColumnBtn.clicked.connect(lambda: root.toggle_left_box(close=True)),
     root.ui.toggleThemeBtn.clicked.connect(root.toggle_theme),
@@ -283,7 +280,13 @@ def setup_main_callbacks(root):
         (root.ui.cbBoxCreditByStatus, lambda: root.filter_credit_by_status_commune(filter="status")),
         (root.ui.cbBoxCreditByCommune, lambda: root.filter_credit_by_status_commune(filter="commune")),
         (root.ui.cbBoxSalaireEmpMonth, lambda: root.calculate_salaire(from_btn=False)),
-        (root.ui.cbBoxChargeByMonth, lambda: root.filter_charge()),
+
+        # --- Charge Page ---
+        (root.ui.cbBoxChargeByYear, root.filter_charge),
+        (root.ui.cbBoxChargeByMonth, root.filter_charge),
+
+        # --- Payment Page ---
+        (root.ui.cbBoxPaymentByYear, root.payment_from_cbbox),
         (root.ui.cbBoxPaymentByMonth, root.payment_from_cbbox),
         # (root.ui.cbBoxEtatByMonth, root.display_etat_journalier),
     ]
@@ -293,7 +296,8 @@ def setup_main_callbacks(root):
     for cbBox in (
         root.ui.cbBoxEmployeOperationByName,
         root.ui.cbBoxEmployeOperationByType,
-        root.ui.cbBoxEmployeOperationByDate
+        root.ui.cbBoxEmployeOperationByDate,
+        root.ui.cbBoxEmployeOperationByYear,
     ):
         cbBox.currentIndexChanged.connect(root.filter_accomptes)
 
@@ -341,7 +345,7 @@ def setup_main_callbacks(root):
 
     # === Context Menus ===
     employe_table_actions = [
-        ('L. Accompte', qta.icon("fa6s.money-check-dollar", color=NEW_COLOR), root.accompte_by_employee),
+        ('Liste des Accomptes', qta.icon("fa6s.money-check-dollar", color=NEW_COLOR), root.accompte_by_employee),
         ('Calculer Salaire', qta.icon('mdi.calculator-variant', color=ICON_COLOR), lambda: root.calculate_salaire(from_btn=True)),
         ('separator', None, None),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_employe),
@@ -349,10 +353,10 @@ def setup_main_callbacks(root):
     setup_table_context_menu(root.ui.employesTableWidget, employe_table_actions)
 
     client_table_actions = [
-        ('N. Crédit', qta.icon('mdi6.cash-plus', color=NEW_COLOR), lambda: root.ui_create_credit(client=True)),
-        ('L. Crédits', qta.icon('ph.list-bullets', color=ICON_COLOR), root.client_credit_list),
-        ('L. Versement', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.client_versement_list),
-        ('A. Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
+        ('Nouveau Crédit', qta.icon('mdi6.cash-plus', color=NEW_COLOR), lambda: root.ui_create_credit(client=True)),
+        ('Liste des Crédits', qta.icon('ph.list-bullets', color=ICON_COLOR), root.client_credit_list),
+        ('Liste des Versement', qta.icon('fa6s.money-check-dollar', color=NEW_COLOR), root.client_versement_list),
+        ('Ajouter un Versement', qta.icon('fa6s.hand-holding-dollar', color=NEW_COLOR), root.ui_add_versement),
         ('separator', None, None),
         ('Supprimer', qta.icon('msc.trashcan', color=TRASH_COLOR), root.delete_client),
     ]
@@ -755,7 +759,7 @@ def export_accompte_excel(rows, file_path):
 
     wb = Workbook()
     ws = wb.active
-    ws.title = "Report"
+    ws.title = "Accompte"
 
     # Group rows by 'name'
     grouped = {}
@@ -791,11 +795,11 @@ def export_accompte_excel(rows, file_path):
             ws.cell(row=row_cursor, column=3, value=somme)
             ws.cell(row=row_cursor, column=4, value=motif)
 
-            if type_ == "avance":
+            if type_ == "Avance":
                 total_avance += somme
-            elif type_ == "retenu":
+            elif type_ == "Retenu":
                 total_retenu += somme
-            elif type_ == "prime":
+            elif type_ == "Prime":
                 total_prime += somme
 
             row_cursor += 1

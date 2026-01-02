@@ -1438,7 +1438,13 @@ class Database:
             conn.commit()
             return {'success': True, 'message': message}
 
+    # ===================================
+    # === Statistics Etat Functions === #
+    # ===================================
     def etat_journalier(self, month):
+        """
+        This Etat from Database
+        """
         queries = {
             "accompte": """
                     SELECT date, SUM(montant) FROM operations
