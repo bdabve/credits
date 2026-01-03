@@ -101,10 +101,10 @@ def get_product_par_prevendeur(driver, dated, datef, camion):
     """
     wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
     product_list = []
-
     url = (
-        f"{VENTE_URL}"
-        f"?camion={camion}&datef={datef}&dated={dated}&type=camion"
+        f"{VENTE_URL}?"
+        f"{'camion=' + camion + '&' if camion else ''}"
+        f"datef={datef}&dated={dated}&type=camion"
     )
 
     driver.get(url)
@@ -181,7 +181,7 @@ def etat_prevendeur(username, password, dated, datef, camion, headless=False):
     """
     driver = create_driver(headless=headless)
     filename = f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_{camion}_{dated}.xlsx"
-    if camion not in ['8442-0000005', '8442-0000006', '8442-0000007', '8442-0000010']:
+    if camion not in ['8442-0000005', '8442-0000006', '8442-0000007', '8442-0000010', '']:
         print("[✗] Incorrect CAMION.")
         return
     try:
