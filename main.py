@@ -927,21 +927,26 @@ class Credit(QtWidgets.QMainWindow):
             # close
 
     def calculate_salaire(self, from_btn=False):
+        # TODO: Display Employees in ComboBox.
         employe_id = self.get_item_id(self.ui.employesTableWidget)
         employe = utils.get_column_value(self.ui.employesTableWidget, self.ui.employesTableWidget.currentRow(), 1)
         logger.info(f"Calculating salary for Employe({employe_id})...")
 
         # setup Date
         if from_btn:
-            month = self.CURRENT_MONTH_TEXT  # Get current month
             # Set current month in the comboBox
-            self.ui.cbBoxSalaireEmpMonth.blockSignals(True)
-            self.ui.cbBoxSalaireEmpMonth.setCurrentText(month)
-            self.ui.cbBoxSalaireEmpMonth.blockSignals(False)
-        else:
-            month = self.ui.cbBoxSalaireEmpMonth.currentText()
+            cbBoxes = [self.ui.cbBoxSalaireEmpMonth, self.ui.cbBoxSalaireEmpYear]
+            # Block Signals
+            for cbBox in cbBoxes: cbBox.blockSignals(True)
+            # set current month and year
+            self.ui.cbBoxSalaireEmpMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+            self.ui.cbBoxSalaireEmpYear.setCurrentText(self.CURRENT_YEAR)
+            # Unblock Signals
+            for cbBox in cbBoxes: cbBox.blockSignals(False)
 
-        date = f"{self.CURRENT_YEAR}-{month}"  # Get month from comboBox
+        month = self.ui.cbBoxSalaireEmpMonth.currentText()
+        year = self.ui.cbBoxSalaireEmpYear.currentText()
+        date = f"{year}-{month}"
         # Get db result
         result = self.db.calculate_salaire_mensuel(date, employe_id)
 
