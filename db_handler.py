@@ -639,7 +639,7 @@ class Database:
         """
         with self.connect() as conn:
             cursor = conn.cursor()
-            cursor.execute(f'SELECT title(nom) FROM {table_name}')
+            cursor.execute(f'SELECT title(nom) FROM {table_name} ORDER BY nom ASC')
             return [row[0] for row in cursor.fetchall()]
 
     def search_clients(self, search_word):

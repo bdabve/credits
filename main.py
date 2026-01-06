@@ -186,6 +186,10 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.cbBoxCreditByStatus,
             self.ui.cbBoxClientCreditByStatus,
 
+            # PAYMENTS
+            self.ui.cbBoxPaymentByMonth,
+            self.ui.cbBoxPaymentByYear,
+
             # ACCOMPTES
             self.ui.cbBoxExportAccompteYear,
             self.ui.cbBoxExportAccompteMonth,
@@ -207,6 +211,10 @@ class Credit(QtWidgets.QMainWindow):
         # == CREDITS
         self.ui.cbBoxClientCreditByStatus.setCurrentIndex(2)    # client credit status 'en cours'
         self.ui.cbBoxCreditByStatus.setCurrentIndex(2)          # credit status 'en cours'
+
+        # == PAYMENTS
+        self.ui.cbBoxPaymentByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
+        self.ui.cbBoxPaymentByYear.setCurrentText(self.CURRENT_YEAR)
 
         # == EMPLOYEES
         self.ui.cbBoxEmployeOperationByYear.setCurrentText(self.CURRENT_YEAR)
@@ -1496,17 +1504,12 @@ class Credit(QtWidgets.QMainWindow):
         :param self: Description
         :param rows: Description
         """
-        month = self.ui.cbBoxPaymentByMonth.currentText()
-        year = self.ui.cbBoxPaymentByYear.currentText()
-        if month == 'Mois':
-            month = f"{year}-{self.CURRENT_MONTH_TEXT}"
-            self.ui.cbBoxPaymentByMonth.setCurrentText(self.CURRENT_MONTH_TEXT)
-        else:
-            month = f"{year}-{month}"
-            self.ui.cbBoxPaymentByMonth.setCurrentText(month)
-
         if rows is None:
-            rows = self.db.dump_payments(month)
+            month = self.ui.cbBoxPaymentByMonth.currentText()
+            year = self.ui.cbBoxPaymentByYear.currentText()
+            month = self.CURRENT_MONTH_TEXT if month == 'Mois' else month
+            date = f"{year}-{month}"
+            rows = self.db.dump_payments(date)
 
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, utils.PAYMENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.paymentsTableWidget, 80, 270, 500, 270)
