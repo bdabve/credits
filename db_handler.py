@@ -1027,27 +1027,40 @@ class Database:
     # ====================================
     # === PAYMENTS(VERSEMENT) METHODES ===
     # ====================================
-    def dump_payments(self, month, journalier=False):
+    def dump_payments(self, month, year, journalier=False):
         with self.connect() as conn:
             cursor = conn.cursor()
+
             if journalier:
                 payments_fields = ["p.date_versement", "IFNULL(SUM(p.montant), 0)"]
                 query = f"""
-                    SELECT {', '.join(payments_fields)}
-                    FROM paiement p
-                    WHERE strftime('%Y-%m', p.date_versement) = ?
-                    GROUP BY p.date_versement
-                    ORDER BY p.id DESC
+                    SELECT {', '.join(payments_fields)} FROM paiement p
+                    JOIN clients c ON p.client_id = c.id
                 """
             else:
                 query = f"""
-                    SELECT {', '.join(self.payments_fields)}
-                    FROM paiement p
+                    SELECT {', '.join(self.payments_fields)} FROM paiement p
                     JOIN clients c ON p.client_id = c.id
-                    WHERE strftime('%Y-%m', p.date_versement) = ?
-                    ORDER BY p.id DESC
                 """
-            cursor.execute(query, (month,))
+
+            conditions = []
+            params = []
+
+            # 🔹 Case 1: All months of a given year
+            if month == "Mois":
+                conditions.append("strftime('%Y', p.date_versement) = ?")
+                params.append(str(year))
+            # 🔹 Case 2: Specific month/year
+            elif month != "Mois":
+                conditions.append("strftime('%Y-%m', p.date_versement) = ?")
+                params.append(f"{year}-{month}")
+
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+
+            query += " GROUP BY p.date_versement ORDER BY p.id DESC"
+
+            cursor.execute(query, params)
             return cursor.fetchall()
 
     def insert_versement_by_credit(self, credit_id, client_id, date_versement, montant, observation=""):
@@ -1328,10 +1341,10 @@ class Database:
 
     def dump_charges(self, month):
         query = f"""
-        SELECT {", ".join(self.charge_fields)} FROM charges ch
-        LEFT JOIN employes emp ON emp.id = ch.effectue_par
-        WHERE strftime('%Y-%m', ch.date_charge) = ?
-        ORDER BY ch.date_charge DESC
+            SELECT {", ".join(self.charge_fields)} FROM charges ch
+            LEFT JOIN employes emp ON emp.id = ch.effectue_par
+            WHERE strftime('%Y-%m', ch.date_charge) = ?
+            ORDER BY ch.date_charge DESC
         """
         with self.connect() as conn:
             cursor = conn.cursor()

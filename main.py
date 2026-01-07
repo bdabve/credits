@@ -610,7 +610,7 @@ class Credit(QtWidgets.QMainWindow):
         """
         logger.info(f"Creating a new {persone_type}...")
         self.ui.labelNewPersonType.setText(persone_type)
-        self.ui.labelNewPersonType.hide()
+        utils.COMMUNES_LIST.pop(0)  # remove "TOUS" from communes list
         utils.populate_comboBox(self.ui.cbBoxNewPersonCommune, utils.COMMUNES_LIST)
         # TODO:
         # Remove and show lineEdits based on type( client | employe )
@@ -1507,9 +1507,7 @@ class Credit(QtWidgets.QMainWindow):
         if rows is None:
             month = self.ui.cbBoxPaymentByMonth.currentText()
             year = self.ui.cbBoxPaymentByYear.currentText()
-            month = self.CURRENT_MONTH_TEXT if month == 'Mois' else month
-            date = f"{year}-{month}"
-            rows = self.db.dump_payments(date)
+            rows = self.db.dump_payments(month, year)
 
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, utils.PAYMENTS_HEADERS)
         utils.set_table_column_sizes(self.ui.paymentsTableWidget, 80, 270, 500, 270)
@@ -1572,12 +1570,15 @@ class Credit(QtWidgets.QMainWindow):
                 self.show_error_message(f"{result['error']}", success=False)
 
     def paiements_etat_journalier(self):
+        if not self.ui.buttonPaiementsEtatJournalier.isChecked():
+            self.display_payments()
+            return
+
         month = self.ui.cbBoxPaymentByMonth.currentText()
         year = self.ui.cbBoxPaymentByYear.currentText()
-        month = f"{year}-{self.CURRENT_MONTH_TEXT}" if month == 'Mois' else f"{year}-{month}"
 
         logger.debug(f"Display Payments Etat Journalier for {month}")
-        rows = self.db.dump_payments(month, journalier=True)
+        rows = self.db.dump_payments(month, year, journalier=True)
         utils.populate_table_widget(self.ui.paymentsTableWidget, rows, ['Date', 'Versement'])
         utils.set_table_column_sizes(self.ui.paymentsTableWidget, 300, 300)
         self.ui.labelPaymentsCount.setText(f"Total: {len(rows)}")
