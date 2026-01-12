@@ -27,10 +27,18 @@ DOWNLOAD_DIR = "triz_downloads"
 # ======================================================
 # DRIVER
 # ======================================================
-def create_driver(headless: bool = False):
+def create_driver(headless: bool = False, download_dir="./triz_downloads"):
     options = uc.ChromeOptions()
+    options.add_argument(f"--unsafely-treat-insecure-origin-as-secure={BASE_URL}")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_experimental_option('prefs', {
+        "download_default_directory": download_dir,
+        "download_prompt_for_download": False,
+        "download_directory_upgrade": True,
+        "safebrowsing.enabled": True
+    })
+
     return uc.Chrome(options=options, headless=headless)
 
 
@@ -87,6 +95,21 @@ def parse_products_table(driver, product_list: list):
 
 
 # ----------# Prevendeur Etat #---------- #
+def download_etat_prevendeur(driver, dated, datef, camion):
+    wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
+    url = (
+        f"{VENTE_URL}?"
+        f"{'camion=' + camion + '&' if camion else ''}"
+        f"datef={datef}&dated={dated}&type=camion"
+    )
+    driver.get(url)
+    wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+    excel_btn = driver.find_element(By.ID, 'liste:j_idt613:j_idt618')
+    excel_btn.click()
+    input("Press Enter after the download is complete...")
+    print("[✓] Excel download initiated.")
+
+
 def get_product_par_prevendeur(driver, dated, datef, camion):
     """
     Get Products List from Triz Chargement Page Detail Produit Sortie
@@ -180,15 +203,17 @@ def etat_prevendeur(username, password, dated, datef, camion, headless=False):
     :camion: camion du livreur
     """
     driver = create_driver(headless=headless)
-    filename = f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_{camion}_{dated}.xlsx"
+    # filename = f"C:\\Users\\ADMIN\\OneDrive\\Desktop\\etat_prevendeur_{camion}_{dated}.xlsx"
     if camion not in ['8442-0000005', '8442-0000006', '8442-0000007', '8442-0000010', '']:
         print("[✗] Incorrect CAMION.")
         return
     try:
         print("[*] Opening page...")
         if login(driver, username, password):
-            product_list = get_product_par_prevendeur(driver, dated, datef, camion)
-            prevendeur_to_excel(product_list, filename)
+            print("[*] Downloading Etat Prevendeur Excel...")
+            download_etat_prevendeur(driver, dated, datef, camion)
+            # product_list = get_product_par_prevendeur(driver, dated, datef, camion)
+            # prevendeur_to_excel(product_list, filename)
     finally:
         print("\n[✓] Close Browser.")
         driver.quit()
