@@ -2017,7 +2017,9 @@ class Credit(QtWidgets.QMainWindow):
         self.display_etat_journalier(self.excel_etat_file)
 
         # --- Ploting Graphs in Thread ---
-        self.worker = DriverGraphWorker(self.excel_etat_file)
+        month = self.ui.cbBoxEtatByMonth.currentText()
+        month_sheet = utils.MONTHS_FR.get(month) if month != "Mois" else utils.MONTHS_FR[self.CURRENT_MONTH_TEXT]
+        self.worker = DriverGraphWorker(self.excel_etat_file, month_sheet)
         self.worker.finished.connect(self.on_worker_finished)
         self.worker.start()
 
@@ -2036,7 +2038,7 @@ class Credit(QtWidgets.QMainWindow):
 
         # --- Debug Info ---
         logger.debug(
-            f"Etat Journalier for month: {selected_month}\n"
+            f"Etat Journalier for month: {selected_month}-{sheet_month}\n"
             f"File Name: {file_path}"
         )
 
@@ -2181,10 +2183,10 @@ class Credit(QtWidgets.QMainWindow):
     # === Etat From database ==
     def etat_from_database(self):
         # NOTE: The QPushButton for Etat Database is named as label
-        # FIXME: Icon must take color from theme
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
         year = self.ui.cbBoxEtatByYear.currentText()
-        logger.debug(f"Selected Month for Etat from Database: {selected_month}")
+        logger.debug(f"Selected Month for Etat from Database: {selected_month}-{year}")
+        # FIXME: Icon must take color from theme
         for btn in [
             self.ui.labelEtatSumAccompte,
             self.ui.labelEtatSumCredit, self.ui.labelEtatSumVerse,
