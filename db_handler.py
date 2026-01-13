@@ -1058,7 +1058,10 @@ class Database:
             if conditions:
                 query += " WHERE " + " AND ".join(conditions)
 
-            query += " GROUP BY p.date_versement ORDER BY p.id DESC"
+            if journalier:
+                query += " GROUP BY p.date_versement ORDER BY p.id DESC"
+            else:
+                query += " ORDER BY p.date_versement DESC"
 
             cursor.execute(query, params)
             return cursor.fetchall()
