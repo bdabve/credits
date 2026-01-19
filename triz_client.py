@@ -248,23 +248,23 @@ def etat_prevendeur(username, password, dated, datef, camion, headless=False):
 
 
 if __name__ == '__main__':
-    # import os
-    # import dotenv
-    # dotenv.load_dotenv(dotenv.find_dotenv())
-    # username = os.getenv("triz_username")
-    # passwd = os.getenv('triz_password')
+    import os
+    import dotenv
+    dotenv.load_dotenv(dotenv.find_dotenv())
+    username = os.getenv("triz_username")
+    passwd = os.getenv('triz_password')
+    # -------------------------------------------
     # from getpass import getpass
     # print('-' * 30)
     # username = input("[:] Triz Username: ")
     # passwd = getpass("[:] Triz Password: ")
     # print()
+    # -------------------------------------------
     # # camion = (WALID="8442-0000005", MOHAMED = "8442-0000006", FETHI = "8442-0000007", MM = "8442-0000010")
     # camion = input("[:] Camion WALID(8442-0000005), MOHAMED(8442-0000006), FETHI(8442-0000007), MM(8442-0000010): ")
     # #
     # date_debut = input("[:] Date Début (dd-mm-yyyy): ")
     # date_fin = input("[:] Date Fin (dd-mm-yyyy): ")
-    username = "a.brahim"
-    passwd = "18111986"
     camion = "8442-0000007"
     date_debut = "01-01-2026"
     date_fin = "31-01-2026"
