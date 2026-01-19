@@ -16,6 +16,12 @@ from selenium.common.exceptions import (
 # ======================================================
 # CONSTANTS
 # ======================================================
+# TODO: LIST OF CAMION
+# if 'Type Agent Commercial' == "Livreur"; then consult; then get camion from url; done"
+TRIZDIST_BASE_URL = "http://51.255.79.241:8080/trizdistribution"
+TRIZDIST_LOGIN_URL = f"{TRIZDIST_BASE_URL}/faces/login.xhtml"
+COMMERCIEL_URL = f"{TRIZDIST_BASE_URL}/faces/view/camion/list.xhtml"
+
 BASE_URL = "http://51.255.79.241:8080/trizstock"
 LOGIN_URL = f"{BASE_URL}/faces/login.xhtml"
 VENTE_URL = f"{BASE_URL}/faces/view/vente/listDetailProduitSortie.xhtml"
