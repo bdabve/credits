@@ -50,25 +50,34 @@ def create_driver(headless: bool = False, download_dir="./triz_downloads"):
 
 
 # ---------- LOGIN ----------
-def login(driver, username: str, password: str, timeout: int = DEFAULT_TIMEOUT):
+def login(driver, username: str, password: str, timeout: int = DEFAULT_TIMEOUT) -> bool:
     print("[+] Login...")
+
     wait = WebDriverWait(driver, timeout)
     driver.get(LOGIN_URL)
 
-    user_input = wait.until(EC.presence_of_element_located((By.ID, "j_username")))
-    pass_input = wait.until(EC.presence_of_element_located((By.ID, "j_password")))
+    # Wait until inputs are visible
+    user_input = wait.until(EC.visibility_of_element_located((By.ID, "j_username")))
+    pass_input = wait.until(EC.visibility_of_element_located((By.ID, "j_password")))
 
     user_input.clear()
     user_input.send_keys(username)
 
     pass_input.clear()
-    pass_input.send_keys(password + Keys.ENTER)
-    # Check for error message
+    pass_input.send_keys(password)
+    pass_input.send_keys(Keys.ENTER)
+
+    # ---- wait for either success OR error (shorter wait) ----
+    short_wait = WebDriverWait(driver, 5)
+
     try:
-        error_message = wait.until(EC.presence_of_element_located((By.ID, "errorMessages")))
-        error_message_text = error_message.find_element(By.CLASS_NAME, 'ui-messages-error-summary').text
-        print(f"[✗] Login failed: {error_message_text}")
+        error_box = short_wait.until(
+            EC.visibility_of_element_located((By.ID, "errorMessages"))
+        )
+        msg = error_box.find_element(By.CLASS_NAME, "ui-messages-error-summary").text
+        print(f"[✗] Login failed: {msg}")
         return False
+
     except TimeoutException:
         print("[✓] Login successful.")
         return True
