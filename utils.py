@@ -87,7 +87,7 @@ COMMUNES_LIST = sorted(COMMUNES_LIST)
 COMMUNES_LIST.insert(0, "TOUS")
 
 MONTHS_FR = {
-    "01": "JANVIER", "02": "FÉVRIER", "03": "MARS", "04": "AVRIL",
+    "01": "JANVIER", "02": "FEVRIER", "03": "MARS", "04": "AVRIL",
     "05": "MAI", "06": "JUIN", "07": "JUILLET", "08": "AOÛT",
     "09": "SEPTEMBRE", "10": "OCTOBRE", "11": "NOVEMBRE", "12": "DECEMBRE"
 }
