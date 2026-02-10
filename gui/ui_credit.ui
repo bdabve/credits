@@ -819,7 +819,7 @@
                 <enum>QFrame::Raised</enum>
                </property>
                <property name="currentIndex">
-                <number>5</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="AddPersonePage">
                 <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1034,6 +1034,13 @@
                        </item>
                        <item row="4" column="1">
                         <widget class="QComboBox" name="cbBoxNewPersonCommune"/>
+                       </item>
+                       <item row="9" column="0">
+                        <widget class="QPushButton" name="buttonTrizClients">
+                         <property name="text">
+                          <string>Triz clients</string>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </widget>

@@ -201,6 +201,7 @@ def setup_main_callbacks(root):
             lambda: root.goto_page('client')
         ),
         (root.ui.buttonNewClient, lambda: root.ui_create_persone('client')),
+        (root.ui.buttonTrizClients, lambda: root.show_triz_clients_dialog()),
         (root.ui.buttonClientSituation, root.client_situation_report),
         (root.ui.buttonClientNewCredit, lambda: root.ui_create_credit(client=True)),
         (root.ui.buttonClientCreditList, root.client_credit_list),
@@ -417,6 +418,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     # --- Clients
     root.ui.buttonClientsPage.setIcon(theme_manager.icon('ph.users', "MENU_COLOR"))
     root.ui.buttonNewClient.setIcon(PLUS_ICON)
+    root.ui.buttonTrizClients.setIcon(theme_manager.icon('ph.users-three', "MENU_COLOR"))
     root.ui.buttonClientNewCredit.setIcon(CASH_PLUS_ICON)
     root.ui.buttonClientCreditList.setIcon(LIST_ICON)
     root.ui.buttonDeleteClient.setIcon(TRASH_ICON)
@@ -936,6 +938,33 @@ class ConfirmDialog(QtWidgets.QDialog):
                 self.move(self.pos() + e.globalPos() - self.clickPosition)
                 self.clickPosition = e.globalPos()
                 e.accept()
+
+
+from gui import h_trizClients
+
+
+class TrizClients(QtWidgets.QDialog):
+    def __init__(self, db):
+        super().__init__()
+        self.db = db
+        self.ui = h_trizClients.Ui_Dialog()
+        self.ui.setupUi(self)
+
+        self.ui.editSearchTrizClient.textChanged.connect(self.search_triz_client)
+        self.ui.buttonSearchTrizClient.clicked.connect(self.search_triz_client)
+        self.ui.buttonAddTrizClient.clicked.connect(self.add_triz_client)
+
+    def search_triz_client(self):
+        search_term = self.ui.editSearchTrizClient.text().strip()
+        if not search_term:
+            QtWidgets.QMessageBox.warning(self, "Input Error", "Please enter a search term.")
+            return
+        result = self.db.search_triz_clients(search_term)
+        headers = ["ID", "Identifiant", "Raison Sociale", "Téléphone", "Adresse", "Commune"]
+        populate_table_widget(self.ui.tableWidgetTrizClients, result, headers=headers, resize_to_content=True)
+
+    def add_triz_client(self):
+        print("Add Client from triz to Our Database")
 
 
 if __name__ == '__main__':

@@ -631,12 +631,22 @@ class Credit(QtWidgets.QMainWindow):
         if persone_type == 'client':
             for edit in client_edits: edit.show()     # Clients
             for edit in employe_edits: edit.hide()      # Employe
+            self.ui.buttonTrizClients.show()
 
         elif persone_type == 'employe':
             for edit in client_edits: edit.hide()     # Clients
             for edit in employe_edits: edit.show()      # Employe
+            self.ui.buttonTrizClients.hide()
 
         self.setup_extraCenter_ui(f"Nouveau {persone_type.title()}", self.ui.AddPersonePage)
+
+    def show_triz_clients_dialog(self):
+        """
+        Show the TrizClients dialog.
+        """
+        logger.info("Opening TrizClients dialog...")
+        dialog = utils.TrizClients(self.db)
+        dialog.exec_()
 
     def save_new_persone(self):
         """

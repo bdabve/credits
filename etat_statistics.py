@@ -586,18 +586,18 @@ if __name__ == "__main__":
     # ---------------------------------------------------
     # ----------- Achat Mohamed ----------------
     # ---------------------------------------------------
-    # file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\ACHAT_MOHAMED_2025.xlsx"
-    # achat_mohamed = achat_mohamed(file_path, "DECEMBRE")
-    # print(achat_mohamed.head(20))
-    # print('-' * 30)
-    # print(achat_mohamed.tail(20))
+    file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\2026-ACHAT_MOHAMED_2026.xlsx"
+    achat_mohamed = achat_mohamed(file_path, "JANVIER")
+    print(achat_mohamed.head(20))
+    print('-' * 30)
+    print(achat_mohamed.tail(20))
     # -------------------------------------------------
     # PDF CHARGEMENT RECAPE MOHAMED
     # -----------------------------
-    pdf_file_path = r"C:\\Users\ADMIN\\OneDrive\Desktop\\FICHE CHARGEMEN\\02-FEVRIER\\MOH-09.pdf"
-    # pdf_file_path = "/home/dabve/Desktop/MOH-04.pdf"
-    pdf_recape = recapepdf_to_text(pdf_file_path)
-    if pdf_recape is not None:
-        print("Recape Journee Mohamed: ")
-        print(pdf_recape)
-        print(f"\n==== Total Article: {len(pdf_recape)} =====")
+    # pdf_file_path = r"C:\\Users\ADMIN\\OneDrive\Desktop\\FICHE CHARGEMEN\\02-FEVRIER\\MOH-09.pdf"
+    # # pdf_file_path = "/home/dabve/Desktop/MOH-04.pdf"
+    # pdf_recape = recapepdf_to_text(pdf_file_path)
+    # if pdf_recape is not None:
+    #     print("Recape Journee Mohamed: ")
+    #     print(pdf_recape)
+    #     print(f"\n==== Total Article: {len(pdf_recape)} =====")

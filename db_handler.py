@@ -126,10 +126,29 @@ class Database:
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS clients (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        nom VARCHAR(255) NOT NULL,
+                        nom VARCHAR(255) NOT NULL UNIQUE,
                         telephone VARCHAR(100),
                         commune VARCHAR(100),
                         observation TEXT
+                    )
+                """)
+                # TRIZ CLIENTS
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS TrizClients(
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        identifiant VARCHAR(255) NOT NULL UNIQUE,
+                        raison_sociale VARCHAR(255) NOT NULL,
+                        telephone VARCHAR(100),
+                        adresse VARCHAR(255),
+                        commune VARCHAR(100),
+                        wilaya VARCHAR(100),
+                        date_ajout TEXT NOT NULL,
+                        type_dactivite VARCHAR(255),
+                        actif BOOLEAN NOT NULL DEFAULT 1,
+                        rc VARCHAR(255),
+                        nif VARCHAR(255),
+                        nis VARCHAR(255),
+                        ai VARCHAR(255)
                     )
                 """)
                 # credit Table
@@ -689,6 +708,24 @@ class Database:
 
             conn.commit()
             return {'success': True, 'message': message}
+
+    def search_triz_clients(self, search_word):
+        """
+        Search for TRIZ clients by identifiant, raison_sociale, telephone, adresse, commune, wilaya, type_dactivite.
+        """
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            query = """
+                SELECT id, identifiant, raison_sociale, telephone, adresse, commune
+                FROM TrizClients
+                WHERE identifiant LIKE ? OR raison_sociale LIKE ? OR telephone LIKE ? OR adresse LIKE ?
+                      OR commune LIKE ? OR wilaya LIKE ? OR type_dactivite LIKE ?
+                ORDER BY raison_sociale ASC
+            """
+            search_pattern = f'%{search_word}%'
+            params = [search_pattern] * 7  # For all searchable fields
+            cursor.execute(query, params)
+            return cursor.fetchall()
 
     # =========================
     # === CREDITS METHODES ===
@@ -1525,7 +1562,53 @@ class Database:
 
 if __name__ == '__main__':
     db = Database()
+    # -------------------------------
+    # Insert TrizClients
+    # import pandas as pd
+    # df = pd.read_excel(r"C:\Users\ADMIN\OneDrive\Desktop\Liste_des_clients_actifs2602101041.xlsx", sheet_name=0)
+    # columns = [
+    #     'Identifiant', 'Raison sociale', 'Téléphone', 'Adresse', 'Commune',
+    #     'Wilaya', "Date d'ajout", "Type d'activité", 'Actif',
+    #     'RC', 'NIF', 'NIS', 'AI'
+    # ]
+    # df = df[columns]
+    # df = df.rename(columns={
+    #     "Identifiant": "identifiant",
+    #     "Raison sociale": "raison_sociale",
+    #     "Téléphone": "telephone",
+    #     "Adresse": "adresse",
+    #     "Commune": "commune",
+    #     "Wilaya": "wilaya",
+    #     "Date d'ajout": "date_ajout",
+    #     "Type d'activité": "type_dactivite",
+    #     "Actif": "actif",
+    #     "RC": "rc",
+    #     "NIF": "nif",
+    #     "NIS": "nis",
+    #     "AI": "ai"
+    # })
+    # # 2️⃣ Connect to SQLite database
+    # conn = sqlite3.connect("./lifeTipazaDB.db")
 
+    # # 3️⃣ Insert data into table
+    # df.to_sql(
+    #     name="TrizClients",     # table name
+    #     con=conn,
+    #     if_exists="append",  # "replace" to overwrite
+    #     index=False
+    # )
+
+    # # 4️⃣ Close connection
+    # conn.close()
+    # print("✅ Data inserted successfully")
+    # --------------------------------------
+    query = "SELECT * FROM TrizClients"
+    with db.connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        print(len(rows))
+    # ----------------------------------------
     # result = db.get_sums_operations('2024-08')
     # print(result)
     # CREATE DATABASE
