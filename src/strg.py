@@ -50,3 +50,4 @@ if __name__ == '__main__':
     # plus_six_month = today + datetime.timedelta(days=180)
     # print("Six months from today:", plus_six_month)
     # print("Today's date:", today)
+    print(load_machine_id())

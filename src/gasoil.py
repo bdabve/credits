@@ -46,5 +46,7 @@ def check_license():
 
 
 if __name__ == '__main__':
+    licence = load_license()
+    print(licence)
     ok = check_license()
     print(ok)
