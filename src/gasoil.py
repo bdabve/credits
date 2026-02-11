@@ -42,7 +42,30 @@ def check_license():
     if today > expires:
         return {"success": False, "message": "License expired"}
 
-    return {"success": True, "message": "License valid"}
+    return {"success": True, "message": "License valid until " + lic["expires_at"]}
+
+def update_license(date):
+    """
+    Update the license expiration date by adding 6 months from today.
+    This can be used for renewing the license.
+    usage:
+        $ update_licence = gsl.update_license("12-03-2026")
+    """
+    lic = load_license()
+    if not lic:
+        return {"success": False, "message": "License not found"}
+
+    # today = datetime.date.today()
+    # plus_six_month = today + datetime.timedelta(days=180)
+    # format the date
+    date = datetime.datetime.strptime(date, "%d-%m-%Y").date()
+    date_to = date.strftime("%Y-%m-%d")
+    lic["expires_at"] = str(date_to)
+
+    with open(license_path(), "w") as f:
+        json.dump(lic, f)
+
+    return {"success": True, "message": "License updated", "expires_at": lic["expires_at"]}
 
 
 if __name__ == '__main__':

@@ -646,7 +646,14 @@ class Credit(QtWidgets.QMainWindow):
         """
         logger.info("Opening TrizClients dialog...")
         dialog = utils.TrizClients(self.db)
-        dialog.exec_()
+        if dialog.exec_():
+            result = dialog.add_client_result
+            if result and result['success']:
+                self.show_error_message("Client ajouté avec succès depuis Triz.", success=True)
+                self.toggle_left_box(close=True)
+                self.goto_page('client', title='Clients')
+            elif result and not result['success']:
+                self.show_error_message(f"Erreur: {result['error']}", success=False)
 
     def save_new_persone(self):
         """
@@ -2226,8 +2233,9 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
     theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
+
     result = gsl.check_license()
-    print(result)
+    # print(result)
     if not result['success']:
         logger.error("License check failed. Exiting application.")
         logger.error(f"License Error: {result['message']}")

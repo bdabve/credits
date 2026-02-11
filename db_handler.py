@@ -1602,12 +1602,12 @@ if __name__ == '__main__':
     # conn.close()
     # print("✅ Data inserted successfully")
     # --------------------------------------
-    query = "SELECT * FROM TrizClients"
-    with db.connect() as conn:
-        cursor = conn.cursor()
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        print(len(rows))
+    # query = "SELECT * FROM TrizClients"
+    # with db.connect() as conn:
+    #     cursor = conn.cursor()
+    #     cursor.execute(query)
+    #     rows = cursor.fetchall()
+    #     print(len(rows))
     # ----------------------------------------
     # result = db.get_sums_operations('2024-08')
     # print(result)

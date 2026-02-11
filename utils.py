@@ -954,6 +954,8 @@ class TrizClients(QtWidgets.QDialog):
         self.ui.buttonSearchTrizClient.clicked.connect(self.search_triz_client)
         self.ui.buttonAddTrizClient.clicked.connect(self.add_triz_client)
 
+        self.add_client_result = None
+
     def search_triz_client(self):
         search_term = self.ui.editSearchTrizClient.text().strip()
         if not search_term:
@@ -964,7 +966,15 @@ class TrizClients(QtWidgets.QDialog):
         populate_table_widget(self.ui.tableWidgetTrizClients, result, headers=headers, resize_to_content=True)
 
     def add_triz_client(self):
+        from utils import get_column_value, table_has_selection
         print("Add Client from triz to Our Database")
+        if table_has_selection(self.ui.tableWidgetTrizClients):
+            row = self.ui.tableWidgetTrizClients.currentRow()
+            client_name = get_column_value(self.ui.tableWidgetTrizClients, row, 2)
+            phone = get_column_value(self.ui.tableWidgetTrizClients, row, 3)
+            commune = get_column_value(self.ui.tableWidgetTrizClients, row, 5)
+            self.add_client_result = self.db.insert_new_client(client_name, phone, commune, observation="Importé depuis TRIZ")
+            self.accept()  # Close the dialog after adding the client
 
 
 if __name__ == '__main__':
