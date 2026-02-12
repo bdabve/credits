@@ -494,7 +494,7 @@ class Database:
             FROM operations ope
             LEFT JOIN employes emp ON emp.id = ope.employe_id
             WHERE emp.id = ? AND strftime('%Y-%m', ope.date) = ?
-            ORDER BY emp.nom
+            ORDER BY ope.date DESC, emp.nom ASC
             """
             cursor.execute(query, (employe_id, date))
             return cursor.fetchall()
