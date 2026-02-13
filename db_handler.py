@@ -220,9 +220,8 @@ class Database:
                         total_ttc DECIMAL(10, 2),
                         observation TEXT,
                         created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
                         FOREIGN KEY(client_id) REFERENCES clients(id) ON DELETE CASCADE
+
                     )
                 """)
                 cursor.execute("""
@@ -233,13 +232,13 @@ class Database:
                         product_id INTEGER UNSIGNED NOT NULL,
                         quantity INTEGER UNSIGNED,
                         price DECIMAL(10, 2),
+                        total DECIMAL(10, 2),
                         remise_percent DECIMAL(10, 2),
                         total_avec_remise DECIMAL(10, 2),
                         total_ttc DECIMAL(10, 2),
                         created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                         FOREIGN KEY (invoice_id) REFERENCES Invoices(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        FOREIGN KEY (product_id) REFERENCES products_gros(id) ON DELETE RESTRICT ON UPDATE CASCADE
+                        FOREIGN KEY (product_id) REFERENCES products_gros(id) ON DELETE CASCADE ON UPDATE CASCADE
                     )
                 """)
 
@@ -363,6 +362,48 @@ class Database:
                     return {"success": True, "data": result[0]}
                 else:
                     return {"success": False, "message": f"Produit '{product}' non trouvé."}
+
+    def save_invoice(self, fact_date, fact_number, total_ht, total_remise, total_ttc, products):
+        """
+        Save invoice and its line items to the database.
+        :params: total_ht, total_remise, total_ttc, products (list of dicts with keys: sku, quantity, price, remise_percent)
+        """
+        with self.connect() as conn:
+            try:
+                cursor = conn.cursor()
+                # Insert invoice
+                cursor.execute(
+                    """INSERT INTO Invoices (invoice_number, invoice_date, client_id,
+                                             total, total_avec_remise, total_ttc)
+                       VALUES (?, ?, ?, ?, ?, ?)""",
+                    (fact_number, fact_date, 57, total_ht, total_remise, total_ttc)
+                    # 57 Mohamed
+                )
+                invoice_id = cursor.lastrowid
+
+                # Insert line items
+                for product in products:
+                    cursor.execute(
+                        """INSERT INTO InvoiceLineItems (invoice_id, invoice_number, product_id, quantity, price,
+                                                         total, remise_percent, total_avec_remise, total_ttc)
+                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        (
+                            invoice_id,
+                            fact_number,
+                            self.get_item_id('products_gros', 'sku', product['sku']),
+                            product['qte'],
+                            product['price'],
+                            product['total'],
+                            product['remise_percent'],
+                            product['remise'],
+                            product['total_ttc']
+                        )
+                    )
+
+                conn.commit()
+                return {"success": True, "invoice_id": invoice_id}
+            except sqlite3.Error as e:
+                return {"success": False, "message": str(e)}
 
     # =========================
     # === EMPLOYES METHODES ===

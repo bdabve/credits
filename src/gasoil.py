@@ -5,6 +5,7 @@
 import json, os, datetime
 from platformdirs import user_data_dir
 from src.strg import load_machine_id
+# from strg import load_machine_id
 
 APP_NAME = "soldes"
 
@@ -44,6 +45,7 @@ def check_license():
 
     return {"success": True, "message": "License valid until " + lic["expires_at"]}
 
+
 def update_license(date):
     """
     Update the license expiration date by adding 6 months from today.
@@ -71,5 +73,6 @@ def update_license(date):
 if __name__ == '__main__':
     licence = load_license()
     print(licence)
+    update_licence = update_license("12-03-2026")
     ok = check_license()
     print(ok)

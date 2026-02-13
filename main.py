@@ -2235,7 +2235,7 @@ if __name__ == '__main__':
     theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
 
     result = gsl.check_license()
-    # print(result)
+    print(result)
     if not result['success']:
         logger.error("License check failed. Exiting application.")
         logger.error(f"License Error: {result['message']}")

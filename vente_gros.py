@@ -2,19 +2,23 @@
 # -*- coding: utf-8 -*-
 #
 # ----------------------------------------------------------------------------
-from PyQt5 import QtWidgets     # , QtCore
+from PyQt5 import QtWidgets, QtCore
 from gui.h_vente_gros import Ui_Dialog
-import db_handler
 import utils
 
 
 class VenteGros(QtWidgets.QDialog):
-    def __init__(self):
+    def __init__(self, db_handler, logger):
         super().__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.db = db_handler.Database()
+        self.logger = logger
 
+        # date and number
+        import datetime
+        date = datetime.date.today().strftime("%Y-%m-%d")
+        self.ui.dateEditFactDate.setDate(QtCore.QDate.fromString(date, "yyyy-MM-dd"))
         # populate price from db
         self.ui.comboBoxProduct.currentIndexChanged.connect(self.get_product_price)
 
@@ -26,7 +30,11 @@ class VenteGros(QtWidgets.QDialog):
         else:
             print("Error fetching products:", result["error"])
 
+        # Add product
         self.ui.buttonAddProduct.clicked.connect(self.add_product_tableWidget)
+
+        # save invoice
+        self.ui.buttonSaveInvoice.clicked.connect(self.save_invoice)
 
     def get_product_price(self):
         """
@@ -62,20 +70,27 @@ class VenteGros(QtWidgets.QDialog):
             return
 
         total = price * qte
-        remise = self.ui.doubleSpinBoxRemise.value()
+        remise = self.ui.doubleSpinBoxRemise.value()        # %
         remise_calc = total * (remise / 100)
         total_ttc = total - remise_calc
-        self.insert_product_tableWidget(sku, qte, price, total, remise_calc, total_ttc)
-        print(f"Adding the product to table widget SKU({sku}) - QTE({qte}) - PRICE({price}) - REMISE({remise})")
+        self.insert_product_tableWidget(sku, qte, price, total, remise, remise_calc, total_ttc)
+        self.logger.debug(f"Adding the product to table widget SKU({sku}) - QTE({qte}) - PRICE({price}) - REMISE({remise})")
 
-    def insert_product_tableWidget(self, sku, qte, price, total, remise_calc, total_ttc):
+    def insert_product_tableWidget(self, sku, qte, price, total, remise, remise_calc, total_ttc):
         table = self.ui.tableWidgetProducts
+        headers = [
+            "SKU", "Qte", "Prix", "Total", "%", "Remise", "Total TTC"
+        ]
+        table.setColumnCount(len(headers))
+        table.setHorizontalHeaderLabels(headers)
+
         row_position = table.rowCount()
         table.insertRow(row_position)
         table.setItem(row_position, 0, QtWidgets.QTableWidgetItem(sku))
         table.setItem(row_position, 1, QtWidgets.QTableWidgetItem(str(qte)))
-        table.setItem(row_position, 3, QtWidgets.QTableWidgetItem(str(price)))
-        table.setItem(row_position, 4, QtWidgets.QTableWidgetItem(str(total)))
+        table.setItem(row_position, 2, QtWidgets.QTableWidgetItem(str(price)))
+        table.setItem(row_position, 3, QtWidgets.QTableWidgetItem(str(total)))
+        table.setItem(row_position, 4, QtWidgets.QTableWidgetItem(str(remise)))
         table.setItem(row_position, 5, QtWidgets.QTableWidgetItem(str(round(remise_calc, 2))))
         table.setItem(row_position, 6, QtWidgets.QTableWidgetItem(str(total_ttc)))
 
@@ -87,18 +102,54 @@ class VenteGros(QtWidgets.QDialog):
         total_remise = 0
         total_ttc = 0
         for row in range(table.rowCount()):
-            total_ht += float(table.item(row, 4).text())
+            total_ht += float(table.item(row, 3).text())
             total_remise += float(table.item(row, 5).text())
             total_ttc += float(table.item(row, 6).text())
         self.ui.TotalGeneral.setText(f"{round(total_ht, 2)}")
         self.ui.TotalGeneralRemise.setText(f"{round(total_remise, 2)}")
         self.ui.TotalGeneralTTC.setText(f"{round(total_ttc, 2)}")
 
+    def save_invoice(self):
+        self.logger.debug("Saving invoice into database")
+        self.logger.debug("Invoice details:")
+
+        table = self.ui.tableWidgetProducts
+        products = []
+        for row in range(table.rowCount()):
+            product = {
+                "sku": table.item(row, 0).text(),
+                "qte": table.item(row, 1).text(),
+                "price": table.item(row, 2).text(),
+                "total": table.item(row, 3).text(),
+                "remise_percent": table.item(row, 4).text(),
+                "remise": table.item(row, 5).text(),
+                "total_ttc": table.item(row, 6).text()
+            }
+            products.append(product)
+            self.logger.debug(f"Product {row + 1}: {product}")
+
+        fact_date = self.ui.dateEditFactDate.date().toPyDate()
+        fact_number = self.ui.lineEditFactNumber.text()
+        self.logger.debug(f"Facutre Number({fact_number}), Facture date({fact_date})")
+        total_ht = sum(float(product["total"]) for product in products)
+        total_remise = sum(float(product["remise"]) for product in products)
+        total_ttc = sum(float(product["total_ttc"]) for product in products)
+        self.logger.debug(f"Total HT: {total_ht}, Total Remise: {total_remise}, Total TTC: {total_ttc}\n{products}")
+
+        result = self.db.save_invoice(fact_date, fact_number, total_ht, total_remise, total_ttc, products)
+        logger.info(f"Invoice saved with result: {result}")
+        if not result["success"]:
+            self.ui.labelErros.setText(result["message"])
+        else:
+            self.ui.labelErros.setText(f"Facture ({result['invoice_id']}) enregistrée avec succès.")
+
 
 if __name__ == '__main__':
     import sys
-    app = QtWidgets.QApplication(sys.argv)
+    import db_handler
+    from logger import logger
 
-    dialog = VenteGros()
+    app = QtWidgets.QApplication(sys.argv)
+    dialog = VenteGros(db_handler, logger)
     dialog.show()
     sys.exit(app.exec_())
