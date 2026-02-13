@@ -188,6 +188,22 @@ class Database:
                         motif TEXT NOT NULL
                     )
                 """)
+                # ---------------------
+                # == Table Products
+                # -----------------
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS products_gros (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        sku VARCHAR(255) NOT NULL UNIQUE,
+                        collisage VARCHAR(255),
+                        collisage_palette VARCHAR(255),
+                        prix_ht_distrubuteur DECIMAL(10, 2),
+                        prix_ttc_distrubuteur DECIMAL(10, 2),
+                        prix_detail_ttc DECIMAL(10, 2),
+                        prix_dgros_ttc DECIMAL(10, 2),
+                        prix_gros_ttc DECIMAL(10, 2)
+                    )
+               """)
 
                 conn.commit()
                 return {'success': True}
@@ -277,6 +293,32 @@ class Database:
         columns = [desc[0] for desc in cursor.description]
         RowTuple = namedtuple(tuple_name, columns)
         return [RowTuple(*row) for row in cursor.fetchall()]
+
+    def get_products_sku(self):
+        query = "SELECT sku FROM products_gros ORDER BY sku ASC"
+        with self.connect() as conn:
+            try:
+                cursor = conn.cursor()
+                cursor.execute(query)
+            except sqlite3.Error as e:
+                return {"success": False, "message": str(e)}
+            else:
+                return {"success": True, "data": [row[0] for row in cursor.fetchall()]}
+
+    def get_product_price(self, product):
+        query = "SELECT prix_gros_ttc FROM products_gros WHERE sku = ?"
+        with self.connect() as conn:
+            try:
+                cursor = conn.cursor()
+                cursor.execute(query, (product,))
+            except sqlite3.Error as e:
+                return {"success": False, "message": str(e)}
+            else:
+                result = cursor.fetchone()
+                if result:
+                    return {"success": True, "data": result[0]}
+                else:
+                    return {"success": False, "message": f"Produit '{product}' non trouvé."}
 
     # =========================
     # === EMPLOYES METHODES ===
@@ -1562,44 +1604,39 @@ class Database:
 
 if __name__ == '__main__':
     db = Database()
+    result = db._create_tables()
+    print(result)
     # -------------------------------
     # Insert TrizClients
     # import pandas as pd
-    # df = pd.read_excel(r"C:\Users\ADMIN\OneDrive\Desktop\Liste_des_clients_actifs2602101041.xlsx", sheet_name=0)
-    # columns = [
-    #     'Identifiant', 'Raison sociale', 'Téléphone', 'Adresse', 'Commune',
-    #     'Wilaya', "Date d'ajout", "Type d'activité", 'Actif',
-    #     'RC', 'NIF', 'NIS', 'AI'
-    # ]
-    # df = df[columns]
-    # df = df.rename(columns={
-    #     "Identifiant": "identifiant",
-    #     "Raison sociale": "raison_sociale",
-    #     "Téléphone": "telephone",
-    #     "Adresse": "adresse",
-    #     "Commune": "commune",
-    #     "Wilaya": "wilaya",
-    #     "Date d'ajout": "date_ajout",
-    #     "Type d'activité": "type_dactivite",
-    #     "Actif": "actif",
-    #     "RC": "rc",
-    #     "NIF": "nif",
-    #     "NIS": "nis",
-    #     "AI": "ai"
-    # })
-    # # 2️⃣ Connect to SQLite database
-    # conn = sqlite3.connect("./lifeTipazaDB.db")
-
-    # # 3️⃣ Insert data into table
-    # df.to_sql(
-    #     name="TrizClients",     # table name
-    #     con=conn,
-    #     if_exists="append",  # "replace" to overwrite
-    #     index=False
+    # # df = pd.read_excel(r"C:\Users\ADMIN\OneDrive\Desktop\Liste_des_clients_actifs2602101041.xlsx", sheet_name=0)
+    # df = pd.read_excel(
+        # "/home/dabve/Desktop/LISTE_PRIX_2026.xlsx",
+        # sheet_name="liste produit life  2026 ",
+        # skiprows=3,
+        # usecols="C:J"
     # )
+    # df = df.iloc[:-1]       # Drop the last line of totals
+    # df = df.rename(columns={
+        # "DESIGNATION (SKU)": "sku",
+        # "COLISAGE": "collisage",
+        # "COLISAGE/P": "collisage_palette",
+        # "PRIX HT DISTRIBUTEUR": "prix_ht_distrubuteur",
+        # "PRIX TTC DISTRIBUTEUR ": "prix_ttc_distrubuteur",
+        # "prix DI / TTC": "prix_detail_ttc",
+        # "prix DG/ TTC": "prix_dgros_ttc",
+        # "prix DD / TTC": "prix_gros_ttc",
+    # })
+    # conn = sqlite3.connect("./lifeTipazaDB.db")       # ==> Connect to SQLite database
 
-    # # 4️⃣ Close connection
-    # conn.close()
+    # ==> Insert data into table
+    # df.to_sql(
+        # name="products_gros",     # table name
+        # con=conn,
+        # if_exists="append",  # "replace" to overwrite
+        # index=False
+    # )
+    # conn.close()      # ==> Close connection
     # print("✅ Data inserted successfully")
     # --------------------------------------
     # query = "SELECT * FROM TrizClients"
@@ -1609,74 +1646,3 @@ if __name__ == '__main__':
     #     rows = cursor.fetchall()
     #     print(len(rows))
     # ----------------------------------------
-    # result = db.get_sums_operations('2024-08')
-    # print(result)
-    # CREATE DATABASE
-    # result = db_handler.create_tables()
-
-    # ADD Emplye | Client
-    # from datetime import datetime
-    # today = datetime.now().date()
-    # result = db.insert_new_employe('Ibrahim', 'Magasinier', '', 40000, today)
-    # result = db.insert_new_client('SUP Elmara3i', '0556000000', '')
-    # print(result)
-    # =======================
-    # Dump Emplyes | Clients
-    # rows = db.dump_employes()
-    # rows = db.dump_clients()
-    # print(rows)
-
-    # ===========
-    # ADD CREDIT
-    # result = db_handler.ajouter_credit(1, '1500', 'Avance')
-
-    # ADD VERSEMENT
-    # result = db_handler.ajouter_versement(1, '200')
-
-    # Get Persones Names
-    # result = db_handler.persone_names()
-
-    # result = db_handler.get_total_credit()
-
-    # Get CLIENT CREDITES
-    # result = db_handler.get_client_credits(1)
-    # print(f"Credit for client :ibrahim: {result}")
-    # result = db_handler.get_credit_versements(1)
-    # print(f"Versement: {result}")
-
-    # Calculate salarie
-    # result = db.calculate_salaire_mensuel('2025-09')
-    # for row in result:
-    #     print(row)
-    # print(result)
-
-    #
-    # result = db.get_client_versement(8)
-    # print(result)
-    # result = db.get_situation(13)        # 8: GM1, 3: boughrassa
-    # for row in result:
-    #     print(row)
-    # for row in result:
-    #     for key, value in row.items():
-    #         if key == 'versements':
-    #             print("Versements:")
-    #             if len(value) > 0:
-    #                 for val in value:
-    #                     for k, v in val.items():
-    #                         print(f"    {k} == {v}")
-    #         else:
-    #             print(f"{key} === {value}")
-    #     print('-' * 30)
-    # import utils
-    # # result = utils.export_situation_to_excel(data=result, file_path='situation_client_gm1.xlsx')
-    # result = db.accompte_details('2025-10')
-    # result = utils.export_salary_report_openpyxl(result)
-    # print(result)
-    # for row in result:
-    #     print(row)
-    # rows = db.etat_journalier()
-    # print(rows)
-
-    # rows = db.dump_payments(by_date=True)
-    # for row in rows:
-    #     print(row)

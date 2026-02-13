@@ -566,6 +566,7 @@ def recapepdf_to_text(pdf_file):
 
 
 if __name__ == "__main__":
+    pass
     # file = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\VERSEMENT_LIVREUR.xlsx"
     # file = "~/Desktop/ADMIN/VERSEMENT_LIVREUR.xlsx"
 
@@ -586,11 +587,11 @@ if __name__ == "__main__":
     # ---------------------------------------------------
     # ----------- Achat Mohamed ----------------
     # ---------------------------------------------------
-    file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\2026-ACHAT_MOHAMED_2026.xlsx"
-    achat_mohamed = achat_mohamed(file_path, "JANVIER")
-    print(achat_mohamed.head(20))
-    print('-' * 30)
-    print(achat_mohamed.tail(20))
+    # file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\2026-ACHAT_MOHAMED_2026.xlsx"
+    # achat_mohamed = achat_mohamed(file_path, "JANVIER")
+    # print(achat_mohamed.head(20))
+    # print('-' * 30)
+    # print(achat_mohamed.tail(20))
     # -------------------------------------------------
     # PDF CHARGEMENT RECAPE MOHAMED
     # -----------------------------
