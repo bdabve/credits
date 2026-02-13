@@ -50,7 +50,7 @@
          <item alignment="Qt::AlignBottom">
           <widget class="QComboBox" name="comboBoxProduct">
            <property name="editable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -193,6 +193,25 @@
           <widget class="QPushButton" name="buttonAddProduct">
            <property name="text">
             <string>Ajouter</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_8">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="labelErros">
+           <property name="text">
+            <string/>
            </property>
           </widget>
          </item>
@@ -359,6 +378,13 @@
              </widget>
             </item>
            </layout>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignRight">
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>Enregestrer</string>
+           </property>
           </widget>
          </item>
         </layout>

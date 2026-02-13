@@ -178,7 +178,9 @@ class Database:
                     )
                 """)
 
-                # Charge
+                # ======================
+                # ==< Tables CHARGES >==
+                # ======================
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS charges (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -188,9 +190,9 @@ class Database:
                         motif TEXT NOT NULL
                     )
                 """)
-                # ---------------------
-                # == Table Products
-                # -----------------
+                # =======================
+                # ==< Tables PRODUCTS >==
+                # =======================
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS products_gros (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -203,7 +205,43 @@ class Database:
                         prix_dgros_ttc DECIMAL(10, 2),
                         prix_gros_ttc DECIMAL(10, 2)
                     )
-               """)
+                """)
+                # Invoices
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS Invoices (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        client_id INTEGER UNSIGNED NOT NULL,
+                        invoice_date DATE,
+                        invoice_number VARCHAR(255) NOT NULL,
+
+                        total DECIMAL(10, 2),
+                        remise_percent DECIMAL(10, 2),
+                        total_avec_remise DECIMAL(10, 2),
+                        total_ttc DECIMAL(10, 2),
+                        observation TEXT,
+                        created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+                        FOREIGN KEY(client_id) REFERENCES clients(id) ON DELETE CASCADE
+                    )
+                """)
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS InvoiceLineItems (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        invoice_id INTEGER UNSIGNED NOT NULL,
+                        invoice_number VARCHAR(255) NOT NULL,
+                        product_id INTEGER UNSIGNED NOT NULL,
+                        quantity INTEGER UNSIGNED,
+                        price DECIMAL(10, 2),
+                        remise_percent DECIMAL(10, 2),
+                        total_avec_remise DECIMAL(10, 2),
+                        total_ttc DECIMAL(10, 2),
+                        created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        FOREIGN KEY (invoice_id) REFERENCES Invoices(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        FOREIGN KEY (product_id) REFERENCES products_gros(id) ON DELETE RESTRICT ON UPDATE CASCADE
+                    )
+                """)
 
                 conn.commit()
                 return {'success': True}
@@ -294,6 +332,9 @@ class Database:
         RowTuple = namedtuple(tuple_name, columns)
         return [RowTuple(*row) for row in cursor.fetchall()]
 
+    # =========================
+    # === PRODUCTS METHODES ===
+    # =========================
     def get_products_sku(self):
         query = "SELECT sku FROM products_gros ORDER BY sku ASC"
         with self.connect() as conn:
@@ -306,7 +347,10 @@ class Database:
                 return {"success": True, "data": [row[0] for row in cursor.fetchall()]}
 
     def get_product_price(self, product):
-        query = "SELECT prix_gros_ttc FROM products_gros WHERE sku = ?"
+        """
+        Get product price to display in QLineEdit Price
+        """
+        query = "SELECT prix_ttc_distrubuteur FROM products_gros WHERE sku = ?"
         with self.connect() as conn:
             try:
                 cursor = conn.cursor()
