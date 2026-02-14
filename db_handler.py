@@ -55,6 +55,11 @@ class Database:
 
         self.payments_fields = ["p.id", "p.date_versement", "title(c.nom)", "p.montant", "p.observation"]
 
+        self.invoice_fields = [
+            "inv.id", "strftime('%d-%m-%Y', inv.invoice_date)", "inv.invoice_number", "cl.nom",
+            "inv.total", "inv.total_avec_remise", "inv.total_ttc"
+        ]
+
     def connect(self):
         conn = sqlite3.connect(self.db_name)
         conn.execute("PRAGMA foreign_keys = ON")
@@ -1685,6 +1690,20 @@ class Database:
     def close(self):
         with self.connect() as conn:
             conn.close()
+
+    # =============
+    # == Invoices ==
+    # =============
+    def dump_invoices(self):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute(f"""
+                SELECT {', '.join(self.invoice_fields)}
+                FROM Invoices inv
+                JOIN Clients cl ON inv.client_id = cl.id
+                ORDER BY inv.invoice_date DESC
+            """)
+            return cursor.fetchall()
 
 
 if __name__ == '__main__':

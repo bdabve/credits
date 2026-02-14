@@ -75,6 +75,7 @@ PAYMENTS_HEADERS = ['ID', 'Date', 'Client', 'Montant', 'Récupérateur']
 CHARGE_HEADERS = ["ID", "Date", "Effectué par", "Montant", "Motif"]
 VERSEMENT_HEADERS = ['ID', 'Date', 'Montant', 'Récupérateur']
 
+INVOICES_HEADERS = ['ID', 'Date', 'Numéro Facture', 'Client', 'Montant Total', 'Remise', 'Total TTC']
 # commune list
 COMMUNES_LIST = [
     "CHIFALO", "KHMISTI", "BOUHAROUN", "BIRARD", "DAMOUS", "LARHAT",

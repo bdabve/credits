@@ -168,6 +168,9 @@ class Credit(QtWidgets.QMainWindow):
                 )
             }
         }
+        # Bind Invoices to CTRL+I
+        invoice_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+I"), self)
+        invoice_shortcut.activated.connect(self.display_invoices)
 
         self.init_ui()
 
@@ -2226,6 +2229,14 @@ class Credit(QtWidgets.QMainWindow):
 
         sum_charges = f"Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
         self.ui.labelEtatSumCharge.setText(sum_charges)
+
+    def display_invoices(self, rows=None):
+        if rows is None:
+            rows = self.db.dump_invoices()
+            logger.debug("Displaying Invoices from database...")
+            logger.info(rows)
+        utils.populate_table_widget(self.ui.invoicesTableWidget, rows, utils.INVOICES_HEADERS)
+        self.ui.stackedWidget.setCurrentWidget(self.ui.InvoicesPage)
 
 
 if __name__ == '__main__':
