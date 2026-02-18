@@ -184,10 +184,10 @@ def setup_main_callbacks(root):
         (root.ui.buttonPaiementsEtatJournalier, root.paiements_etat_journalier),
         # versement for a specific credit
         (root.ui.buttonCreditVersement, root.credit_list_versement),
+        (root.ui.buttonDeletePayment, root.delete_payment),
 
         # == Versement Small Table Page ==
         # ================================
-        (root.ui.buttonDeletePayment, root.delete_payment),
         (root.ui.buttonCreditAddVersement, root.ui_add_versement),
         (root.ui.buttonSaveVersement, root.save_new_versement),
         (root.ui.buttonRegleCredit, root.regle_credit),
@@ -467,6 +467,7 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     # New Invoice Button
     root.ui.buttonNewInvoice.setIcon(PLUS_ICON)
     root.ui.buttonDeleteInvoice.setIcon(TRASH_ICON)
+
 
 def pagebuttons_stats(root):
     """

@@ -1548,7 +1548,7 @@ class Credit(QtWidgets.QMainWindow):
             text = utils.format_to_decimal(text)
             if not text['success']:
                 self.show_error_message(f"Erreur: {text['error']}", success=False)
-                self.display_payments()      # refresh tablhu
+                self.display_payments()      # refresh table
                 return
             else:
                 text = text['value']
@@ -1581,7 +1581,7 @@ class Credit(QtWidgets.QMainWindow):
 
         dialog = utils.ConfirmDialog(title)
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
-            result = self.db.delete_item('versements', ids)
+            result = self.db.delete_item('paiement', ids)
             logger.debug(f"Delete Payments: {result}")
             if result['success']:
                 self.show_error_message("Versement supprimé avec succès.", success=True)

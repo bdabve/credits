@@ -1713,6 +1713,7 @@ class Database:
             next_number = int(result[0] or 0) + 1
             return {'success': True, 'invoice_number': next_number}
 
+
 if __name__ == '__main__':
     db = Database()
     result = db._create_tables()
