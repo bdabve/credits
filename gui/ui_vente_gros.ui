@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>749</width>
+    <width>789</width>
     <height>585</height>
    </rect>
   </property>
@@ -17,7 +17,13 @@
    <string>Vente Gros</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Monaco&quot;;</string>
+   <string notr="true">*{
+	font: 12pt &quot;Monaco&quot;;
+}
+
+#mainWidget {
+	background-color: #ffffff;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -56,6 +62,18 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLineEdit" name="lineEditFactNumber">
               <property name="placeholderText">
@@ -77,7 +95,11 @@
              </spacer>
             </item>
             <item>
-             <widget class="QDateEdit" name="dateEditFactDate"/>
+             <widget class="QDateEdit" name="dateEditFactDate">
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -91,7 +113,19 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignBottom">
              <widget class="QComboBox" name="comboBoxProduct">
               <property name="editable">
                <bool>false</bool>
@@ -233,7 +267,7 @@
               </layout>
              </widget>
             </item>
-            <item>
+            <item alignment="Qt::AlignBottom">
              <widget class="QPushButton" name="buttonAddProduct">
               <property name="text">
                <string>Ajouter</string>

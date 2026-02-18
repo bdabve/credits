@@ -2200,7 +2200,9 @@ class Credit(QtWidgets.QMainWindow):
             self.ui.editObservationByDate.setStyleSheet("padding: 10px;")
             self.ui.editObservationByDate.setFocus(True)
 
-    # === Etat From database ==
+    # +++++++++++++++++++++
+    # == Etat From database
+    # ---------------------
     def etat_from_database(self):
         # NOTE: The QPushButton for Etat Database is named as label
         selected_month = self.ui.cbBoxEtatByMonth.currentText()
@@ -2230,6 +2232,9 @@ class Credit(QtWidgets.QMainWindow):
         sum_charges = f"Charges: {utils.format_money(sum(r[4] for r in rows))} DA"
         self.ui.labelEtatSumCharge.setText(sum_charges)
 
+    # ++++++++++++
+    # ++ INVOICES
+    # ------------
     def display_invoices(self, rows=None):
         if rows is None:
             rows = self.db.dump_invoices()
@@ -2237,6 +2242,16 @@ class Credit(QtWidgets.QMainWindow):
             logger.info(rows)
         utils.populate_table_widget(self.ui.invoicesTableWidget, rows, utils.INVOICES_HEADERS)
         self.ui.stackedWidget.setCurrentWidget(self.ui.InvoicesPage)
+
+    def ui_create_invoice(self):
+        from vente_gros import VenteGros
+        dialog = VenteGros(self.db, logger)
+        # ☻ TODO: Pass theme manager to dialog to apply the current theme
+        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+            self.display_invoices()  # Refresh the invoices list after creating a new invoice
+
+    def delete_invoice(self):
+        logger.debug('Delete Invoice')
 
 
 if __name__ == '__main__':
@@ -2246,10 +2261,9 @@ if __name__ == '__main__':
     theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
 
     result = gsl.check_license()
-    print(result)
     if not result['success']:
-        logger.error("License check failed. Exiting application.")
-        logger.error(f"License Error: {result['message']}")
+        logger.error("LCF ERROR. Exiting application.")
+        logger.error(f"Error: {result['message']}")
         sys.exit(1)
     dialog = Credit(theme_manager)
     dialog.show()

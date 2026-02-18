@@ -1705,6 +1705,13 @@ class Database:
             """)
             return cursor.fetchall()
 
+    def get_next_invoice_number(self):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT MAX(invoice_number) FROM Invoices")
+            result = cursor.fetchone()
+            next_number = int(result[0] or 0) + 1
+            return {'success': True, 'invoice_number': next_number}
 
 if __name__ == '__main__':
     db = Database()
@@ -1715,30 +1722,30 @@ if __name__ == '__main__':
     # import pandas as pd
     # # df = pd.read_excel(r"C:\Users\ADMIN\OneDrive\Desktop\Liste_des_clients_actifs2602101041.xlsx", sheet_name=0)
     # df = pd.read_excel(
-        # "/home/dabve/Desktop/LISTE_PRIX_2026.xlsx",
-        # sheet_name="liste produit life  2026 ",
-        # skiprows=3,
-        # usecols="C:J"
+    #    # "/home/dabve/Desktop/LISTE_PRIX_2026.xlsx",
+    #    # sheet_name="liste produit life  2026 ",
+    #    # skiprows=3,
+    #    # usecols="C:J"
     # )
     # df = df.iloc[:-1]       # Drop the last line of totals
     # df = df.rename(columns={
-        # "DESIGNATION (SKU)": "sku",
-        # "COLISAGE": "collisage",
-        # "COLISAGE/P": "collisage_palette",
-        # "PRIX HT DISTRIBUTEUR": "prix_ht_distrubuteur",
-        # "PRIX TTC DISTRIBUTEUR ": "prix_ttc_distrubuteur",
-        # "prix DI / TTC": "prix_detail_ttc",
-        # "prix DG/ TTC": "prix_dgros_ttc",
-        # "prix DD / TTC": "prix_gros_ttc",
+    #    # "DESIGNATION (SKU)": "sku",
+    #    # "COLISAGE": "collisage",
+    #    # "COLISAGE/P": "collisage_palette",
+    #    # "PRIX HT DISTRIBUTEUR": "prix_ht_distrubuteur",
+    #    # "PRIX TTC DISTRIBUTEUR ": "prix_ttc_distrubuteur",
+    #    # "prix DI / TTC": "prix_detail_ttc",
+    #    # "prix DG/ TTC": "prix_dgros_ttc",
+    #    # "prix DD / TTC": "prix_gros_ttc",
     # })
     # conn = sqlite3.connect("./lifeTipazaDB.db")       # ==> Connect to SQLite database
 
     # ==> Insert data into table
     # df.to_sql(
-        # name="products_gros",     # table name
-        # con=conn,
-        # if_exists="append",  # "replace" to overwrite
-        # index=False
+    #    # name="products_gros",     # table name
+    #    # con=conn,
+    #    # if_exists="append",  # "replace" to overwrite
+    #    # index=False
     # )
     # conn.close()      # ==> Close connection
     # print("✅ Data inserted successfully")

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # ----------------------------------------------------------------------------
+import datetime
 from PyQt5 import QtWidgets, QtCore
 from gui.h_vente_gros import Ui_Dialog
 import utils
@@ -12,15 +13,12 @@ class VenteGros(QtWidgets.QDialog):
         super().__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.db = db_handler.Database()
+        self.db = db_handler
         self.logger = logger
 
         # date and number
-        import datetime
         date = datetime.date.today().strftime("%Y-%m-%d")
         self.ui.dateEditFactDate.setDate(QtCore.QDate.fromString(date, "yyyy-MM-dd"))
-        # populate price from db
-        self.ui.comboBoxProduct.currentIndexChanged.connect(self.get_product_price)
 
         # populate products comboBox
         result = self.db.get_products_sku()
@@ -30,17 +28,28 @@ class VenteGros(QtWidgets.QDialog):
         else:
             print("Error fetching products:", result["error"])
 
+        # SIGNALS AND CALLBACKS
+        # ---------------------
+        # populate price from db
+        self.ui.comboBoxProduct.currentIndexChanged.connect(self.get_product_price)
         # Add product
         self.ui.buttonAddProduct.clicked.connect(self.add_product_tableWidget)
-
         # save invoice
         self.ui.buttonSaveInvoice.clicked.connect(self.save_invoice)
+        # get invoice number from database
+        result = self.db.get_next_invoice_number()
+        if result["success"]:
+            next_invoice_number = result["invoice_number"]
+            self.ui.lineEditFactNumber.setText(str(next_invoice_number))
+        self.get_product_price()
 
     def get_product_price(self):
         """
         GET PRODUCT PRICE
+        This work with 'combooBox.currentIndexChanged' signal
         get the product price to display in QDoubleSpinBox Price
         """
+        self.ui.lineEditQte.setText("1")
         product = self.ui.comboBoxProduct.currentText()
         result = self.db.get_product_price(product)
         if result["success"]:
@@ -137,11 +146,12 @@ class VenteGros(QtWidgets.QDialog):
         self.logger.debug(f"Total HT: {total_ht}, Total Remise: {total_remise}, Total TTC: {total_ttc}\n{products}")
 
         result = self.db.save_invoice(fact_date, fact_number, total_ht, total_remise, total_ttc, products)
-        logger.info(f"Invoice saved with result: {result}")
+        self.logger.info(f"Invoice saved with result: {result}")
         if not result["success"]:
             self.ui.labelErros.setText(result["message"])
         else:
             self.ui.labelErros.setText(f"Facture ({result['invoice_id']}) enregistrée avec succès.")
+            self.accept()
 
 
 if __name__ == '__main__':

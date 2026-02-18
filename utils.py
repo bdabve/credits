@@ -162,7 +162,8 @@ def is_date(value: str, fmt="%Y-%m-%d") -> bool:
 # ==================
 # == UI -- Functions
 # ==================
-# === 1) Setup callbacks/signals/menus (run once at startup) ===
+# === Setup callbacks/signals/menus (run once at startup)
+# ========================================================
 def setup_main_callbacks(root):
     # --- Button callbacks (no icons here!)
     root.ui.toggleMenuButton.clicked.connect(root.on_toggle_menu),
@@ -311,6 +312,9 @@ def setup_main_callbacks(root):
 
     root.ui.dateEditEtatJournee.dateChanged.connect(root.etat_detail_journe)
 
+    # === INVOICE ===
+    root.ui.buttonNewInvoice.clicked.connect(root.ui_create_invoice)
+    root.ui.buttonDeleteInvoice.clicked.connect(root.delete_invoice)
     # === Menus ===
     create_menu(
         root,
@@ -381,7 +385,9 @@ def setup_main_callbacks(root):
     setup_table_context_menu(root.ui.chargeTableWidget, charge_table_actions)
 
 
-# === 2) Refresh icons (call on startup + every theme toggle) ===
+# -------------------------------------------------------
+# == Refresh icons (call on startup + every theme toggle)
+# ========================================================
 def refresh_main_icons(root, theme_manager: ThemeManager):
     PLUS_ICON = theme_manager.icon('ph.plus', "NEW_COLOR")
     CASH_PLUS_ICON = theme_manager.icon('mdi6.cash-plus', "NEW_COLOR")
@@ -458,6 +464,9 @@ def refresh_main_icons(root, theme_manager: ThemeManager):
     root.ui.buttonIconSumRetenu.setIcon(qta.icon('fa5s.dollar-sign', color=ICON_COLOR))
     root.ui.extraIconPlus.setIcon(qta.icon('ph.plus', color=SKYPE_COLOR))
 
+    # New Invoice Button
+    root.ui.buttonNewInvoice.setIcon(PLUS_ICON)
+    root.ui.buttonDeleteInvoice.setIcon(TRASH_ICON)
 
 def pagebuttons_stats(root):
     """
@@ -974,7 +983,7 @@ class TrizClients(QtWidgets.QDialog):
             client_name = get_column_value(self.ui.tableWidgetTrizClients, row, 2)
             phone = get_column_value(self.ui.tableWidgetTrizClients, row, 3)
             commune = get_column_value(self.ui.tableWidgetTrizClients, row, 5)
-            self.add_client_result = self.db.insert_new_client(client_name, phone, commune, observation="Importé depuis TRIZ")
+            self.add_client_result = self.db.insert_new_client(client_name.strip(), phone, commune, observation="Importé depuis TRIZ")
             self.accept()  # Close the dialog after adding the client
 
 
