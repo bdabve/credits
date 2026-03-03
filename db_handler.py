@@ -1691,9 +1691,9 @@ class Database:
         with self.connect() as conn:
             conn.close()
 
-    # =============
+    # ==============
     # == Invoices ==
-    # =============
+    # ==============
     def dump_invoices(self):
         with self.connect() as conn:
             cursor = conn.cursor()
