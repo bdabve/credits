@@ -2259,7 +2259,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
     theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
-
     result = gsl.check_license()
     if not result['success']:
         logger.error("LCF ERROR. Exiting application.")

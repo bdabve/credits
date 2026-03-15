@@ -73,6 +73,6 @@ def update_license(date):
 if __name__ == '__main__':
     licence = load_license()
     print(licence)
-    update_licence = update_license("12-03-2026")
+    update_licence = update_license("12-12-2026")
     ok = check_license()
     print(ok)
