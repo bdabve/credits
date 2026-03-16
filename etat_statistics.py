@@ -504,7 +504,7 @@ def categorize(des):
     # --- Lave-Sol ---
     elif d.startswith("lave sol"): return "Lave Sole"
     # --- Sanibon ---
-    elif d.startswith("désodorisant"): return "Sanibon"
+    elif d.startswith("désodorisant pour sol"): return "Sanibon"
     # --- Lave-Main 2.5L ---
     elif d.startswith("lave main 2.5l"): return "Lave main 2.5L"
     # --- Lave-Main 400ML ---
@@ -595,10 +595,10 @@ if __name__ == "__main__":
     # -------------------------------------------------
     # PDF CHARGEMENT RECAPE MOHAMED
     # -----------------------------
-    # pdf_file_path = r"C:\\Users\ADMIN\\OneDrive\Desktop\\FICHE CHARGEMEN\\02-FEVRIER\\MOH-09.pdf"
-    # # pdf_file_path = "/home/dabve/Desktop/MOH-04.pdf"
-    # pdf_recape = recapepdf_to_text(pdf_file_path)
-    # if pdf_recape is not None:
-    #     print("Recape Journee Mohamed: ")
-    #     print(pdf_recape)
-    #     print(f"\n==== Total Article: {len(pdf_recape)} =====")
+    pdf_file_path = r"C:\\Users\ADMIN\\OneDrive\Desktop\\FICHE CHARGEMEN\\03-MARS\\MOH-16.pdf"
+    # pdf_file_path = "/home/dabve/Desktop/MOH-04.pdf"
+    pdf_recape = recapepdf_to_text(pdf_file_path)
+    if pdf_recape is not None:
+        print("Recape Journee Mohamed: ")
+        print(pdf_recape)
+        print(f"\n==== Total Article: {len(pdf_recape)} =====")
