@@ -2135,8 +2135,14 @@ class Credit(QtWidgets.QMainWindow):
         # ----------- GRAPH 3: % RETOUR -----------
         les_retour, sum_retour = st.driver_retour(df)
         self.canvas_retour = ploting.MplCanvas(self.ui.scrollAreaGraphContents, width=5, height=4, dpi=100)
-        st.plot_driver_retour_pyqt(self.canvas_retour, sum_retour, allowed_livreur)
-        layout.addWidget(self.canvas_retour, 1, 1, 1, 1)
+        try:
+            # FIXME: The plot_driver_retour_pyqt function is not working properly, it shows wrong values for the drivers, need to check the logic of this function and how it calculates the retour percentages.
+            st.plot_driver_retour_pyqt(self.canvas_retour, sum_retour, allowed_livreur)
+        except Exception as e:
+            self.show_error_message(f"Erreur lors du tracé du graphique de retours: {e}", success=False)
+            pass
+        else:
+            layout.addWidget(self.canvas_retour, 1, 1, 1, 1)
 
         # Put layout inside scroll area
         self.ui.scrollAreaGraphContents.setLayout(layout)
