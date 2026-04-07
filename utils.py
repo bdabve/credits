@@ -988,10 +988,18 @@ class TrizClients(QtWidgets.QDialog):
             self.accept()  # Close the dialog after adding the client
 
 
-if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
 
-    dialog = ConfirmDialog("Confirm Action")
-    dialog.show()
-    sys.exit(app.exec_())
+def num_to_words(number):
+    from num2words import num2words
+    return num2words(number, to="currency", lang='fr_DZ')
+
+
+if __name__ == '__main__':
+    number = 3220140
+    print(num_to_words(number))
+    # import sys
+    # app = QtWidgets.QApplication(sys.argv)
+
+    # dialog = ConfirmDialog("Confirm Action")
+    # dialog.show()
+    # sys.exit(app.exec_())
