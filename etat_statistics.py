@@ -456,6 +456,9 @@ def reminder(file_name):
 # --- Mohamed Functions
 # ==========================================
 def achat_mohamed(file_path, sheet_name):
+    """
+    ETATS MENSUEL
+    """
     df = pd.read_excel(file_path, sheet_name=sheet_name, skiprows=2, usecols="A:I")
     clean_df = df[~df["Prix achat"].astype(str).str.contains("TOTAL", na=False)]
     clean_df = clean_df.dropna(subset=["Nom"])
@@ -463,12 +466,12 @@ def achat_mohamed(file_path, sheet_name):
     for col in cols:
         clean_df[col] = pd.to_numeric(clean_df[col], errors="coerce")
 
-    cols_to_use = ["Nom", "Qte Global", "Prix achat", "Total"]
+    cols_to_use = ["Nom", "Qte Global", "Total", "TOTAL AVEC REMISE"]
     clean_df = clean_df.loc[:, cols_to_use]
     recape = clean_df.groupby("Nom", as_index=False).agg({
         "Qte Global": "sum",
-        "Prix achat": "first",
         "Total": "sum",
+        "TOTAL AVEC REMISE": "sum",
     })
     # recape["Total Achat"] = recape["Qte Global"] * recape["Prix achat"]
     # TODO: Add Remise
@@ -587,18 +590,18 @@ if __name__ == "__main__":
     # ---------------------------------------------------
     # ----------- Achat Mohamed ----------------
     # ---------------------------------------------------
-    # file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\2026-ACHAT_MOHAMED_2026.xlsx"
-    # achat_mohamed = achat_mohamed(file_path, "JANVIER")
+    file_path = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\ADMIN\\2026-ACHAT_MOHAMED_2026.xlsx"
+    achat_mohamed = achat_mohamed(file_path, "AVRIL")
     # print(achat_mohamed.head(20))
     # print('-' * 30)
     # print(achat_mohamed.tail(20))
     # -------------------------------------------------
     # PDF CHARGEMENT RECAPE MOHAMED
     # -----------------------------
-    pdf_file_path = r"C:\\Users\ADMIN\\OneDrive\Desktop\\FICHE CHARGEMEN\\03-MARS\\MOH-16.pdf"
-    # pdf_file_path = "/home/dabve/Desktop/MOH-04.pdf"
-    pdf_recape = recapepdf_to_text(pdf_file_path)
-    if pdf_recape is not None:
-        print("Recape Journee Mohamed: ")
-        print(pdf_recape)
-        print(f"\n==== Total Article: {len(pdf_recape)} =====")
+    # pdf_file_path = r"C:\\Users\ADMIN\\OneDrive\Desktop\\FICHE CHARGEMEN\\03-MARS\\MOH-16.pdf"
+    # # pdf_file_path = "/home/dabve/Desktop/MOH-04.pdf"
+    # pdf_recape = recapepdf_to_text(pdf_file_path)
+    # if pdf_recape is not None:
+    #     print("Recape Journee Mohamed: ")
+    #     print(pdf_recape)
+    #     print(f"\n==== Total Article: {len(pdf_recape)} =====")
