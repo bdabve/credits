@@ -2265,8 +2265,27 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
     theme_manager = utils.ThemeManager(app, utils.THEMES, default="dark")
+    update_lcs = gsl.update_license("11-01-2030")
     result = gsl.check_license()
     if not result['success']:
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setStyleSheet(
+            """
+            * { color: #000000; font-size: 16px;}
+            QPushButton {
+                font-size: 16px;
+                background-color: #FF0000;
+                color: #ffffff;
+                border-radius: 5px;
+                min-width: 80px;
+            }
+            """
+        )
+        msg_box.setWindowTitle("ERROR")
+        msg_box.setIcon(QtWidgets.QMessageBox.Critical)
+        msg_box.setText(f"Erreur: {result['message']}\n\nL'application va se fermer.")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg_box.exec_()
         logger.error("LCF ERROR. Exiting application.")
         logger.error(f"Error: {result['message']}")
         sys.exit(1)

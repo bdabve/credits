@@ -41,9 +41,9 @@ def check_license():
     expires = datetime.date.fromisoformat(lic["expires_at"])
 
     if today > expires:
-        return {"success": False, "message": "License expired"}
+        return {"success": False, "message": "1x3255698547lc8xx22563000"}
 
-    return {"success": True, "message": "License valid until " + lic["expires_at"]}
+    return {"success": True, "message": "LCS valid until " + lic["expires_at"]}
 
 
 def update_license(date):
@@ -73,6 +73,6 @@ def update_license(date):
 if __name__ == '__main__':
     licence = load_license()
     print(licence)
-    update_licence = update_license("12-12-2026")
+    update_licence = update_license("12-07-2026")
     ok = check_license()
     print(ok)
